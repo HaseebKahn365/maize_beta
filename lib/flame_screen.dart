@@ -2,12 +2,9 @@
 
 import 'dart:ui';
 
-import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
-import 'package:flame/flame.dart';
+
 import 'package:flame/game.dart';
-import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_beta/player.dart';
 
@@ -21,7 +18,7 @@ class FlameScreen extends StatefulWidget {
 class _FlameScreenState extends State<FlameScreen> {
   @override
   Widget build(BuildContext context) {
-    return GameWidget(game: MyGame());
+    return SafeArea(child: GameWidget(game: MyGame()));
   }
 }
 
@@ -37,7 +34,7 @@ class MyGame extends FlameGame {
 
   @override
   Color backgroundColor() {
-    return Colors.red;
+    return Colors.brown;
   }
 
   @override
