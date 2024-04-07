@@ -8,18 +8,17 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 //the player should be able to readjust its initaial position when the user holds the screen and moves the device. this will give the user a better and comfortable experience when playing the game allowing the user to take a break.
 
-class Player extends PositionComponent with HasGameRef<MyGame>, TapCallbacks {
+class Player extends PositionComponent with TapCallbacks {
   Color _color = Colors.white;
   final _playerPaint = Paint();
 
   Player({
     this.playerRadius = 35,
+    required this.initialPosition,
   }) : super(
           position: Vector2.all(150),
           priority: 20,
-        ) {
-    initialPosition = position;
-  }
+        ) {}
 
   final double playerRadius;
   Vector2 _velocity = Vector2.zero();
@@ -31,22 +30,13 @@ class Player extends PositionComponent with HasGameRef<MyGame>, TapCallbacks {
     anchor = Anchor.center;
 
     _gyroscopeSubscription = gyroscopeEvents.listen((GyroscopeEvent event) {
-      _velocity = Vector2(event.y, event.x);
+      _velocity = Vector2(event.x, -event.y);
 
       //set the initial position of the player
-      initialPosition = Vector2(event.y, event.x);
+      initialPosition = Vector2(event.x, -event.y);
     });
 
     super.onMount();
-  }
-
-  bool cond = false;
-
-  @override
-  void onLongTapDown(TapDownEvent event) {
-    // Set cond to true to start updating newPosition
-    cond = !cond;
-    super.onLongTapDown(event);
   }
 
   late Vector2 initialPosition;
@@ -54,11 +44,7 @@ class Player extends PositionComponent with HasGameRef<MyGame>, TapCallbacks {
 
   @override
   void update(double dt) {
-    if (cond) {
-      newPosition = initialPosition;
-    }
-
-    newPosition += _velocity * dt * 1500;
+    newPosition += _velocity * dt * 1000;
     position += (newPosition - initialPosition) * dt;
 
     super.update(dt);
@@ -77,7 +63,7 @@ class Player extends PositionComponent with HasGameRef<MyGame>, TapCallbacks {
 
     final text = 'x: ${_velocity.x.toStringAsFixed(2)}\ny: ${_velocity.y.toStringAsFixed(2)}';
     final textStyle = TextStyle(
-      color: Colors.black,
+      color: Colors.white,
       fontSize: 20,
     );
     final textSpan = TextSpan(
@@ -92,6 +78,6 @@ class Player extends PositionComponent with HasGameRef<MyGame>, TapCallbacks {
       minWidth: 0,
       maxWidth: 200,
     );
-    textPainter.paint(canvas, Offset(0, 0));
+    textPainter.paint(canvas, Offset(100, 0));
   }
 }

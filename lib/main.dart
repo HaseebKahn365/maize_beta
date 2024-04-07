@@ -1,10 +1,21 @@
+import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:maize_beta/flame_screen.dart';
+import 'package:maize_beta/my_game.dart';
 
 //this is a base project for the maize app. here we will start off by testing the player moment using the gyroscope sensor.
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  Flame.device.fullScreen();
+  Flame.device.setLandscape();
+  // final myGame = MyGame();
+  runApp(
+    InteractiveViewer(
+      maxScale: 3,
+      child: GameWidget(game: MyGame()),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -44,7 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
             // Navigate to the flame screen
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const FlameScreen()),
+              MaterialPageRoute(
+                  builder: (context) => GameWidget(
+                        game: MyGame(),
+                      )),
             );
           },
           child: const Text('Click me!'),
