@@ -10,11 +10,12 @@ import 'package:maize_beta/collision_block.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 //the player should be able to readjust its initaial position when the user holds the screen and moves the device. this will give the user a better and comfortable experience when playing the game allowing the user to take a break.
+enum Direction { updown, leftright, invalid }
 
 class Player extends PositionComponent {
   Color _color = Colors.white;
   final _playerPaint = Paint();
-  final motionIntensity = 500;
+  final motionIntensity = 700;
 
   //these are the collision blocks that the player will collide with
 
@@ -24,7 +25,7 @@ class Player extends PositionComponent {
     this.playerRadius = 20,
     required this.initialPosition,
   }) : super(
-          position: Vector2.all(150),
+          position: Vector2(100, 40),
           priority: 20,
         ) {}
 
@@ -62,14 +63,29 @@ class Player extends PositionComponent {
     //check if the player is colliding with any of the collision blocks
     for (final block in collisionBlocks) {
       if (collidesWith(block)) {
+        final pointOfCollision = newPosition; //we want to slide rather than stopping the player
         _color = Colors.red;
-        position = tempPosition;
 
-        //add collision sparks to the current point of intersection using the particle system
+        //finding direction:
+        final Direction dir = findDirection(tempPosition, block);
+
+        switch (dir) {
+          case Direction.leftright:
+            print('Collision on left or right! detected');
+            newPosition = Vector2(initialPosition.x, pointOfCollision.y);
+
+          case Direction.updown:
+            print('Collision on up or down! detected');
+            newPosition = Vector2(pointOfCollision.x, initialPosition.y);
+
+          case Direction.invalid:
+            print('Invalid direction! detected');
+        }
 
         _addParticle();
 
         //making the collision sound
+        _playFutureAudio();
 
         break;
       } else {
@@ -78,6 +94,34 @@ class Player extends PositionComponent {
     }
 
     super.update(dt);
+  }
+
+  Direction findDirection(Vector2 oldPositioin, CollisionBlock block) {
+    //finding the central point of collision from rects
+    final playerRect = toRect();
+    final blockRect = block.toRect();
+
+    final double playerCenterX = playerRect.left + playerRect.width / 2;
+
+    // finding the direction of the player
+
+    if (playerCenterX < blockRect.left || playerCenterX > blockRect.right) {
+      return Direction.leftright;
+    } else {
+      return Direction.updown;
+    }
+  }
+
+  int audioPlayCount = 0; // Counter for the number of times the audio has been played
+
+  void _playFutureAudio() {
+    if (audioPlayCount % 12 == 0) {
+      // Only play the audio if it has been played less than 5 times
+      // FlameAudio.play('laserShoot.wav');
+      // print('Audio played!');
+      audioPlayCount = 0; // Reset the counter
+    }
+    audioPlayCount++; // Increment the counter each time the audio is played
   }
 
   @override

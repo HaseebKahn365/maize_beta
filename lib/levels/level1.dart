@@ -26,13 +26,14 @@ class Level extends World with TapCallbacks {
     final spawnPointLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
 
 // Each one of the spawn points coming from the map
+
     if (spawnPointLayer != null) {
       for (final spawnPoint in spawnPointLayer.objects) {
         switch (spawnPoint.type) {
           case 'Player':
             //we need to accomodate for the player size too.
 
-            player = Player(playerRadius: 8, initialPosition: Vector2(spawnPoint.x - 20, spawnPoint.y - 20));
+            player = Player(playerRadius: 8, initialPosition: Vector2(spawnPoint.x - 20, spawnPoint.y - 150));
             add(player);
             break;
         }
@@ -61,6 +62,6 @@ class Level extends World with TapCallbacks {
       player.collisionBlocks = collisionBlocks;
     }
 
-    return super.onLoad();
+    // return super.onLoad();
   }
 }
