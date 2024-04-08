@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/particles.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_beta/collision_block.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -53,7 +54,7 @@ class Player extends PositionComponent {
   var tempPosition;
 
   @override
-  void update(double dt) {
+  void update(double dt) async {
     tempPosition = position.clone();
     newPosition += _velocity * dt * motionIntensity.toDouble();
     position += (newPosition - initialPosition) * dt;
@@ -67,6 +68,8 @@ class Player extends PositionComponent {
         //add collision sparks to the current point of intersection using the particle system
 
         _addParticle();
+
+        //making the collision sound
 
         break;
       } else {

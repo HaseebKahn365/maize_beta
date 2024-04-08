@@ -5,14 +5,15 @@
     },
     "activeFile": "level_01.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "level_01.tmx": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 306,
-                "y": 249.5
+                "x": 315.33333333333326,
+                "y": 203.66666666666669
             }
         },
         "maize.tsx": {
