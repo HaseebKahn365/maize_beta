@@ -11,8 +11,7 @@ class MyGame extends FlameGame {
 
   @override
   FutureOr<void> onLoad() async {
-    debugMode = true;
-    debugMode = true;
+    // debugMode = true;
     cam = CameraComponent.withFixedResolution(
       world: world,
       height: 360,
