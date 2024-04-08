@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,7 @@ class Player extends PositionComponent {
         _color = Colors.white;
       }
     }
+
     super.update(dt);
   }
 
@@ -83,12 +85,41 @@ class Player extends PositionComponent {
       Path()
         ..addOval(Rect.fromCircle(
           //dividing the new position by 5 to reduce the shadow length due to the velocity
-          center: (newPosition / 10).toOffset() + (newPosition / 10).toOffset(),
+          center: ((newPosition / 10).toOffset() + (newPosition / 10).toOffset()) + (Offset(playerRadius, 0)),
           radius: playerRadius * 1.5, //
         )),
       Colors.white,
       10, // blur radius
       true,
+    );
+
+//adding velocity strip:
+    final Offset start = ((size / 2)).toOffset();
+    final Offset end = (size / 2).toOffset() + (newPosition / 10).toOffset();
+
+// Offset for the arrowhead
+    final double arrowOffset = 20;
+    final Offset arrowEnd = end.translate(arrowOffset * cos(atan2(end.dy - start.dy, end.dx - start.dx)), arrowOffset * sin(atan2(end.dy - start.dy, end.dx - start.dx)));
+
+// Calculate the angle of the line
+    double angle = atan2(arrowEnd.dy - start.dy, arrowEnd.dx - start.dx);
+
+// Draw the arrowhead
+    final double arrowLength = 10;
+    final double arrowWidth = 2 * pi / 15; // 24 degrees
+    canvas.drawLine(
+      arrowEnd,
+      arrowEnd.translate(-arrowLength * cos(angle - arrowWidth), -arrowLength * sin(angle - arrowWidth)),
+      Paint()
+        ..color = Colors.white
+        ..strokeWidth = 2,
+    );
+    canvas.drawLine(
+      arrowEnd,
+      arrowEnd.translate(-arrowLength * cos(angle + arrowWidth), -arrowLength * sin(angle + arrowWidth)),
+      Paint()
+        ..color = Colors.white
+        ..strokeWidth = 2,
     );
   }
 
