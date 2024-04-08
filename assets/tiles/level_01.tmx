@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="24">
  <tileset firstgid="1" source="maize.tsx"/>
  <layer id="1" name="Tile Layer 1" width="40" height="23">
   <data encoding="csv">
@@ -28,4 +28,25 @@
 146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147
 </data>
  </layer>
+ <objectgroup id="2" name="Spawnpoints">
+  <object id="5" name="Player" type="Player" x="80" y="64" width="33" height="32.25"/>
+ </objectgroup>
+ <objectgroup id="3" name="Collisions">
+  <object id="6" name="ColllisionRecs" type="ColllisionRecs" x="32" y="16" width="112" height="16"/>
+  <object id="7" name="ColllisionRecs" type="ColllisionRecs" x="144" y="48" width="16" height="176"/>
+  <object id="8" name="ColllisionRecs" type="ColllisionRecs" x="48" y="32" width="16" height="288"/>
+  <object id="9" name="ColllisionRecs" type="ColllisionRecs" x="48" y="320" width="176" height="16"/>
+  <object id="10" name="ColllisionRecs" type="ColllisionRecs" x="224" y="208" width="16" height="128"/>
+  <object id="11" name="ColllisionRecs" type="ColllisionRecs" x="240" y="208" width="16" height="128"/>
+  <object id="12" name="ColllisionRecs" type="ColllisionRecs" x="256" y="320" width="208" height="16"/>
+  <object id="13" name="ColllisionRecs" type="ColllisionRecs" x="464" y="160" width="32" height="176"/>
+  <object id="14" name="ColllisionRecs" type="ColllisionRecs" x="496" y="320" width="112" height="16"/>
+  <object id="15" name="ColllisionRecs" type="ColllisionRecs" x="544" y="224" width="64" height="32"/>
+  <object id="16" name="ColllisionRecs" type="ColllisionRecs" x="608" y="64" width="16" height="272"/>
+  <object id="17" name="ColllisionRecs" type="ColllisionRecs" x="464" y="48" width="144" height="16"/>
+  <object id="18" name="ColllisionRecs" type="ColllisionRecs" x="368" y="80" width="96" height="16"/>
+  <object id="19" name="ColllisionRecs" type="ColllisionRecs" x="336" y="96" width="32" height="128"/>
+  <object id="20" name="ColllisionRecs" type="ColllisionRecs" x="176" y="80" width="160" height="16"/>
+  <object id="21" name="ColllisionRecs" type="ColllisionRecs" x="160" y="96" width="16" height="128"/>
+ </objectgroup>
 </map>

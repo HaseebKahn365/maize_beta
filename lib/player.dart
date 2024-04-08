@@ -1,23 +1,27 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'package:maize_beta/flame_screen.dart';
+import 'package:maize_beta/collision_block.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 //the player should be able to readjust its initaial position when the user holds the screen and moves the device. this will give the user a better and comfortable experience when playing the game allowing the user to take a break.
 
-class Player extends PositionComponent with TapCallbacks {
+class Player extends PositionComponent {
   Color _color = Colors.white;
   final _playerPaint = Paint();
 
+  //these are the collision blocks that the player will collide with
+
+  List<CollisionBlock> collisionBlocks = [];
+
   Player({
-    this.playerRadius = 35,
+    this.playerRadius = 20,
     required this.initialPosition,
   }) : super(
           position: Vector2.all(150),
           priority: 20,
+          anchor: Anchor.center,
         ) {}
 
   final double playerRadius;
@@ -36,17 +40,33 @@ class Player extends PositionComponent with TapCallbacks {
       initialPosition = Vector2(event.x, -event.y);
     });
 
+    //modify the hitbox of the player to be circular
+
     super.onMount();
   }
 
   late Vector2 initialPosition;
   var newPosition = Vector2.zero();
 
+  var tempPosition;
+
   @override
   void update(double dt) {
-    newPosition += _velocity * dt * 1000;
+    tempPosition = position.clone();
+    newPosition += _velocity * dt * 300;
     position += (newPosition - initialPosition) * dt;
 
+    //check if the player is colliding with any of the collision blocks
+    for (final block in collisionBlocks) {
+      if (collidesWith(block)) {
+        _color = Colors.red;
+        position = tempPosition;
+        _continueFromCollisionPoint();
+        break;
+      } else {
+        _color = Colors.white;
+      }
+    }
     super.update(dt);
   }
 
@@ -58,26 +78,31 @@ class Player extends PositionComponent with TapCallbacks {
       playerRadius,
       _playerPaint..color = _color,
     );
+    //add shadow to the player in the direction of the velocity
+    canvas.drawShadow(
+      Path()
+        ..addOval(Rect.fromCircle(
+          //dividing the new position by 5 to reduce the shadow length due to the velocity
+          center: (newPosition / 10).toOffset() + (newPosition / 10).toOffset(),
+          radius: playerRadius * 1.5, //
+        )),
+      Colors.white,
+      10, // blur radius
+      true,
+    );
+  }
 
-    //add a rectange component on the top that will display the x and y values of the gyroscope sensor
+  //collides with the collision block method
+  bool collidesWith(CollisionBlock block) {
+    final playerRect = toRect();
+    final blockRect = block.toRect();
 
-    final text = 'x: ${_velocity.x.toStringAsFixed(2)}\ny: ${_velocity.y.toStringAsFixed(2)}';
-    final textStyle = TextStyle(
-      color: Colors.white,
-      fontSize: 20,
-    );
-    final textSpan = TextSpan(
-      text: text,
-      style: textStyle,
-    );
-    final textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout(
-      minWidth: 0,
-      maxWidth: 200,
-    );
-    textPainter.paint(canvas, Offset(100, 0));
+    return playerRect.overlaps(blockRect);
+  }
+
+  //TODO: reset gyro method
+  void _continueFromCollisionPoint() {
+    //when i collide with a block, i should be able to continue from the point of collision
+    newPosition = initialPosition;
   }
 }
