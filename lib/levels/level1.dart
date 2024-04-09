@@ -56,7 +56,8 @@ class Level extends World with TapCallbacks {
             collisionBlocks.add(collisionBlock);
             add(collisionBlock);
 
-            break;
+          case 'bomb':
+          // add
         }
       }
       player.collisionBlocks = collisionBlocks;

@@ -35,6 +35,7 @@ class Player extends PositionComponent {
 
   @override
   void onMount() {
+    super.onMount();
     size = Vector2.all(playerRadius * 2);
 
     _gyroscopeSubscription = gyroscopeEvents.listen((GyroscopeEvent event) {
@@ -45,8 +46,6 @@ class Player extends PositionComponent {
     });
 
     //modify the hitbox of the player to be circular
-
-    super.onMount();
   }
 
   late Vector2 initialPosition;
@@ -56,6 +55,7 @@ class Player extends PositionComponent {
 
   @override
   void update(double dt) async {
+    super.update(dt);
     tempPosition = position.clone();
     newPosition += _velocity * dt * motionIntensity.toDouble();
     position += (newPosition - initialPosition) * dt;
@@ -95,8 +95,6 @@ class Player extends PositionComponent {
         _color = Colors.white;
       }
     }
-
-    super.update(dt);
   }
 
   Direction findDirection(Vector2 oldPositioin, CollisionBlock block) {
