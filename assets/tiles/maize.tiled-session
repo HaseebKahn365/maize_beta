@@ -10,10 +10,10 @@
     "fileStates": {
         "level_01.tmx": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 314.6666666666667,
-                "y": 203
+                "x": 59.33333333333337,
+                "y": 123
             }
         },
         "maize.tsx": {
