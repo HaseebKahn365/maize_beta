@@ -156,7 +156,9 @@ class Player extends PositionComponent {
   }
 
   //collides with the collision block method
-  bool collidesWith(CollisionBlock block) {
+  bool collidesWith(
+    PositionComponent block,
+  ) {
     final playerRect = toRect();
     final blockRect = block.toRect();
 

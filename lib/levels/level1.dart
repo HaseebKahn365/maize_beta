@@ -39,9 +39,9 @@ class Level extends World with TapCallbacks {
         }
       }
     }
-    add(level);
 
     final collisionLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
+    add(level);
 
     if (collisionLayer != null) {
       for (final collision in collisionLayer.objects) {
@@ -55,10 +55,10 @@ class Level extends World with TapCallbacks {
 
             collisionBlocks.add(collisionBlock);
             add(collisionBlock);
+            break;
 
           case 'bomb':
             print('bomb found');
-            break;
         }
       }
       player.collisionBlocks = collisionBlocks;

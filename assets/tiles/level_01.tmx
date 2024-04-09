@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="129">
  <tileset firstgid="1" source="maize.tsx"/>
- <layer id="1" name="Tile Layer 1" width="40" height="23">
+ <layer id="1" name="Tile Layer 1" width="40" height="23" visible="0">
   <data encoding="csv">
 124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,124,125,
 146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,124,125,
@@ -28,8 +28,8 @@
 146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147,146,147
 </data>
  </layer>
- <objectgroup id="2" name="Spawnpoints">
-  <object id="5" name="Player" type="Player" x="94.6667" y="227.333" width="16" height="16"/>
+ <objectgroup id="2" name="Spawnpoints" visible="0">
+  <object id="5" name="Player" type="Player" x="96" y="64" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="3" name="Collisions">
   <object id="6" name="ColllisionRecs" type="ColllisionRecs" x="32" y="16" width="112" height="16"/>
@@ -45,29 +45,5 @@
   <object id="17" name="ColllisionRecs" type="ColllisionRecs" x="464" y="48" width="144" height="16"/>
   <object id="19" name="ColllisionRecs" type="ColllisionRecs" x="336" y="96" width="32" height="128"/>
   <object id="20" name="ColllisionRecs" type="ColllisionRecs" x="176" y="64" width="288" height="32"/>
-  <object id="30" name="bomb" type="bomb" x="63.0474" y="30.9048" width="1" height="1.15057"/>
-  <object id="101" name="bomb" type="bomb" x="378.411" y="258.087" width="6.90909" height="6.15057"/>
-  <object id="112" name="bomb" type="bomb" x="336.161" y="89.8366" width="6.90909" height="6.15057"/>
-  <object id="119" name="bomb" type="bomb" x="361.411" y="89.8366" width="6.90909" height="6.15057"/>
-  <object id="104" name="bomb" type="bomb" x="378.411" y="258.087" width="6.90909" height="6.15057"/>
-  <object id="111" name="bomb" type="bomb" x="464.411" y="320.177" width="6.90909" height="6.15057"/>
-  <object id="127" name="bomb" type="bomb" x="464" y="160" width="2.24242" height="2.81723"/>
-  <object id="105" name="bomb" type="bomb" x="378.411" y="258.087" width="6.90909" height="6.15057"/>
-  <object id="106" name="bomb" type="bomb" x="456.911" y="59.0866" width="6.90909" height="6.15057"/>
-  <object id="123" name="bomb" type="bomb" x="607.411" y="57.5866" width="6.90909" height="6.15057"/>
-  <object id="121" name="bomb" type="bomb" x="607.911" y="224.587" width="6.90909" height="6.15057"/>
-  <object id="124" name="bomb" type="bomb" x="544.275" y="224.223" width="0.727273" height="0.786932"/>
-  <object id="122" name="bomb" type="bomb" x="608.411" y="250.087" width="6.90909" height="6.15057"/>
-  <object id="125" name="bomb" type="bomb" x="543.957" y="255.177" width="0.636364" height="0.696023"/>
-  <object id="120" name="bomb" type="bomb" x="607.911" y="320.087" width="6.90909" height="6.15057"/>
-  <object id="109" name="bomb" type="bomb" x="488.911" y="319.087" width="6.90909" height="6.15057"/>
-  <object id="126" name="bomb" type="bomb" x="493.578" y="161.087" width="2.24242" height="1.81723"/>
-  <object id="107" name="bomb" type="bomb" x="249.911" y="320.087" width="6.90909" height="6.15057"/>
-  <object id="108" name="bomb" type="bomb" x="169.411" y="91.5866" width="6.90909" height="6.15057"/>
-  <object id="103" name="bomb" type="bomb" x="224.161" y="320.087" width="6.90909" height="6.15057"/>
-  <object id="102" name="bomb" type="bomb" x="57.6611" y="319.587" width="6.90909" height="6.15057"/>
-  <object id="35" name="bomb" type="bomb" x="144" y="29.1394" width="3.13655" height="2.82652"/>
-  <object id="36" name="bomb" type="bomb" x="144.008" y="223.378" width="0.46875" height="0.43182"/>
-  <object id="128" name="bomb" type="bomb" x="175.477" y="223.378" width="0.46875" height="0.43182"/>
  </objectgroup>
 </map>
