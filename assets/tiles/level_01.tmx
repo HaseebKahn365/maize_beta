@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="27">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="29">
  <tileset firstgid="1" source="maize.tsx"/>
  <layer id="1" name="Tile Layer 1" width="40" height="23">
   <data encoding="csv">
@@ -36,8 +36,7 @@
   <object id="7" name="ColllisionRecs" type="ColllisionRecs" x="144" y="48" width="32" height="176"/>
   <object id="8" name="ColllisionRecs" type="ColllisionRecs" x="48" y="32" width="16" height="288"/>
   <object id="9" name="ColllisionRecs" type="ColllisionRecs" x="48" y="320" width="176" height="16"/>
-  <object id="10" name="ColllisionRecs" type="ColllisionRecs" x="224" y="208" width="16" height="128"/>
-  <object id="11" name="ColllisionRecs" type="ColllisionRecs" x="240" y="208" width="16" height="128"/>
+  <object id="10" name="ColllisionRecs" type="ColllisionRecs" x="224" y="208" width="32" height="128"/>
   <object id="12" name="ColllisionRecs" type="ColllisionRecs" x="256" y="320" width="208" height="16"/>
   <object id="13" name="ColllisionRecs" type="ColllisionRecs" x="464" y="160" width="32" height="176"/>
   <object id="14" name="ColllisionRecs" type="ColllisionRecs" x="496" y="320" width="112" height="16"/>
@@ -46,8 +45,5 @@
   <object id="17" name="ColllisionRecs" type="ColllisionRecs" x="464" y="48" width="144" height="16"/>
   <object id="19" name="ColllisionRecs" type="ColllisionRecs" x="336" y="96" width="32" height="128"/>
   <object id="20" name="ColllisionRecs" type="ColllisionRecs" x="176" y="64" width="288" height="32"/>
-  <object id="26" name="ColiisionRecs" type="ColiisionRecs" x="112" y="256">
-   <polygon points="0,0 48,-16 48,32"/>
-  </object>
  </objectgroup>
 </map>

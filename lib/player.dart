@@ -73,13 +73,16 @@ class Player extends PositionComponent {
           case Direction.leftright:
             print('Collision on left or right! detected');
             newPosition = Vector2(initialPosition.x, pointOfCollision.y);
+            break;
 
           case Direction.updown:
             print('Collision on up or down! detected');
             newPosition = Vector2(pointOfCollision.x, initialPosition.y);
+            break;
 
           case Direction.invalid:
             print('Invalid direction! detected');
+            break;
         }
 
         _addParticle();
@@ -101,25 +104,34 @@ class Player extends PositionComponent {
     final playerRect = toRect();
     final blockRect = block.toRect();
 
+    // Calculate the player's center
     final double playerCenterX = playerRect.left + playerRect.width / 2;
+    final double playerCenterY = playerRect.top + playerRect.height / 2;
 
-    // finding the direction of the player
+    // Check if the player's center is within the block's boundaries
+    bool isWithinBlockX = playerCenterX >= blockRect.left && playerCenterX <= blockRect.right;
+    bool isWithinBlockY = playerCenterY >= blockRect.top && playerCenterY <= blockRect.bottom;
 
-    if (playerCenterX < blockRect.left || playerCenterX > blockRect.right) {
+    // Determine the direction of the collision
+    if (isWithinBlockY) {
+      // If the player's center is within the block's top and bottom boundaries, it's a left/right collision
       return Direction.leftright;
-    } else {
+    } else if (isWithinBlockX) {
+      // If the player's center is within the block's left and right boundaries, it's an up/down collision
       return Direction.updown;
+    } else {
+      // If the player's center is not within the block's boundaries, it's a corner collision
+      return Direction.invalid;
     }
   }
 
   int audioPlayCount = 0; // Counter for the number of times the audio has been played
 
   void _playFutureAudio() {
-    if (audioPlayCount % 12 == 0) {
+    if (audioPlayCount % 8 == 0 || audioPlayCount == 0) {
       // Only play the audio if it has been played less than 5 times
       // FlameAudio.play('laserShoot.wav');
       // print('Audio played!');
-      audioPlayCount = 0; // Reset the counter
     }
     audioPlayCount++; // Increment the counter each time the audio is played
   }
