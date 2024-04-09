@@ -33,7 +33,7 @@ class Level extends World with TapCallbacks {
           case 'Player':
             //we need to accomodate for the player size too.
 
-            player = Player(playerRadius: 8, initialPosition: Vector2(spawnPoint.x - 20, spawnPoint.y - 150));
+            player = Player(playerRadius: 8, position: Vector2(spawnPoint.x, spawnPoint.y));
             add(player);
             break;
         }
@@ -57,7 +57,8 @@ class Level extends World with TapCallbacks {
             add(collisionBlock);
 
           case 'bomb':
-          // add
+            print('bomb found');
+            break;
         }
       }
       player.collisionBlocks = collisionBlocks;

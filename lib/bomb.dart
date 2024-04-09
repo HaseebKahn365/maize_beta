@@ -2,23 +2,23 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class Bomb extends SpriteComponent {
-  static const bombSize = 32.0;
+  static const bombSize = 12.0;
 
-  Bomb({
-    required Vector2 position,
-  }) : super(
+  Bomb({position})
+      : super(
           position: position,
-          size: Vector2.all(bombSize),
-        ) {
-    // Load the bomb icon
-    Sprite.load('bomb_icon.png').then((sprite) {
-      this.sprite = sprite;
-    });
-  }
+        ) {}
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
     // The sprite is automatically rendered at the bomb's position
+    //add a black rectangle
+
+    final bombPaint = Paint()
+      ..color = const Color(0xFF000000)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawRect(size.toRect(), bombPaint);
   }
 }

@@ -21,11 +21,9 @@ class Player extends PositionComponent {
 
   List<CollisionBlock> collisionBlocks = [];
 
-  Player({
-    this.playerRadius = 20,
-    required this.initialPosition,
-  }) : super(
-          position: Vector2(100, 40),
+  Player({this.playerRadius = 20, position})
+      : super(
+          position: position,
           priority: 20,
         ) {}
 
