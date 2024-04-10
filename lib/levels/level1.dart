@@ -7,7 +7,7 @@ import 'package:maize_beta/Components/collectable.dart';
 import 'package:maize_beta/Components/collision_block.dart';
 import 'package:maize_beta/Components/player.dart';
 
-class Level extends World with TapCallbacks {
+class Level extends World with TapCallbacks, HasCollisionDetection {
   late TiledComponent level;
   late Player player;
 
@@ -61,7 +61,7 @@ class Level extends World with TapCallbacks {
           case 'Player':
             //we need to accomodate for the player size too.
 
-            player = Player(playerRadius: 2, position: Vector2(spawnPoint.x, spawnPoint.y));
+            player = Player(playerRadius: 6, position: Vector2(spawnPoint.x, spawnPoint.y));
             add(player);
             break;
 

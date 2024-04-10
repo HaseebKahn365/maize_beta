@@ -1,18 +1,21 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/particles.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:maize_beta/Components/collectable.dart';
 import 'package:maize_beta/Components/collision_block.dart';
+import 'package:maize_beta/my_game.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 //the player should be able to readjust its initaial position when the user holds the screen and moves the device. this will give the user a better and comfortable experience when playing the game allowing the user to take a break.
 enum Direction { updown, leftright, invalid }
 
-class Player extends PositionComponent {
+class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGame> {
   Color _color = Colors.white;
   final _playerPaint = Paint();
   final motionIntensity = 700;
@@ -24,13 +27,37 @@ class Player extends PositionComponent {
   Player({this.playerRadius = 20, position})
       : super(
           position: position,
+          anchor: Anchor.topLeft,
           priority: 20,
-        ) {}
+        ) {
+    debugMode = true;
+  }
 
   final double playerRadius;
   Vector2 _velocity = Vector2.zero();
   late StreamSubscription<GyroscopeEvent> _gyroscopeSubscription;
 
+  //addinghitbox
+  @override
+  FutureOr<void> onLoad() {
+    add(RectangleHitbox(
+      position: size,
+      anchor: Anchor.topLeft,
+      size: Vector2(playerRadius * 2, playerRadius * 2),
+      collisionType: CollisionType.active,
+    ));
+    return super.onLoad();
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Collectable) {
+      print('Player collided with a heart!');
+    }
+    super.onCollision(intersectionPoints, other);
+  }
+
+//gyroninit
   @override
   void onMount() {
     super.onMount();
@@ -42,15 +69,14 @@ class Player extends PositionComponent {
       //set the initial position of the player
       initialPosition = Vector2(event.x, -event.y);
     });
-
-    //modify the hitbox of the player to be circular
   }
 
-  late Vector2 initialPosition;
+  late Vector2 initialPosition = Vector2.zero();
   var newPosition = Vector2.zero();
 
   var tempPosition;
 
+//update position or slide on collision
   @override
   void update(double dt) async {
     super.update(dt);
@@ -215,10 +241,10 @@ class Player extends PositionComponent {
     ParticleSystemComponent particleSystem = ParticleSystemComponent(
       particle: Particle.generate(
         count: 1, // Increase count for more sparks
-        lifespan: 1, // Increase lifespan for longer-lasting sparks
+        lifespan: 0.4, // Increase lifespan for longer-lasting sparks
         generator: (i) => AcceleratedParticle(
           acceleration: Vector2(random.nextDouble() * 100 - 50, random.nextDouble() * 100 - 50), // Randomize acceleration for more chaotic sparks
-          speed: Vector2(random.nextDouble() * 100 - 50, random.nextDouble() * 100 - 50), // Randomize speed for more chaotic sparks
+          speed: Vector2(random.nextDouble() * 200 - 50, random.nextDouble() * 200 - 50), // Randomize speed for more chaotic sparks
           child: CircleParticle(
             radius: 0.1 + random.nextDouble(), // Decrease radius for smaller, more spark-like particles
             paint: Paint()..color = Colors.yellow, // Change color to yellow for more spark-like color
