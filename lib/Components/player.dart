@@ -57,6 +57,8 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
     super.onCollision(intersectionPoints, other);
   }
 
+  bool showGuideArc = true;
+
 //gyroninit
   @override
   void onMount() {
@@ -113,6 +115,9 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
 
         //making the collision sound
         _playFutureAudio();
+
+        //reduce the life
+        gameRef.decreaseLife();
 
         break;
       } else {
@@ -225,16 +230,19 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
     Offset center = arrowEnd.translate(-radius * cos(angle), -radius * sin(angle));
 
     // Draw the arc
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      startAngle,
-      sweepAngle,
-      false,
-      Paint()
-        ..color = Colors.white
-        ..strokeWidth = 2
-        ..style = PaintingStyle.stroke,
-    );
+
+    if (showGuideArc) {
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        startAngle,
+        sweepAngle,
+        false,
+        Paint()
+          ..color = Colors.white
+          ..strokeWidth = 2
+          ..style = PaintingStyle.stroke,
+      );
+    }
   }
 
   void _addParticle() {

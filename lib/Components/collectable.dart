@@ -27,6 +27,7 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
     if (!collided) {
       //add shrink animation to the coollectable then _addBlastParticleEffect
       _addBlastParticleEffect();
+      gameRef.increaseLife();
       collided = true;
       await Future.delayed(Duration(milliseconds: 1000));
       removeFromParent();
