@@ -7,9 +7,6 @@ import 'package:maize_beta/my_game.dart';
 
 //this is a base project for the maize app. here we will start off by testing the player moment using the gyroscope sensor.
 
-import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
-
 void main() {
   runApp(MyApp());
 }
@@ -32,6 +29,9 @@ class _MyAppState extends State<MyApp> {
         body: Stack(
           children: [
             InteractiveViewer(
+              onInteractionUpdate: (details) {
+                game.som.player.recenterThePlayer();
+              },
               maxScale: 3,
               child: GameWidget(game: game),
             ),
