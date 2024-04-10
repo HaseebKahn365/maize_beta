@@ -6,7 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/particles.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:maize_beta/collision_block.dart';
+import 'package:maize_beta/Components/collision_block.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 //the player should be able to readjust its initaial position when the user holds the screen and moves the device. this will give the user a better and comfortable experience when playing the game allowing the user to take a break.
@@ -144,7 +144,7 @@ class Player extends PositionComponent {
     canvas.drawShadow(
       Path()
         ..addOval(Rect.fromCircle(
-          //dividing the new position by 5 to reduce the shadow length due to the velocity
+          //dividing the new position by 10 to reduce the shadow length due to the velocity
           center: ((newPosition / 10).toOffset() + (newPosition / 10).toOffset()) + (Offset(playerRadius, 0)),
           radius: playerRadius * 1.5, //
         )),

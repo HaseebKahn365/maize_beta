@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:maize_beta/collision_block.dart';
-import 'package:maize_beta/player.dart';
+import 'package:maize_beta/Components/collectable.dart';
+import 'package:maize_beta/Components/collision_block.dart';
+import 'package:maize_beta/Components/player.dart';
 
 class Level extends World with TapCallbacks {
   late TiledComponent level;
@@ -23,22 +24,7 @@ class Level extends World with TapCallbacks {
   FutureOr<void> onLoad() async {
     level = await TiledComponent.load('level_01.tmx', Vector2.all(16));
 
-    final spawnPointLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
-
-// Each one of the spawn points coming from the map
-
-    if (spawnPointLayer != null) {
-      for (final spawnPoint in spawnPointLayer.objects) {
-        switch (spawnPoint.type) {
-          case 'Player':
-            //we need to accomodate for the player size too.
-
-            player = Player(playerRadius: 8, position: Vector2(spawnPoint.x, spawnPoint.y));
-            add(player);
-            break;
-        }
-      }
-    }
+    _spawningObjects();
 
     final collisionLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
     add(level);
@@ -56,14 +42,39 @@ class Level extends World with TapCallbacks {
             collisionBlocks.add(collisionBlock);
             add(collisionBlock);
             break;
-
-          case 'bomb':
-            print('bomb found');
         }
       }
       player.collisionBlocks = collisionBlocks;
     }
 
     // return super.onLoad();
+  }
+
+  void _spawningObjects() {
+    final spawnPointLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
+
+// Each one of the spawn points coming from the map
+
+    if (spawnPointLayer != null) {
+      for (final spawnPoint in spawnPointLayer.objects) {
+        switch (spawnPoint.type) {
+          case 'Player':
+            //we need to accomodate for the player size too.
+
+            player = Player(playerRadius: 2, position: Vector2(spawnPoint.x, spawnPoint.y));
+            add(player);
+            break;
+
+          case 'Fruit':
+            print('fruit found');
+            final collectable = Collectable(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              collectable: 'Apple',
+            );
+            add(collectable);
+        }
+      }
+    }
   }
 }
