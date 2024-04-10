@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     WidgetsFlutterBinding.ensureInitialized();
     Flame.device.fullScreen();
     Flame.device.setLandscape();
-
+    final game = MyGame();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             InteractiveViewer(
               maxScale: 3,
-              child: GameWidget(game: MyGame()),
+              child: GameWidget(game: game),
             ),
             Align(
               alignment: Alignment.topCenter,
@@ -68,9 +68,13 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Handle FAB press
+            // game.som.player.recenterThePlayer();
+            //restart the game
+            setState(() {
+              game.onLoad();
+            });
           },
-          child: Icon(Icons.add),
+          child: Icon(Icons.restart_alt_rounded),
         ),
       ),
     );
