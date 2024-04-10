@@ -30,7 +30,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
           anchor: Anchor.topLeft,
           priority: 20,
         ) {
-    debugMode = true;
+    // debugMode = true;
   }
 
   final double playerRadius;

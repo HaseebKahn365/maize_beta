@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:maize_beta/my_game.dart';
 
 class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, CollisionCallbacks {
-  final String collectable;
+  final IconData icon;
+  final Color color;
 
-  Collectable({position, size, this.collectable = 'heart'})
+  Collectable({position, size, required this.icon, required this.color})
       : super(
           position: position,
           size: size,
@@ -34,22 +35,6 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
     super.onCollision(intersectionPoints, other);
   }
 
-  Future<void> _shrinkAnimation() async {
-    final initialSize = size.clone();
-    final initialPosition = position.clone();
-    final stepSize = initialSize / 10;
-    final stepTime = 0.05;
-
-    for (var i = 0; i < 10; i++) {
-      size -= stepSize;
-      position += stepSize / 2;
-      await Future.delayed(Duration(milliseconds: (stepTime * 1000).round()));
-    }
-
-    size = initialSize;
-    position = initialPosition;
-  }
-
   @override
   FutureOr<void> onLoad() {
     add(RectangleHitbox(
@@ -63,7 +48,7 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
 
   @override
   // TODO: implement priority
-  int get priority => 21;
+  int get priority => 1;
 
 //add a heart material icon
 
@@ -71,14 +56,14 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
   void render(Canvas canvas) {
     super.render(canvas);
 
-    final icon = Icons.favorite; // The heart icon
     final textSpan = TextSpan(
       text: String.fromCharCode(icon.codePoint),
       style: TextStyle(
         fontSize: 18, // The size of the icon
         fontFamily: icon.fontFamily,
         package: icon.fontPackage,
-        color: Colors.white, // The color of the icon
+        //proper bg color needed;
+        color: (collided) ? Colors.black.withOpacity(0) : color, // The color of the icon
       ),
     );
     final textPainter = TextPainter(
@@ -89,6 +74,8 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
     final relativePosition = Vector2(0, 0); // Calculate the relative position
 
     textPainter.paint(canvas, relativePosition.toOffset()); // Use the relative position
+
+    //check if collided then set the color to black
   }
 
   void _addBlastParticleEffect() {
@@ -96,13 +83,13 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
     ParticleSystemComponent particleSystem = ParticleSystemComponent(
       anchor: Anchor.center,
       particle: Particle.generate(
-        count: 100, // Increase count for more sparks
-        lifespan: 1, // Increase lifespan for longer-lasting sparks
+        count: 10, // Increase count for more sparks
+        lifespan: 2, // Increase lifespan for longer-lasting sparks
         generator: (i) => AcceleratedParticle(
-          acceleration: Vector2(random.nextDouble() * 220 - 50, random.nextDouble() * 220 - 50), // Randomize acceleration for more chaotic sparks
-          speed: Vector2(random.nextDouble() * 100 - 50, random.nextDouble() * 100 - 50), // Randomize speed for more chaotic sparks
+          acceleration: Vector2(random.nextDouble() * 100 - 50, random.nextDouble() * 100 - 50), // Randomize acceleration for more chaotic sparks
+          speed: Vector2(random.nextDouble() * 200 - 50, random.nextDouble() * 200 - 50), // Randomize speed for more chaotic sparks
           child: CircleParticle(
-            radius: 0.1 + random.nextDouble(), // Decrease radius for smaller, more spark-like particles
+            radius: 0.07 + random.nextDouble(), // Decrease radius for smaller, more spark-like particles
             paint: Paint()
               ..color = Color.fromRGBO(
                 random.nextInt(256), // Random red

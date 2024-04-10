@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flutter/material.dart';
 import 'package:maize_beta/Components/collectable.dart';
 import 'package:maize_beta/Components/collision_block.dart';
 import 'package:maize_beta/Components/player.dart';
@@ -70,7 +71,8 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
             final collectable = Collectable(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
-              collectable: 'Apple',
+              icon: Icons.favorite,
+              color: Colors.red,
             );
             add(collectable);
         }
