@@ -57,6 +57,10 @@ class MyGame extends FlameGame {
     timeElapsed.value += 1;
   }
 
+  void incrementScore() {
+    score.value += 1;
+  }
+
   Future<void> increaseLife() async {
     print('increasing life');
     if (life.value < 100) {

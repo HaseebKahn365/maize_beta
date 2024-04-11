@@ -29,6 +29,7 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
       //add shrink animation to the coollectable then _addBlastParticleEffect
       _addBlastParticleEffect();
       gameRef.increaseLife();
+      _affectScore();
       collided = true;
       FlameAudio.play('collectable.wav');
 
@@ -37,6 +38,13 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
     }
 
     super.onCollision(intersectionPoints, other);
+  }
+
+  void _affectScore() async {
+    for (int i = 0; i < 100; i++) {
+      await Future.delayed(Duration(milliseconds: 10));
+      game.incrementScore();
+    }
   }
 
   @override
@@ -51,7 +59,6 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
   }
 
   @override
-  // TODO: implement priority
   int get priority => 1;
 
 //add a heart material icon

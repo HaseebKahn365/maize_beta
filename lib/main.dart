@@ -68,14 +68,6 @@ class _MyAppState extends State<MyApp> {
 
                 height: 20,
                 margin: EdgeInsets.fromLTRB(250, 10, 250, 0),
-                // child: LinearProgressIndicator(
-                //   //make it rounded cornered add padding and increase hieight
-                //   backgroundColor: Colors.grey,
-                //   borderRadius: BorderRadius.circular(10),
-                //   color: Colors.red,
-
-                //   value: ((game.life.value / 100) > 1) ? 1 : game.life.value / 100,
-                // ),
 
                 child: ValueListenableBuilder(
                     valueListenable: game.life,

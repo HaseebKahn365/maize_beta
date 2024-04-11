@@ -121,6 +121,12 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
 
         break;
       } else {
+        //find the int distance between two vector2s distance(newPosition - initialPosition)
+        final distance = (newPosition).distanceTo(initialPosition);
+        if (distance > 170) {
+          // print(distance);
+          game.incrementScore();
+        }
         _color = Colors.white;
       }
     }
@@ -161,7 +167,6 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
       // FlameAudio.play('laserShoot.wav');
       // print('Audio played!');
     }
-    audioPlayCount++; // Increment the counter each time the audio is played
   }
 
   @override
