@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_beta/levels/level1.dart';
 
@@ -34,11 +34,28 @@ class MyGame extends FlameGame {
     cam.viewfinder.anchor = Anchor.topLeft;
 
     addAll([cam, som]);
+    //casche the audio
+    //start the timer
+
+    await FlameAudio.audioCache.loadAll(['collectable.wav', 'laserShoot.wav']);
 
     return super.onLoad();
   }
 
   final ValueNotifier<int> life = ValueNotifier(100);
+
+  final ValueNotifier<int> timeElapsed = ValueNotifier(0);
+
+  final ValueNotifier<int> score = ValueNotifier(0);
+
+  //reset the timer
+  void resetTimer() {
+    timeElapsed.value = 0;
+  }
+
+  void incrementTimer() {
+    timeElapsed.value += 1;
+  }
 
   Future<void> increaseLife() async {
     print('increasing life');

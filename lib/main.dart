@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
+
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +20,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     Flame.device.fullScreen();
     Flame.device.setLandscape();
     final game = MyGame();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      game.incrementTimer();
+    });
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -99,7 +109,68 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                   );
-                })
+                }),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Column(
+                children: [
+                  TextComponent(
+                    text: 'Time',
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(5, 10, 10, 0),
+                    padding: EdgeInsets.only(top: 2, bottom: 2, left: 4, right: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ValueListenableBuilder(
+                        valueListenable: game.timeElapsed,
+                        builder: (BuildContext context, int value, Widget? child) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              (value < 60) ? '${value} s' : '${value ~/ 60}m ${value % 60}s',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+
+                  //add a similar container for keeping track of score
+                  TextComponent(
+                    text: '\nScore',
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(5, 5, 10, 0),
+                    padding: EdgeInsets.only(top: 2, bottom: 2, left: 4, right: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ValueListenableBuilder(
+                        valueListenable: game.score,
+                        builder: (BuildContext context, int value, Widget? child) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              '$value',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -108,11 +179,28 @@ class _MyAppState extends State<MyApp> {
             //restart the game
             setState(() {
               game.onLoad();
+              //add another FAB on the top right corner keeping track of the time elapsed
             });
           },
           child: Icon(Icons.restart_alt_rounded),
         ),
       ),
+    );
+  }
+}
+
+class TextComponent extends StatelessWidget {
+  final String text;
+  const TextComponent({
+    required this.text,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(text, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
     );
   }
 }

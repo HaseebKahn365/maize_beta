@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_beta/my_game.dart';
 
@@ -29,6 +30,8 @@ class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, Coll
       _addBlastParticleEffect();
       gameRef.increaseLife();
       collided = true;
+      FlameAudio.play('collectable.wav');
+
       await Future.delayed(Duration(milliseconds: 1000));
       removeFromParent();
     }
