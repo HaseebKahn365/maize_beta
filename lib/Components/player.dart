@@ -7,7 +7,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/particles.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:maize_beta/Components/collectable.dart';
+import 'package:maize_beta/Components/Collectable_Logic.dart';
 import 'package:maize_beta/Components/collision_block.dart';
 import 'package:maize_beta/my_game.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -33,9 +33,14 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
     // debugMode = true;
   }
 
-  final double playerRadius;
+  double playerRadius;
   Vector2 _velocity = Vector2.zero();
   late StreamSubscription<GyroscopeEvent> _gyroscopeSubscription;
+
+  //shrinker
+  void shrink() {
+    playerRadius = playerRadius / 2;
+  }
 
   //addinghitbox
   @override
@@ -83,8 +88,11 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
   void update(double dt) async {
     super.update(dt);
     tempPosition = position.clone();
-    newPosition += _velocity * dt * motionIntensity.toDouble();
-    position += (newPosition - initialPosition) * dt;
+
+    if (game.showPausedOverlay.value == true) {
+      newPosition += _velocity * dt * motionIntensity.toDouble();
+      position += (newPosition - initialPosition) * dt;
+    }
 
     //check if the player is colliding with any of the collision blocks
     for (final block in collisionBlocks) {
@@ -125,7 +133,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
         final distance = (newPosition).distanceTo(initialPosition);
         if (distance > 170) {
           // print(distance);
-          game.incrementScore();
+          game.incrementScore(1);
         }
         _color = Colors.white;
       }

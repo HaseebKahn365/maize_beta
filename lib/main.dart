@@ -172,8 +172,6 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
             ),
-
-            //use a stateful widget to show the start overlay using the value notifier<bool>
             ValueListenableBuilder(
                 valueListenable: game.showStartOverlay,
                 builder: (BuildContext context, bool value, Widget? child) {
@@ -228,19 +226,45 @@ class _MyAppState extends State<MyApp> {
                           ))
                       : SizedBox.shrink();
                 }),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FloatingActionButton(
+                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                    onPressed: () {
+                      // game.som.player.recenterThePlayer();
+                      //restart the game
+                      setState(() {
+                        game.onLoad();
+                        //add another FAB on the top right corner keeping track of the time elapsed
+                      });
+                    },
+                    child: Icon(Icons.restart_alt_rounded),
+                  ),
+                  SizedBox(height: 20), // Add some spacing between the buttons
+                  FloatingActionButton(
+                    onPressed: () {
+                      final playerAccess = game.som.player;
+
+                      playerAccess.recenterThePlayer();
+                      playerAccess.showGuideArc = !playerAccess.showGuideArc;
+                      game.showPausedOverlay.value = !game.showPausedOverlay.value;
+                    },
+                    child: ValueListenableBuilder(
+                        valueListenable: game.showPausedOverlay,
+                        builder: (BuildContext context, bool value, Widget? child) {
+                          return Icon(value ? Icons.pause : Icons.play_arrow);
+                        }),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // game.som.player.recenterThePlayer();
-            //restart the game
-            setState(() {
-              game.onLoad();
-              //add another FAB on the top right corner keeping track of the time elapsed
-            });
-          },
-          child: Icon(Icons.restart_alt_rounded),
-        ),
+
+        //add another FAB for pausing the game
       ),
     );
   }

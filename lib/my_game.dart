@@ -56,6 +56,13 @@ class MyGame extends FlameGame {
   //a boolean valuenotifier for showing the game start overlay
   final ValueNotifier<bool> showStartOverlay = ValueNotifier(true);
 
+  //a boolean valuenotifier for showing the paused overlay
+  //pause means that we are just keeping the ball in its position and not moving it
+
+  final ValueNotifier<bool> showPausedOverlay = ValueNotifier(true);
+
+  //infinite recenter
+
   //reset the timer
   void resetTimer() {
     timeElapsed.value = 0;
@@ -65,8 +72,8 @@ class MyGame extends FlameGame {
     timeElapsed.value += 1;
   }
 
-  void incrementScore() {
-    score.value += 1;
+  void incrementScore(int value) {
+    score.value += value;
   }
 
   Future<void> increaseLife() async {
@@ -77,7 +84,7 @@ class MyGame extends FlameGame {
         neededLife = 10;
       }
       for (int i = 0; i < neededLife; i++) {
-        await Future.delayed(const Duration(milliseconds: 5), () {
+        await Future.delayed(const Duration(milliseconds: 10), () {
           life.value += 1;
         });
       }

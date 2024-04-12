@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:flutter/material.dart';
-import 'package:maize_beta/Components/collectable.dart';
+
+import 'package:maize_beta/Components/Collectables/Diamond.dart';
+import 'package:maize_beta/Components/Collectables/Heart.dart';
+import 'package:maize_beta/Components/Collectables/Shrinker.dart';
+// import 'package:maize_beta/Components/collectable.dart';
 import 'package:maize_beta/Components/collision_block.dart';
 import 'package:maize_beta/Components/player.dart';
 
@@ -64,15 +67,30 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
 
             player = Player(playerRadius: 6, position: Vector2(spawnPoint.x, spawnPoint.y));
             add(player);
-            break;
 
           case 'Fruit':
             print('fruit found');
-            final collectable = Collectable(
+            final collectable = Heart(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
-              icon: Icons.favorite,
-              color: Colors.red,
+            );
+            add(collectable);
+
+          //check for Shrinker and Diamond
+
+          case 'Shrinker':
+            print('Shrinker found');
+            final collectable = Shrinker(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(collectable);
+
+          case 'Diamond':
+            print('Diamond found');
+            final collectable = Diamond(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(collectable);
         }
