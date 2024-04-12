@@ -14,6 +14,11 @@ class MyGame extends FlameGame {
     pauseEngine();
   }
 
+  //in the constructor we pause the engine
+  MyGame() {
+    pauseEngine();
+  }
+
   //RESUME THE ENGINE METHOD
 
   void resume() {
@@ -48,6 +53,9 @@ class MyGame extends FlameGame {
 
   final ValueNotifier<int> score = ValueNotifier(0);
 
+  //a boolean valuenotifier for showing the game start overlay
+  final ValueNotifier<bool> showStartOverlay = ValueNotifier(true);
+
   //reset the timer
   void resetTimer() {
     timeElapsed.value = 0;
@@ -81,5 +89,10 @@ class MyGame extends FlameGame {
       life.value -= 1;
       print('decreasing life');
     }
+  }
+
+  void startGame() {
+    showStartOverlay.value = false;
+    resume();
   }
 }

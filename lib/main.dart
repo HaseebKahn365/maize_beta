@@ -1,15 +1,21 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:maize_beta/my_game.dart';
 
 //this is a base project for the maize app. here we will start off by testing the player moment using the gyroscope sensor.
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Flame.device.fullScreen();
+  Flame.device.setLandscape();
   runApp(MyApp());
 }
 
@@ -26,12 +32,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsFlutterBinding.ensureInitialized();
-    Flame.device.fullScreen();
-    Flame.device.setLandscape();
     final game = MyGame();
+    //timer for the game
     Timer.periodic(Duration(seconds: 1), (timer) {
-      game.incrementTimer();
+      if (game.showStartOverlay.value == false) {
+        game.incrementTimer();
+      }
     });
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -39,6 +45,8 @@ class _MyAppState extends State<MyApp> {
         body: Stack(
           children: [
             InteractiveViewer(
+              //on single tap doown i should do the same
+
               onInteractionUpdate: (details) {
                 game.som.player.recenterThePlayer();
                 game.som.player.showGuideArc = false;
@@ -47,6 +55,7 @@ class _MyAppState extends State<MyApp> {
                 game.som.player.showGuideArc = true;
               },
               maxScale: 3,
+
               child: GameWidget(game: game),
             ),
             Align(
@@ -163,6 +172,62 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
             ),
+
+            //use a stateful widget to show the start overlay using the value notifier<bool>
+            ValueListenableBuilder(
+                valueListenable: game.showStartOverlay,
+                builder: (BuildContext context, bool value, Widget? child) {
+                  return (value)
+                      ? GestureDetector(
+                          onTap: () {
+                            game.startGame();
+                          },
+                          child: Container(
+                            color: Colors.black.withOpacity(0.5),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Maize',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Tap to start',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  //tap.png from assets/images
+
+                                  Transform.rotate(
+                                    angle: -30 * pi / 180,
+                                    child: Icon(
+                                      FluentIcons.tap_single_32_regular,
+                                      color: Colors.white,
+                                      size: 70,
+                                    ), // replace with your icon
+                                  )
+                                ],
+                              ).animate(
+                                effects: [
+                                  ScaleEffect(
+                                    duration: Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                  )
+                                ],
+                              ),
+                            ),
+                            //add blur
+                          ))
+                      : SizedBox.shrink();
+                }),
           ],
         ),
         floatingActionButton: FloatingActionButton(
