@@ -9,9 +9,9 @@ class Shrinker extends Collectable {
           icon: Icons.remove_circle,
           color: Colors.blue,
         );
-
   @override
-  void _affectScore() {
-    game.som.player.shrink();
+  void affectScore() {
+    super.affectScore();
+    gameRef.som.player.shrink();
   }
 }

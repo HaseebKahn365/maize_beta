@@ -48,7 +48,7 @@ abstract class Collectable extends SpriteAnimationComponent with HasGameRef<MyGa
     print('OnCollision call with player detected');
     if (!collided) {
       _addBlastParticleEffect();
-      _affectScore();
+      affectScore();
 
       collided = true;
       FlameAudio.play('collectable.wav');
@@ -60,7 +60,7 @@ abstract class Collectable extends SpriteAnimationComponent with HasGameRef<MyGa
     super.onCollision(intersectionPoints, other);
   }
 
-  void _affectScore() async {
+  void affectScore() async {
     game.incrementScore(score);
   }
 

@@ -39,6 +39,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
 
   //shrinker
   void shrink() {
+    print('Player is shrinking!');
     playerRadius = playerRadius / 2;
   }
 
@@ -56,9 +57,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Collectable) {
-      print('Player collided with a heart!');
-    }
+    if (other is Collectable) {}
     super.onCollision(intersectionPoints, other);
   }
 
@@ -115,6 +114,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
             break;
 
           case Direction.invalid:
+            recenterThePlayer();
             print('Invalid direction! detected');
             break;
         }
