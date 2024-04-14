@@ -31,6 +31,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
           priority: 20,
         ) {
     // debugMode = true;
+    originalPlayerRadius = playerRadius;
   }
 
   double playerRadius;
@@ -38,8 +39,11 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
   late StreamSubscription<GyroscopeEvent> _gyroscopeSubscription;
 
   //shrinker
+
+  late double originalPlayerRadius;
   void shrink() {
     print('Player is shrinking!');
+    originalPlayerRadius = playerRadius;
     playerRadius = playerRadius / 2;
   }
 
@@ -262,14 +266,14 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
     final random = Random();
     ParticleSystemComponent particleSystem = ParticleSystemComponent(
       particle: Particle.generate(
-        count: 1, // Increase count for more sparks
-        lifespan: 0.4, // Increase lifespan for longer-lasting sparks
+        count: 1, // Increase count for more drops
+        lifespan: 2, // Increase lifespan for longer-lasting drops
         generator: (i) => AcceleratedParticle(
-          acceleration: Vector2(random.nextDouble() * 100 - 50, random.nextDouble() * 100 - 50), // Randomize acceleration for more chaotic sparks
-          speed: Vector2(random.nextDouble() * 200 - 50, random.nextDouble() * 200 - 50), // Randomize speed for more chaotic sparks
+          acceleration: Vector2(random.nextDouble() * 50 - 25, 50 + random.nextDouble() * 50), // Add downward acceleration
+          speed: Vector2(random.nextDouble() * 100 - 50, random.nextDouble() * 100 - 50), // Randomize speed for more chaotic drops
           child: CircleParticle(
-            radius: 0.1 + random.nextDouble(), // Decrease radius for smaller, more spark-like particles
-            paint: Paint()..color = Colors.yellow, // Change color to yellow for more spark-like color
+            radius: 0.5 + random.nextDouble() * 0.3, // Increase radius for larger, more drop-like particles
+            paint: Paint()..color = Colors.red, // Change color to red for blood-like color
           ),
         ),
       ),

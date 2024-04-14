@@ -11,7 +11,7 @@ class Heart extends Collectable {
         );
 
   @override
-  void _affectScore() {
+  void affectScore() {
     game.incrementScore(100);
     game.increaseLife();
   }

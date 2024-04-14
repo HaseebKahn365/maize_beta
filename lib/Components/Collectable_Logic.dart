@@ -30,7 +30,7 @@ import 'package:maize_beta/my_game.dart';
 
 abstract class Collectable extends SpriteAnimationComponent with HasGameRef<MyGame>, CollisionCallbacks {
   final IconData icon;
-  final Color color;
+  Color color;
   final int score;
 
   Collectable({position, size, required this.icon, required this.color, this.score = 100})
@@ -87,7 +87,7 @@ abstract class Collectable extends SpriteAnimationComponent with HasGameRef<MyGa
     final textSpan = TextSpan(
       text: String.fromCharCode(icon.codePoint),
       style: TextStyle(
-        fontSize: 18, // The size of the icon
+        fontSize: size.length, // The size of the icon
         fontFamily: icon.fontFamily,
         package: icon.fontPackage,
         //proper bg color needed;

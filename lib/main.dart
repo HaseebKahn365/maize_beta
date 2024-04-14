@@ -37,6 +37,9 @@ class _MyAppState extends State<MyApp> {
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (game.showStartOverlay.value == false) {
         game.incrementTimer();
+        if (game.som.player.originalPlayerRadius > game.som.player.playerRadius) {
+          game.som.player.playerRadius += 0.35;
+        }
       }
     });
     return MaterialApp(

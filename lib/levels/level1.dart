@@ -7,6 +7,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:maize_beta/Components/Collectables/Diamond.dart';
 import 'package:maize_beta/Components/Collectables/Heart.dart';
 import 'package:maize_beta/Components/Collectables/Shrinker.dart';
+import 'package:maize_beta/Components/Collectables/Trophy.dart';
 // import 'package:maize_beta/Components/collectable.dart';
 import 'package:maize_beta/Components/collision_block.dart';
 import 'package:maize_beta/Components/player.dart';
@@ -75,6 +76,7 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(collectable);
+            break;
 
           //check for Shrinker and Diamond
 
@@ -85,10 +87,20 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(collectable);
+            break;
 
           case 'Diamond':
             print('Diamond found');
             final collectable = Diamond(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(collectable);
+
+          //check for trophy
+          case 'trophy':
+            print('Trophy found!');
+            final collectable = Trophy(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );

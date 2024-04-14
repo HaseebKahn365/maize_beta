@@ -3,28 +3,33 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level_01.tmx",
+    "activeFile": "level2.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
         "level2.tmx": {
+            "expandedObjectLayers": [
+                2,
+                3
+            ],
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 441,
-                "y": 251.5
+                "x": 240,
+                "y": 193.5
             }
         },
         "level_01.tmx": {
             "expandedObjectLayers": [
-                2
+                2,
+                3
             ],
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 253.3333333333333,
-                "y": 139.66666666666669
+                "x": 512.6666666666666,
+                "y": 151
             }
         },
         "maize.tsx": {
@@ -39,13 +44,14 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "maize.tsx",
-        "level_01.tmx"
+        "level_01.tmx",
+        "level2.tmx"
     ],
     "project": "maize.tiled-project",
     "recentFiles": [
-        "maize.tsx",
-        "level_01.tmx"
+        "level_01.tmx",
+        "level2.tmx",
+        "maize.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

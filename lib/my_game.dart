@@ -56,6 +56,9 @@ class MyGame extends FlameGame {
   //a boolean valuenotifier for showing the game start overlay
   final ValueNotifier<bool> showStartOverlay = ValueNotifier(true);
 
+  //a boolean valuenotifier for showing the game over overlay
+  final ValueNotifier<bool> showGameOverOverlay = ValueNotifier(false);
+
   //a boolean valuenotifier for showing the paused overlay
   //pause means that we are just keeping the ball in its position and not moving it
 
