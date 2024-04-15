@@ -7,8 +7,9 @@ class MyTimelineTile extends StatefulWidget {
   final isFirst;
   final isLast;
   var isPast;
+  final Widget child;
 
-  MyTimelineTile({super.key, required this.isFirst, required this.isLast, this.isPast = false});
+  MyTimelineTile({super.key, required this.isFirst, required this.isLast, this.isPast = false, required this.child});
 
   @override
   State<MyTimelineTile> createState() => _MyTimelineTileState();
@@ -32,7 +33,7 @@ class _MyTimelineTileState extends State<MyTimelineTile> {
         ),
       ),
       endChild: EventCard(
-        child: Text('Level 1'),
+        child: widget.child,
       ),
     );
   }

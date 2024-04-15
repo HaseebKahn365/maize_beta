@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
       //create a floating action button on the top right corner for profile
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 150.0),
+        padding: const EdgeInsets.only(top: 185.0),
         child: Align(
           alignment: Alignment.topRight,
           child: AnimatedBuilder(
