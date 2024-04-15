@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:maize_beta/TimelineComponents/mytimeline_tile.dart';
 
@@ -25,104 +23,153 @@ class _JourneyState extends State<Journey> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          // Timeline widget
-          // Container for each level
-          // Avatar
-          // Name
-          // Score
+      body: Container(
+        padding: const EdgeInsets.fromLTRB(20, 80, 20, 0),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            // Timeline widget
+            // Container for each level
+            // Avatar
+            // Name
+            // Score
 
-          //three tiles for now
-          MyTimelineTile(
-            isFirst: true,
-            isLast: false,
-            isPast: false,
-            child: Text('Level 3'),
-          ),
-          MyTimelineTile(
-            isFirst: false,
-            isLast: false,
-            isPast: false,
-            child: Text('Level 2'),
-          ),
-          MyTimelineTile(
-            isFirst: false,
-            isLast: true,
-            isPast: true,
-            child: BeautifulEventCard(),
-          ),
-        ],
+            //three tiles for now
+            MyTimelineTile(
+              isFirst: true,
+              isLast: false,
+              isPast: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text('Level 1'),
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12.0),
+                        child: Text('My Position: 1'),
+                      )
+                    ],
+                  ),
+                  BeautifulEventCard(
+                    countryCode: 'pk',
+                    name: 'Abdul Haseeb',
+                    score: 100,
+                  ),
+                  BeautifulEventCard(
+                    countryCode: 'pk',
+                    name: 'Abdul Haseeb',
+                    score: 100,
+                  ),
+                  BeautifulEventCard(
+                    countryCode: 'pk',
+                    name: 'Abdul Haseeb',
+                    score: 100,
+                  ),
+                ],
+              ),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: false,
+              isPast: false,
+              child: Text('Level 2'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+            MyTimelineTile(
+              isFirst: false,
+              isLast: true,
+              isPast: false,
+              child: Text('Level 3'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class BeautifulEventCard extends StatefulWidget {
-  const BeautifulEventCard({super.key});
+class BeautifulEventCard extends StatelessWidget {
+  final String countryCode;
+  final String name;
+  final int score;
+  const BeautifulEventCard({
+    super.key,
+    required this.countryCode,
+    required this.name,
+    required this.score,
+  });
 
-  @override
-  State<BeautifulEventCard> createState() => _BeautifulEventCardState();
-}
-
-class _BeautifulEventCardState extends State<BeautifulEventCard> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage('assets/images/flags/ke.png'),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Kenya'),
-                Text('Score: 100'),
-              ],
+    return ListTile(
+      leading: Container(
+        //add shadow
+
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.2),
+              blurRadius: 2,
+              spreadRadius: 2,
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage('assets/images/flags/ug.png'),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Uganda'),
-                Text('Score: 90'),
-              ],
-            ),
-          ],
+        child: CircleAvatar(
+          radius: 20,
+          backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.2),
+          backgroundImage: NetworkImage('https://flagcdn.com/w160/pk.jpg'),
         ),
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage('assets/images/flags/tz.png'),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Tanzania'),
-                Text('Score: 80'),
-              ],
-            ),
-          ],
-        ),
-      ],
+      ),
+      title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+      subtitle: Text(score.toString()),
+      trailing: IconButton(
+        icon: Icon(Icons.arrow_forward_ios),
+        onPressed: () {},
+      ),
     );
   }
 }

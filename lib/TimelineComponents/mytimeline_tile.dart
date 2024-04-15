@@ -25,7 +25,7 @@ class _MyTimelineTileState extends State<MyTimelineTile> {
       beforeLineStyle: LineStyle(color: color),
       indicatorStyle: IndicatorStyle(
         color: color,
-        width: 30,
+        width: 35,
         iconStyle: IconStyle(
           color: widget.isPast ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.primaryContainer,
           //use a lock iicon iif not past
@@ -51,8 +51,8 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(20),
-        padding: const EdgeInsets.all(25),
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(8),
