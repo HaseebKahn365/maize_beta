@@ -177,7 +177,7 @@ class BeautifulEventCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.2),
-              blurRadius: 2,
+              blurRadius: 7,
               spreadRadius: 2,
             ),
           ],
