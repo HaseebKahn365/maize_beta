@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:maize_beta/Screens/Journey.dart';
 import 'package:maize_beta/Screens/leaderboard.dart';
 
 class MainScreen extends StatefulWidget {
@@ -132,15 +133,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: Text('Maize Beta'),
         actions: [
           IconButton(
-            icon: Icon(widget.useLightMode ? Icons.dark_mode : Icons.light_mode),
-            onPressed: widget.handleBrightnessChange,
+            onPressed: () {
+              //handle the brightness change
+              widget.handleBrightnessChange();
+            },
+            icon: Icon(widget.useLightMode ? FluentIcons.weather_sunny_24_regular : FluentIcons.weather_moon_24_regular),
           ),
         ],
       ),
-
       //create a floating action button on the top right corner for profile
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 200.0),
+        padding: const EdgeInsets.only(top: 150.0),
         child: Align(
           alignment: Alignment.topRight,
           child: AnimatedBuilder(
@@ -163,32 +166,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       ),
 
-      body: (selectedScreen == 1)
-          ? LeaderBoardScreen()
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Welcome to Maize Beta',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Start Journey'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LeaderBoardScreen()),
-                      );
-                    },
-                    child: Text('Leaderboard'),
-                  ),
-                ],
-              ),
-            ),
+      body: (selectedScreen == 1) ? LeaderBoardScreen() : Journey(),
 
       //add a bottom navigation bar
       bottomNavigationBar: BottomNavigationBar(
@@ -196,13 +174,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           BottomNavigationBarItem(
             icon: Icon(FluentIcons.home_20_regular),
             label: 'Journey',
+            activeIcon: Icon(FluentIcons.home_20_filled),
           ),
           BottomNavigationBarItem(
             icon: Icon(FluentIcons.top_speed_20_regular),
             label: 'Leaderboard',
+            activeIcon: Icon(FluentIcons.top_speed_20_filled),
           ),
         ],
         currentIndex: selectedScreen,
+        elevation: 10,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         onTap: (int index) {
           //handle the screen change
