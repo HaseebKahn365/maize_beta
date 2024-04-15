@@ -166,10 +166,10 @@ class BeautifulEventCard extends StatelessWidget {
       ),
       title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
       subtitle: Text(score.toString()),
-      trailing: IconButton(
-        icon: Icon(Icons.arrow_forward_ios),
-        onPressed: () {},
-      ),
+      trailing: Icon(Icons.arrow_forward_ios, size: 15),
+      onTap: () {
+        print('tapped');
+      },
     );
   }
 }
