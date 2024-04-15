@@ -51,7 +51,7 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(15),
         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,

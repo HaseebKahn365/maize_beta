@@ -67,6 +67,30 @@ class _JourneyState extends State<Journey> {
                     name: 'Abdul Haseeb',
                     score: 100,
                   ),
+
+                  //create a play button using row widget and center alligned
+                  //the play button will be a raised button with a text play
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //elevated button with text play
+                      ElevatedButton(
+                        onPressed: () {
+                          print('play');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.play_arrow,
+                              size: 30,
+                            ),
+                            Text('  Play'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -78,43 +102,43 @@ class _JourneyState extends State<Journey> {
             ),
             MyTimelineTile(
               isFirst: false,
-              isLast: true,
+              isLast: false,
               isPast: false,
               child: Text('Level 3'),
             ),
             MyTimelineTile(
               isFirst: false,
-              isLast: true,
+              isLast: false,
               isPast: false,
               child: Text('Level 3'),
             ),
             MyTimelineTile(
               isFirst: false,
-              isLast: true,
+              isLast: false,
               isPast: false,
               child: Text('Level 3'),
             ),
             MyTimelineTile(
               isFirst: false,
-              isLast: true,
+              isLast: false,
               isPast: false,
               child: Text('Level 3'),
             ),
             MyTimelineTile(
               isFirst: false,
-              isLast: true,
+              isLast: false,
               isPast: false,
               child: Text('Level 3'),
             ),
             MyTimelineTile(
               isFirst: false,
-              isLast: true,
+              isLast: false,
               isPast: false,
               child: Text('Level 3'),
             ),
             MyTimelineTile(
               isFirst: false,
-              isLast: true,
+              isLast: false,
               isPast: false,
               child: Text('Level 3'),
             ),
@@ -159,7 +183,7 @@ class BeautifulEventCard extends StatelessWidget {
           ],
         ),
         child: CircleAvatar(
-          radius: 20,
+          maxRadius: 20,
           backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.2),
           backgroundImage: NetworkImage('https://flagcdn.com/w160/pk.jpg'),
         ),
