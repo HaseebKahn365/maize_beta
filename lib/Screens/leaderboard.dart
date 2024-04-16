@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:maize_beta/Database_Services/db.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
   const LeaderBoardScreen({Key? key}) : super(key: key);
@@ -9,7 +10,21 @@ class LeaderBoardScreen extends StatefulWidget {
   State<LeaderBoardScreen> createState() => _LeaderBoardScreenState();
 }
 
+DatabaseService? _databaseService;
+
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
+  @override
+  void initState() {
+    _getDbReady();
+
+    super.initState();
+  }
+
+  Future<void> _getDbReady() async {
+    _databaseService = DatabaseService();
+    await _databaseService!.open();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +65,22 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           collectablesCollected: 100,
           damageTaken: 100,
           totalScore: 1000,
+        ),
+
+        //creating buttons to test the db services
+
+        //create and test the profile
+        ElevatedButton(
+          onPressed: () async {
+            final User user = User(id: 1, name: 'Abdul Haseeb', country_code: 'pk');
+            try {
+              await _databaseService!.updateProfile(user);
+            } catch (e) {
+              //show snakbar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
+            }
+          },
+          child: Text('Create Profile'),
         ),
       ],
     ));

@@ -117,6 +117,7 @@ class DatabaseService {
     final db = await getDBorThrow();
     try {
       await db.update(profileTable, user.toMap(), where: '$idColumn = ?', whereArgs: [user.id]);
+      print('Profile updated successfully! to $user');
     } catch (e) {
       print('Error updating profile: $e');
     }

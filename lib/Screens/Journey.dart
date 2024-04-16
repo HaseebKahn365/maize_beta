@@ -36,7 +36,7 @@ class _JourneyState extends State<Journey> {
 
             //three tiles for now
             MyTimelineTile(
-              isFirst: true,
+              isFirst: false,
               isLast: false,
               isPast: true,
               child: Column(
