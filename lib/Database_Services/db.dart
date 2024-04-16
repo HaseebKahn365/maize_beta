@@ -32,6 +32,95 @@ CREATE TABLE `History_t` (
 
  */
 
+//Here will be the services for the db
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+
+class DatabaseService {
+  Database? _db;
+
+  Future<void> open() async {
+    if (_db != null) {
+      throw 'Database already open';
+    }
+
+    try {
+      final dbPath = await getApplicationDocumentsDirectory();
+      final path = dbPath.path + dbName;
+      _db = await openDatabase(path, version: 1, onCreate: (db, version) async {
+        await db.execute('''
+        CREATE TABLE $profileTable (
+          $idColumn INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          $nameColumn TEXT NOT NULL DEFAULT 'Anon',
+          $countryCodeColumn TEXT DEFAULT 'ps'
+        );
+        ''');
+
+        print('created profile table successfully!');
+
+        await db.execute('''
+        CREATE TABLE $levelTable (
+          $idColumn INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          $nameColumn TEXT NOT NULL
+        );
+        ''');
+
+        print('created level table successfully!');
+
+        await db.execute('''
+        CREATE TABLE $historyTable (
+          $idColumn INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          $diamondsColumn INTEGER NOT NULL DEFAULT 0,
+          $heartsColumn INTEGER NOT NULL DEFAULT 0,
+          $shrinkersColumn INTEGER NOT NULL DEFAULT 0,
+          $levelIdColumn INTEGER NOT NULL,
+          $playerColumn INTEGER NOT NULL,
+          $healthColumn INTEGER NOT NULL DEFAULT 0,
+          $scoreColumn INTEGER NOT NULL DEFAULT 0,
+          $timeElapsedColumn INTEGER NOT NULL DEFAULT 0,
+          $dateTimeColumn INTEGER NOT NULL,
+          FOREIGN KEY($playerColumn) REFERENCES $profileTable($idColumn),
+          FOREIGN KEY($levelIdColumn) REFERENCES $levelTable($idColumn)
+        );
+        ''');
+
+        print('created history table successfully!');
+      });
+    } catch (e) {
+      print('Error opening db: $e');
+    }
+  }
+
+//closing the database
+  Future<void> close() async {
+    if (_db == null) {
+      throw 'Database already closed';
+    }
+
+    await _db!.close();
+    _db = null;
+  }
+
+  //private function to get the db getDBorThrow
+
+  Future<Database> getDBorThrow() async {
+    if (_db == null) {
+      throw 'Database not open';
+    }
+    return _db!;
+  }
+
+//only update method for the profile
+  Future<void> updateProfile(User user) async {
+    final db = await getDBorThrow();
+    try {
+      await db.update(profileTable, user.toMap(), where: '$idColumn = ?', whereArgs: [user.id]);
+    } catch (e) {
+      print('Error updating profile: $e');
+    }
+  }
+}
+
 class User {
   final int id;
   String name;
@@ -43,6 +132,14 @@ class User {
       : id = map[idColumn],
         name = map[nameColumn],
         country_code = map[countryCodeColumn];
+
+  Map<String, dynamic> toMap() {
+    return {
+      idColumn: id,
+      nameColumn: name,
+      countryCodeColumn: country_code,
+    };
+  }
 
   @override
   String toString() {
