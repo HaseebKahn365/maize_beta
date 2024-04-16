@@ -82,6 +82,37 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           },
           child: Text('Create Profile'),
         ),
+
+        //get the user
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              final User? myUser = await _databaseService!.getUser();
+              print('myUser: $myUser');
+              if (myUser != null) {
+                //show snakbar
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myUser: $myUser')));
+              }
+            } catch (e) {
+              //show snakbar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myUser: $e')));
+            }
+          },
+          child: Text('Get User'),
+        ),
+
+        //deleting the entire db
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              await _databaseService!.closeAndDelete();
+            } catch (e) {
+              //show snakbar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error deleting db: $e')));
+            }
+          },
+          child: Text('Delete DB'),
+        ),
       ],
     ));
   }

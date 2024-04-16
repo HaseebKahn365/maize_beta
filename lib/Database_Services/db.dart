@@ -92,13 +92,16 @@ class DatabaseService {
   }
 
 //closing the database
-  Future<void> close() async {
+  Future<void> closeAndDelete() async {
     if (_db == null) {
       throw 'Database already closed';
     }
-
     await _db!.close();
     _db = null;
+    final dbPath = await getApplicationDocumentsDirectory();
+    final path = dbPath.path + dbName;
+    await deleteDatabase(path);
+    print('Database deleted successfully!');
   }
 
   //private function to get the db getDBorThrow
@@ -116,25 +119,34 @@ class DatabaseService {
   Future<void> updateProfile(User user) async {
     final db = await getDBorThrow();
     try {
-      await db.update(profileTable, user.toMap(), where: '$idColumn = ?', whereArgs: [user.id]);
-      print('Profile updated successfully! to $user');
+      //print the count of the rows in the profile table
+      final count = await Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $profileTable'));
+      if (count != 1) {
+        //create a users
+        await db.insert(profileTable, user.toMap());
+        print('created user successfully!');
+      } else {
+        print('Trying to update user...');
+        await db.update(profileTable, user.toMap(), where: '$idColumn = ?', whereArgs: [user.id]);
+      }
     } catch (e) {
       print('Error updating profile: $e');
     }
   }
 
 //method for getting the user
-  Future<User?> getUser(int id) async {
+  Future<User?> getUser({int id = 1}) async {
     final db = await getDBorThrow();
     try {
+      //read the all the rows using the * operator
       final maps = await db.query(profileTable, where: '$idColumn = ?', whereArgs: [id]);
+
       if (maps.isNotEmpty) {
         return User.fromRow(maps.first);
       }
     } catch (e) {
       print('Error getting user: $e');
     }
-    return null;
   }
 
 //!methods for the level
