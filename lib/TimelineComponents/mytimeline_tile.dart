@@ -33,6 +33,7 @@ class _MyTimelineTileState extends State<MyTimelineTile> {
         ),
       ),
       endChild: EventCard(
+        isPast: widget.isPast,
         child: widget.child,
       ),
     );
@@ -40,7 +41,8 @@ class _MyTimelineTileState extends State<MyTimelineTile> {
 }
 
 class EventCard extends StatefulWidget {
-  EventCard({super.key, required this.child});
+  final bool isPast;
+  EventCard({super.key, required this.isPast, required this.child});
   final Widget child;
 
   @override
@@ -51,10 +53,10 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(15),
+        margin: const EdgeInsets.fromLTRB(10, 10, 10, 20),
         padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
+          color: (widget.isPast) ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: widget.child);
