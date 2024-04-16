@@ -110,6 +110,8 @@ class DatabaseService {
     return _db!;
   }
 
+//!methods for the profile
+
 //only update method for the profile
   Future<void> updateProfile(User user) async {
     final db = await getDBorThrow();
@@ -118,6 +120,92 @@ class DatabaseService {
     } catch (e) {
       print('Error updating profile: $e');
     }
+  }
+
+//method for getting the user
+  Future<User?> getUser(int id) async {
+    final db = await getDBorThrow();
+    try {
+      final maps = await db.query(profileTable, where: '$idColumn = ?', whereArgs: [id]);
+      if (maps.isNotEmpty) {
+        return User.fromRow(maps.first);
+      }
+    } catch (e) {
+      print('Error getting user: $e');
+    }
+    return null;
+  }
+
+//!methods for the level
+
+//method for creating a level in the level table
+  Future<void> createLevel(Level level) async {
+    final db = await getDBorThrow();
+    try {
+      await db.insert(levelTable, level.toMap());
+    } catch (e) {
+      print('Error creating level: $e');
+    }
+  }
+
+  //method for getting the count of all the levels
+  Future<int> getLevelCount() async {
+    final db = await getDBorThrow();
+    try {
+      final count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $levelTable'));
+      return count!;
+    } catch (e) {
+      print('Error getting level count: $e');
+    }
+    return 0;
+  }
+
+  //method for getting all the levels
+  Future<List<Level>> getLevels() async {
+    final db = await getDBorThrow();
+    try {
+      final maps = await db.query(levelTable);
+      return List.generate(maps.length, (index) => Level.fromRow(maps[index]));
+    } catch (e) {
+      print('Error getting levels: $e');
+    }
+    return [];
+  }
+
+//!methods for the history
+
+//method for creating a history in the history table
+  Future<void> createHistory(History history) async {
+    final db = await getDBorThrow();
+    try {
+      await db.insert(historyTable, history.toMap());
+    } catch (e) {
+      print('Error creating history: $e');
+    }
+  }
+
+  //method for getting the count of all the history
+  Future<int> getHistoryCount() async {
+    final db = await getDBorThrow();
+    try {
+      final count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $historyTable'));
+      return count!;
+    } catch (e) {
+      print('Error getting history count: $e');
+    }
+    return 0;
+  }
+
+  //method for getting all the history
+  Future<List<History>> getHistory() async {
+    final db = await getDBorThrow();
+    try {
+      final maps = await db.query(historyTable);
+      return List.generate(maps.length, (index) => History.fromRow(maps[index]));
+    } catch (e) {
+      print('Error getting history: $e');
+    }
+    return [];
   }
 }
 
@@ -161,6 +249,13 @@ class Level {
       : id = map[idColumn],
         name = map[nameColumn];
 
+  Map<String, dynamic> toMap() {
+    return {
+      idColumn: id,
+      nameColumn: name,
+    };
+  }
+
   @override
   String toString() {
     return 'Level{id: $id, name: $name}';
@@ -195,6 +290,21 @@ class History {
         score = map[scoreColumn],
         time_elapsed = map[timeElapsedColumn],
         date_time = map[dateTimeColumn];
+
+  Map<String, dynamic> toMap() {
+    return {
+      idColumn: id,
+      diamondsColumn: diamonds,
+      heartsColumn: hearts,
+      shrinkersColumn: shrinkers,
+      levelIdColumn: level_id,
+      playerColumn: player_id,
+      healthColumn: health,
+      scoreColumn: score,
+      timeElapsedColumn: time_elapsed,
+      dateTimeColumn: date_time,
+    };
+  }
 
   @override
   String toString() {
