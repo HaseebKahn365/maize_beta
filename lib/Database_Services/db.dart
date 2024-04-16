@@ -155,6 +155,12 @@ class DatabaseService {
   Future<void> createLevel(Level level) async {
     final db = await getDBorThrow();
     try {
+      //check if there are any levels with same id
+      final count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $levelTable WHERE $idColumn = ${level.id}'));
+      if (count != 0) {
+        print('Level with id ${level.id} already exists');
+        return;
+      }
       await db.insert(levelTable, level.toMap());
     } catch (e) {
       print('Error creating level: $e');

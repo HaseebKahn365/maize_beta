@@ -101,6 +101,42 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           child: Text('Get User'),
         ),
 
+        //Testing the level table
+        ElevatedButton(
+          onPressed: () async {
+            final Level level = Level(id: 1, name: "Desert");
+            final Level level2 = Level(id: 2, name: "Forest");
+            try {
+              await _databaseService!.createLevel(level);
+              await _databaseService!.createLevel(level2);
+            } catch (e) {
+              //show snakbar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating level: $e')));
+            }
+          },
+          child: Text('Create Level'),
+        ),
+
+        //get the level
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              final List<Level?> myLevels = await _databaseService!.getLevels();
+              print('myLevel: $myLevels');
+              if (myLevels != null) {
+                //show snakbar
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myLevel: ${myLevels.length}')));
+              }
+            } catch (e) {
+              //show snakbar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myLevel: $e')));
+            }
+          },
+          child: Text('Get Level'),
+        ),
+
+        //
+
         //deleting the entire db
         ElevatedButton(
           onPressed: () async {
