@@ -285,7 +285,7 @@ const levelIdColumn = 'level_id';
 const levelNameColumn = 'name';
 
 class History {
-  final int id;
+  int id = 0;
   int diamonds;
   int hearts;
   int shrinkers;
@@ -296,7 +296,23 @@ class History {
   int time_elapsed;
   int date_time;
 
-  History({required this.id, required this.diamonds, required this.hearts, required this.shrinkers, required this.level_id, required this.player_id, required this.health, required this.score, required this.time_elapsed, required this.date_time});
+  /*
+  Example:
+   id: 1,
+              level_id: 1,
+              diamonds: 10,
+              health: 100,
+              //int date time since epoch in milliseconds
+              date_time: DateTime.now().millisecondsSinceEpoch,
+              hearts: 5,
+              player_id: 1,
+              shrinkers: 2,
+              //time in seconds
+              time_elapsed: 21,
+              score: 1000,
+   */
+
+  History({required this.diamonds, required this.hearts, required this.shrinkers, required this.level_id, required this.player_id, required this.health, required this.score, required this.time_elapsed, required this.date_time});
 
   History.fromRow(Map<String, dynamic> map)
       : id = map[idColumn],
@@ -312,7 +328,7 @@ class History {
 
   Map<String, dynamic> toMap() {
     return {
-      idColumn: id,
+      //id colum was not included because it is autoincremented
       diamondsColumn: diamonds,
       heartsColumn: hearts,
       shrinkersColumn: shrinkers,

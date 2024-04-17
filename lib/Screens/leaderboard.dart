@@ -135,7 +135,52 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           child: Text('Get Level'),
         ),
 
-        //
+        //Testing the History table
+
+        ElevatedButton(
+          onPressed: () async {
+            final History history = History(
+              //id for history is not needed as it is auto incremented
+              level_id: 1,
+              diamonds: 10,
+              health: 100,
+              //int date time since epoch in milliseconds
+              date_time: DateTime.now().millisecondsSinceEpoch,
+              hearts: 5,
+              player_id: 1,
+              shrinkers: 2,
+              //time in seconds
+              time_elapsed: 21,
+              score: 1000,
+            );
+
+            try {
+              await _databaseService!.createHistory(history);
+            } catch (e) {
+              //show snakbar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating history: $e')));
+            }
+          },
+          child: Text('Create History'),
+        ),
+
+        //get the history
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              final List<History?> myHistory = await _databaseService!.getHistory();
+              print('myHistory: $myHistory');
+              if (myHistory != null) {
+                //show snakbar
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myHistory: ${myHistory.length}')));
+              }
+            } catch (e) {
+              //show snakbar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myHistory: $e')));
+            }
+          },
+          child: Text('Get History'),
+        ),
 
         //deleting the entire db
         ElevatedButton(
