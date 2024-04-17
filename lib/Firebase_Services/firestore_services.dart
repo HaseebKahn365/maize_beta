@@ -89,8 +89,8 @@ class FirestoreServices {
   Future<void> addUser(User user) async {
     try {
       await _firestore.collection('users').doc(user.uuid).set({
-        'name': 'Anon',
-        'country_code': 'pl',
+        'name': user.name,
+        'country_code': user.country_code,
       });
     } catch (e) {
       print(e);
