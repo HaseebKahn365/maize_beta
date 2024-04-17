@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:maize_beta/Database_Services/db.dart';
+import 'package:maize_beta/Firebase_Services/firestore_services.dart';
 import 'package:uuid/uuid.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class LeaderBoardScreen extends StatefulWidget {
 }
 
 DatabaseService? _databaseService;
+late FirestoreServices _firestoreServices;
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
@@ -24,6 +26,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   Future<void> _getDbReady() async {
     _databaseService = DatabaseService();
     await _databaseService!.open();
+    _firestoreServices = FirestoreServices();
   }
 
   @override
@@ -70,137 +73,163 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
 
         //creating buttons to test the db services
 
-        //create and test the profile
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  //we need to use the version 4 of RFC4122 UUIDs to generate the uuid
+                  final String uuid = const Uuid().v4();
+                  final User user = User(id: 1, name: 'Abdul Haseeb', country_code: 'pk', uuid: uuid);
+                  try {
+                    await _databaseService!.updateProfile(user);
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
+                  }
+                },
+                child: Text('Create Profile'),
+              ),
+
+              //get the user
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final User? myUser = await _databaseService!.getUser();
+                    print('myUser: $myUser');
+                    if (myUser != null) {
+                      //show snakbar
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myUser: $myUser')));
+                    }
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myUser: $e')));
+                  }
+                },
+                child: Text('Get User'),
+              ),
+
+              //Testing the level table
+              ElevatedButton(
+                onPressed: () async {
+                  final Level level = Level(id: 1, name: "Desert");
+                  final Level level2 = Level(id: 2, name: "Forest");
+                  try {
+                    await _databaseService!.createLevel(level);
+                    await _databaseService!.createLevel(level2);
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating level: $e')));
+                  }
+                },
+                child: Text('Create Level'),
+              ),
+
+              //get the level
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final List<Level?> myLevels = await _databaseService!.getLevels();
+                    print('myLevel: $myLevels');
+                    if (myLevels != null) {
+                      //show snakbar
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myLevel: ${myLevels.length}')));
+                    }
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myLevel: $e')));
+                  }
+                },
+                child: Text('Get Level'),
+              ),
+
+              //Testing the History table
+
+              ElevatedButton(
+                onPressed: () async {
+                  final History history = History(
+                    //id for history is not needed as it is auto incremented
+                    level_id: 1,
+                    diamonds: 10,
+                    health: 100,
+                    //int date time since epoch in milliseconds
+                    date_time: DateTime.now().millisecondsSinceEpoch,
+                    hearts: 5,
+                    player_id: 1,
+                    shrinkers: 2,
+                    //time in seconds
+                    time_elapsed: 21,
+                    score: 1000,
+                  );
+
+                  try {
+                    await _databaseService!.createHistory(history);
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating history: $e')));
+                  }
+                },
+                child: Text('Create History'),
+              ),
+
+              //get the history
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final List<History?> myHistory = await _databaseService!.getHistory();
+                    print('myHistory: $myHistory');
+                    if (myHistory != null) {
+                      //show snakbar
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myHistory: ${myHistory.length}')));
+                    }
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myHistory: $e')));
+                  }
+                },
+                child: Text('Get History'),
+              ),
+
+              //deleting the entire db
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await _databaseService!.closeAndDelete();
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error deleting db: $e')));
+                  }
+                },
+                child: Text('Delete DB'),
+              ),
+            ],
+          ),
+        ),
+
+        //creating buttons to test the firebase firestore services
+
         ElevatedButton(
           onPressed: () async {
             //we need to use the version 4 of RFC4122 UUIDs to generate the uuid
-            final String uuid = const Uuid().v4();
-            final User user = User(id: 1, name: 'Abdul Haseeb', country_code: 'pk', uuid: uuid);
+
+            final User? user = await _databaseService!.getUser();
             try {
-              await _databaseService!.updateProfile(user);
+              await _firestoreServices.addUser(user!);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User added to firestore')));
             } catch (e) {
               //show snakbar
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
             }
           },
-          child: Text('Create Profile'),
-        ),
-
-        //get the user
-        ElevatedButton(
-          onPressed: () async {
-            try {
-              final User? myUser = await _databaseService!.getUser();
-              print('myUser: $myUser');
-              if (myUser != null) {
-                //show snakbar
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myUser: $myUser')));
-              }
-            } catch (e) {
-              //show snakbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myUser: $e')));
-            }
-          },
-          child: Text('Get User'),
-        ),
-
-        //Testing the level table
-        ElevatedButton(
-          onPressed: () async {
-            final Level level = Level(id: 1, name: "Desert");
-            final Level level2 = Level(id: 2, name: "Forest");
-            try {
-              await _databaseService!.createLevel(level);
-              await _databaseService!.createLevel(level2);
-            } catch (e) {
-              //show snakbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating level: $e')));
-            }
-          },
-          child: Text('Create Level'),
-        ),
-
-        //get the level
-        ElevatedButton(
-          onPressed: () async {
-            try {
-              final List<Level?> myLevels = await _databaseService!.getLevels();
-              print('myLevel: $myLevels');
-              if (myLevels != null) {
-                //show snakbar
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myLevel: ${myLevels.length}')));
-              }
-            } catch (e) {
-              //show snakbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myLevel: $e')));
-            }
-          },
-          child: Text('Get Level'),
-        ),
-
-        //Testing the History table
-
-        ElevatedButton(
-          onPressed: () async {
-            final History history = History(
-              //id for history is not needed as it is auto incremented
-              level_id: 1,
-              diamonds: 10,
-              health: 100,
-              //int date time since epoch in milliseconds
-              date_time: DateTime.now().millisecondsSinceEpoch,
-              hearts: 5,
-              player_id: 1,
-              shrinkers: 2,
-              //time in seconds
-              time_elapsed: 21,
-              score: 1000,
-            );
-
-            try {
-              await _databaseService!.createHistory(history);
-            } catch (e) {
-              //show snakbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating history: $e')));
-            }
-          },
-          child: Text('Create History'),
-        ),
-
-        //get the history
-        ElevatedButton(
-          onPressed: () async {
-            try {
-              final List<History?> myHistory = await _databaseService!.getHistory();
-              print('myHistory: $myHistory');
-              if (myHistory != null) {
-                //show snakbar
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myHistory: ${myHistory.length}')));
-              }
-            } catch (e) {
-              //show snakbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myHistory: $e')));
-            }
-          },
-          child: Text('Get History'),
-        ),
-
-        //deleting the entire db
-        ElevatedButton(
-          onPressed: () async {
-            try {
-              await _databaseService!.closeAndDelete();
-            } catch (e) {
-              //show snakbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error deleting db: $e')));
-            }
-          },
-          child: Text('Delete DB'),
+          child: Text('Create user in firestore'),
         ),
       ],
     ));
   }
 }
+
+//!just a simple list tile to display the player details
 
 class PlayerListTile extends StatelessWidget {
   final String name;
