@@ -3,12 +3,14 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
+import 'package:maize_beta/firebase_options.dart';
 import 'package:maize_beta/my_game.dart';
 
 //now we are gonna start to worrk on the main interface of the entire game app:
@@ -21,8 +23,11 @@ in the body we might load the JourneyScreen or LeaderBoardScreen depending on th
 
  */
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(MainScreen());
 }

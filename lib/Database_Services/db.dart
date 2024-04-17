@@ -1,4 +1,6 @@
 //Here we are going to use the sqflite package to create and manage the db.
+// ignore_for_file: avoid_print
+
 /*
 Here is what the structure of the db tables look like:
 

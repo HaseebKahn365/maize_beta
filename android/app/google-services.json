@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "431132444760",
+    "project_id": "maize-beta-6e103",
+    "storage_bucket": "maize-beta-6e103.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431132444760:android:77284446e33cb5061aa22d",
+        "android_client_info": {
+          "package_name": "com.example.maize_beta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcC2kfJjLQURThNy9EbHsl14rsEB1GuGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
