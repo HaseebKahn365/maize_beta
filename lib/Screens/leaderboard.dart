@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:maize_beta/Database_Services/db.dart';
+import 'package:uuid/uuid.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
   const LeaderBoardScreen({Key? key}) : super(key: key);
@@ -72,7 +73,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
         //create and test the profile
         ElevatedButton(
           onPressed: () async {
-            final User user = User(id: 1, name: 'Abdul Haseeb', country_code: 'pk');
+            //we need to use the version 4 of RFC4122 UUIDs to generate the uuid
+            final String uuid = const Uuid().v4();
+            final User user = User(id: 1, name: 'Abdul Haseeb', country_code: 'pk', uuid: uuid);
             try {
               await _databaseService!.updateProfile(user);
             } catch (e) {

@@ -3,9 +3,11 @@
 Here is what the structure of the db tables look like:
 
 CREATE TABLE `Profile_t` (
+  //i forgot to add the uuid column in the Profile_t table
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`name`	INTEGER NOT NULL DEFAULT 'Anon',
 	`country_code`	TEXT DEFAULT 'ps'
+  `uuid`	TEXT NOT NULL UNIQUE
 );
 
 
@@ -52,7 +54,8 @@ class DatabaseService {
         CREATE TABLE $profileTable (
           $idColumn INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
           $nameColumn TEXT NOT NULL DEFAULT 'Anon',
-          $countryCodeColumn TEXT DEFAULT 'ps'
+          $countryCodeColumn TEXT DEFAULT 'ps',
+          $uuidColumn TEXT NOT NULL UNIQUE
         );
         ''');
 
@@ -232,31 +235,35 @@ class User {
   final int id;
   String name;
   String country_code;
+  String uuid;
 
-  User({required this.id, required this.name, required this.country_code});
+  User({required this.id, required this.name, required this.country_code, required this.uuid});
 
   User.fromRow(Map<String, dynamic> map)
       : id = map[idColumn],
         name = map[nameColumn],
-        country_code = map[countryCodeColumn];
+        country_code = map[countryCodeColumn],
+        uuid = map[uuidColumn];
 
   Map<String, dynamic> toMap() {
     return {
       idColumn: id,
       nameColumn: name,
       countryCodeColumn: country_code,
+      uuidColumn: uuid,
     };
   }
 
   @override
   String toString() {
-    return 'User{id: $id, name: $name, country_code: $country_code}';
+    return 'User{id: $id, name: $name, country_code: $country_code, uuid: $uuid}';
   }
 }
 
 const idColumn = 'id';
 const nameColumn = 'name';
 const countryCodeColumn = 'country_code';
+const uuidColumn = 'uuid';
 
 class Level {
   final int id;
