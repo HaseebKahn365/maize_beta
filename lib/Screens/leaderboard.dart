@@ -26,7 +26,10 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   Future<void> _getDbReady() async {
     _databaseService = DatabaseService();
     await _databaseService!.open();
-    _firestoreServices = FirestoreServices();
+    User? user = await _databaseService!.getUser();
+    _firestoreServices = FirestoreServices.forUser(
+      user!,
+    );
   }
 
   @override
@@ -209,20 +212,55 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
 
         //creating buttons to test the firebase firestore services
 
-        ElevatedButton(
-          onPressed: () async {
-            //we need to use the version 4 of RFC4122 UUIDs to generate the uuid
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  //we need to use the version 4 of RFC4122 UUIDs to generate the uuid
 
-            final User? user = await _databaseService!.getUser();
-            try {
-              await _firestoreServices.addUser(user!);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User added to firestore')));
-            } catch (e) {
-              //show snakbar
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
-            }
-          },
-          child: Text('Create user in firestore'),
+                  final User? user = await _databaseService!.getUser();
+                  try {
+                    _firestoreServices = FirestoreServices.forUser(user!);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User added to firestore')));
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
+                  }
+                },
+                child: Text('Create user in firestore'),
+              ),
+
+              //button to create mock levels toppers
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await _firestoreServices.createMockLevelToppers();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Mock levels toppers created')));
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating mock levels toppers: $e')));
+                  }
+                },
+                child: Text('Create mock levels toppers'),
+              ),
+
+              //button to create mock leaderboard toppers
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await _firestoreServices.createMockLeaderBoard();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Mock leaderboard toppers created')));
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating mock leaderboard toppers: $e')));
+                  }
+                },
+                child: Text('Create mock leaderboard toppers'),
+              ),
+            ],
+          ),
         ),
       ],
     ));
