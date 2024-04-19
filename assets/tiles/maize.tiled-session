@@ -22,18 +22,82 @@
                 2
             ],
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 304.6666666666667,
+                "x": 304,
                 "y": 153
             }
         },
         "level3.tmx": {
+            "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 355.33333333333326,
+                "y": 273
+            }
+        },
+        "level4.tmx": {
+            "scale": 1.6803124999999999,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 320.1785382183374,
+                "y": 184.19192858471268
+            }
+        },
+        "level5.tmx": {
+            "scale": 1.6803124999999999,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 320.1785382183374,
+                "y": 184.19192858471268
+            }
+        },
+        "level6.tmx": {
+            "scale": 1.6803124999999999,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 320.1785382183374,
+                "y": 184.19192858471268
+            }
+        },
+        "level7 - Copy (3).tmx": {
             "scale": 1.6803124999999999,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 341.6031244188209,
-                "y": 160.38683280639765
+                "x": 320.1785382183374,
+                "y": 184.19192858471268
+            }
+        },
+        "level7.tmx": {
+            "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1.6803124999999999,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 320.1785382183374,
+                "y": 260.9633624697787
+            }
+        },
+        "level8.tmx": {
+            "scale": 1.6803124999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 319.5834108238795,
+                "y": 183.59680119025484
+            }
+        },
+        "level9.tmx": {
+            "scale": 1.6803124999999999,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 320.1785382183374,
+                "y": 184.19192858471268
             }
         },
         "level_01.tmx": {
@@ -65,6 +129,8 @@
     ],
     "project": "maize.tiled-project",
     "recentFiles": [
+        "level8.tmx",
+        "level7 - Copy (3).tmx",
         "level_01.tmx",
         "level2.tmx",
         "maize.tsx"
