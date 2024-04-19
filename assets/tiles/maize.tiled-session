@@ -10,26 +10,26 @@
     "fileStates": {
         "level2.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 240,
-                "y": 193.5
+                "x": 239,
+                "y": 192.5
             }
         },
         "level_01.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 512.6666666666666,
-                "y": 151
+                "x": 319.66666666666663,
+                "y": 184
             }
         },
         "maize.tsx": {
