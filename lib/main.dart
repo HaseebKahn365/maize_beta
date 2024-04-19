@@ -79,59 +79,75 @@ class _MyAppState extends State<MyApp> {
 
               child: GameWidget(game: game),
             ),
-            Align(
-              alignment: Alignment.topCenter,
-              //for life
-              child: Container(
-                //add shadow
-                //add white outline and black shadow
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(0.0, 1.0), //(x,y)
-                      blurRadius: 6.0,
-                    ),
-                  ],
-                ),
-
-                height: 20,
-                margin: EdgeInsets.fromLTRB(250, 10, 250, 0),
-
-                child: ValueListenableBuilder(
-                    valueListenable: game.life,
-                    builder: (BuildContext context, int value, Widget? child) {
-                      return LinearProgressIndicator(
-                        //make it rounded cornered add padding and increase hieight
-                        backgroundColor: Colors.grey,
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.red,
-                        //increase the value smoothly
-
-                        value: ((value / 100) > 1) ? 1 : value / 100,
-                      );
-                    }),
-              ),
-            ),
-            ValueListenableBuilder(
-                valueListenable: game.life,
-                builder: (BuildContext context, int value, Widget? child) {
-                  return Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(250, 10, 250, 0),
-                      child: Text(
-                        '$value%',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+            Stack(
+              alignment: Alignment.bottomLeft,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        // Adjust the width and height as needed
+                        width: 20,
+                        height: 100,
+                        margin: EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.red,
+                              offset: Offset(0.0, 1.0), //(x,y)
+                              blurRadius: 6.0,
+                            ),
+                          ],
+                        ),
+                        child: RotatedBox(
+                          quarterTurns: 3,
+                          child: ValueListenableBuilder(
+                            valueListenable: game.life,
+                            builder: (BuildContext context, int value, Widget? child) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: ValueListenableBuilder(
+                                  valueListenable: game.life,
+                                  builder: (BuildContext context, int value, Widget? child) {
+                                    return LinearProgressIndicator(
+                                      backgroundColor: Colors.grey,
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                                      value: ((value / 100) > 1) ? 1 : value / 100,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                      ValueListenableBuilder(
+                        valueListenable: game.life,
+                        builder: (BuildContext context, int value, Widget? child) {
+                          return SizedBox(
+                            width: 45,
+                            height: 20,
+                            child: Center(
+                              child: Text(
+                                '$value%',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             Align(
               alignment: Alignment.topLeft,
               child: Column(
