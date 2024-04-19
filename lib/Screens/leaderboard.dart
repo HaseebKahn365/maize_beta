@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Firebase_Services/firestore_services.dart';
+import 'package:maize_beta/GeneralRepresentation/level_toppers_and_thresholds.dart';
 import 'package:uuid/uuid.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
@@ -278,14 +279,16 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
               ElevatedButton(
                 onPressed: () async {
                   try {
-                    await _firestoreServices.downloadUpperLower5docs(1);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Level docs downloaded')));
+                    _firestoreServices.testDownloadLevel(3);
+
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Downloading level docs')));
                   } catch (e) {
                     //show snakbar
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error downloading level docs: $e')));
                   }
                 },
-                child: Text('Download Level Docs'),
+                child: Text('Download Level 3'),
               ),
             ],
           ),

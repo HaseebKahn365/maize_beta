@@ -125,53 +125,41 @@ Structure of the level toppers document in firestore
         }
  */
 
-class FirestoreTopperDocumentObject {
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class LocalObjectForLevel {
   //storing the level toppers data for easy access
-  final int level;
+  int level = 1;
   final List<LevelTopper?> toppers = [];
   final List<LevelTopperThreshold?> levelThresholds = [];
 
-  FirestoreTopperDocumentObject({required this.level});
+  //named constructor to download the data from firestore and parse it into LevelTopper and LevelTopperThreshold objects and add them to the respective lists
+  Future<LocalObjectForLevel?> downloadLevelToppersAndThresholds(int level) async {
+    this.level = level;
+    final DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore.instance.collection('levels').doc(level.toString()).get();
+    final Map<String, dynamic> data = doc.data()!;
+    print(data);
+    //Here is what the data looks like
+    /*{1000: {score: 2120, total_participants: 58, time: 310, life: 60}, 100: {score: 2210, total_participants: 100, time: 220, life: 60}, 1: {score: 2310, time: 120, uuid: bd1ae9fb-d261-4493-9b6b-8f7ee5de2362, life: 100}, 200: {score: 2200, total_participants: 100, time: 230, life: 50}, 
+   2: {score: 2300, time: 130, uuid: 213jo12i3jii-12n, life: 90}, 3: {score: 2290, time: 140, uuid: 213jo12i3jii-12n, life: 80}, 300: {score: 2190, total_participants: 100, time: 240, life: 40}, 4: {score: 2280, time: 150, uuid: 213jo12i3jii-12n, life: 70}, 400: {score: 2180, total_participants: 100, time: 250, life: 30}, 500: {score: 2170, total_participants: 100, time: 260, life: 20}, 5: {score: 2270, time: 160, uuid: 213jo12i3jii-12n, life: 60}, 600: {score: 2160, total_participants: 100, time: 270, life: 10}, */
 
-  //separately create the toppers and thresholds for a provided level document
-  // '1': {
-  //         'uuid': user.uuid,
-  //         'time': 120,
-  //         'life': 100,
-  //         'score': 2310,
-  //       },
-  //       '2': {
-  //         'uuid': '213jo12i3jii-12n',
-  //         'time': 130,
-  //         'life': 90,
-  //         'score': 2300,
-  //       }, ..and so on upto 10th topper we should parse this data into a list of LevelTopper objects
-
-  //filling the list of toppers
-
-  factory FirestoreTopperDocumentObject.fromCollection(Map<String, dynamic> data, int level) {
-    List<LevelTopper?> toppers = [];
-    List<LevelTopperThreshold?> levelThresholds = [];
-
-    //The provided collection in the parameter is a collection of levels in the following form:
-    //{3: {1000: {score: 2120, total_participants: 58, time: 310, life: 60}, 1: {score: 2310, time: 120, uuid: bd1ae9fb-d261-4493-9b6b-8f7ee5de2362, life: 100},...
-    //here 3 is the level number and 1000, 1 are the threshold and topper numbers respectively
-
-    //go through every level document and parse the data for toppers and thresholds
-
-    data.forEach((key, value) {
-      if (int.parse(key) <= 10) {
-        //parse the toppers
-        toppers.add(LevelTopper.fromMap(value));
-      } else {
-        //parse the thresholds
-        levelThresholds.add(LevelTopperThreshold.fromMap(value));
+    //parsing the level toppers data
+    for (int i = 1; i <= 10; i++) {
+      if (data.containsKey(i.toString())) {
+        toppers.add(LevelTopper.fromMap(data[i.toString()]));
+        print("${LevelTopper.fromMap(data[i.toString()])} added to toppers");
       }
-    });
+    }
 
-    return FirestoreTopperDocumentObject(level: level)
-      ..toppers.addAll(toppers)
-      ..levelThresholds.addAll(levelThresholds);
+    //parsing the level thresholds data
+    for (int i = 100; i <= 1000; i += 100) {
+      if (data.containsKey(i.toString())) {
+        levelThresholds.add(LevelTopperThreshold.fromMap(data[i.toString()]));
+        print("${LevelTopperThreshold.fromMap(data[i.toString()])} added to levelThresholds");
+      }
+    }
+
+    return this;
   }
 
   //toString for the entire object

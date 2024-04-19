@@ -81,7 +81,7 @@ Comparison is made based on the following criteria:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:maize_beta/Database_Services/db.dart';
-import 'package:maize_beta/GeneralRepresentation/level_toppers.dart';
+import 'package:maize_beta/GeneralRepresentation/level_toppers_and_thresholds.dart';
 
 //starting with a test functioon to create a collection 'users' and add a document to it.
 
@@ -378,59 +378,16 @@ The document contains the following fields:
   } //end of createMockLeaderBoard
 
   //method to download only the 5 upper and bottom 5 levels from a particular level for view of the Journey screen
-  //storage for the documents of the levels
-  Map<String, dynamic> levelStorageMap = {}; //this is not a single level document but a collection of documents for the levels
+
   int currentLevel = 3;
 
-  Future<void> downloadUpperLower5docs(int level) async {
-    try {
-      await _firestore.collection('levels').doc(level.toString()).get().then(
-        (snapshot) async {
-          if (snapshot.exists) {
-            //downloading the upper 4 levels
-            //including the current level
-            //downloading the lower 5 levels
-            for (int i = 1; i < 5; i++) {
-              if (i == 1) {
-                //_JsonDocumentSnapshot to Map<String, dynamic>
-                DocumentSnapshot docSnapshotCurrentLevel = await FirebaseFirestore.instance.collection('levels').doc(currentLevel.toString()).get();
-                if (docSnapshotCurrentLevel.exists) levelStorageMap[currentLevel.toString()] = docSnapshotCurrentLevel.data() as Map<String, dynamic>;
+  //downloading the document for the current level and parsing it into
 
-                //downloading the lower level
-                DocumentSnapshot docSnapshotLower = await FirebaseFirestore.instance.collection('levels').doc((currentLevel + i).toString()).get();
-                if (docSnapshotLower.exists) levelStorageMap[(currentLevel + i).toString()] = docSnapshotLower.data() as Map<String, dynamic>;
-              } else {
-                if (currentLevel - i > 0) {
-                  //downloading the 4 upper levels
-                  //levelStorageMap[(currentLevel - (i - 1)).toString()] = await FirebaseFirestore.instance.collection('levels').doc((currentLevel - (i - 1)).toString()).get() as Map<String, dynamic>;
-                  DocumentSnapshot docSnapshotUpper = await FirebaseFirestore.instance.collection('levels').doc((currentLevel - i).toString()).get();
-                  if (docSnapshotUpper.exists) levelStorageMap[(currentLevel - i).toString()] = docSnapshotUpper.data() as Map<String, dynamic>;
-                }
-                //downloading the lower 5 levels
-
-                // levelStorageMap[(currentLevel + i).toString()] = await FirebaseFirestore.instance.collection('levels').doc((currentLevel + i).toString()).get() as Map<String, dynamic>;
-                DocumentSnapshot docSnapshotLower = await FirebaseFirestore.instance.collection('levels').doc((currentLevel + i).toString()).get();
-
-                if (docSnapshotLower.exists) levelStorageMap[(currentLevel + i).toString()] = docSnapshotLower.data() as Map<String, dynamic>;
-              }
-            }
-            //downloading the data for 5th level will download the 1 to 10th level
-            print('tried to download the upper and lower 5 levels from the firestore database\n $levelStorageMap');
-            print('Downloaded the following levels: ${levelStorageMap.keys}');
-
-            //now parsing the entire document into FirestoreTopperDocumentObject
-            FirestoreTopperDocumentObject.fromCollection(levelStorageMap, level);
-          } else {
-            print('Document for level $level does not exist');
-            //create a document for the level
-            _firestore.collection('levels').doc(level.toString()).set({});
-          }
-        },
-      );
-    } catch (e) {
-      print('Error in downloading level toppers: $e');
-    }
-  } //end of downloadLevelToppers
+  Future<void> testDownloadLevel(int level) async {
+    LocalObjectForLevel localLevel = LocalObjectForLevel();
+    await localLevel.downloadLevelToppersAndThresholds(level);
+    print('Level toppers downloaded');
+  }
 
   //method to delete the entire collections
   Future<void> deleteCollections() async {
