@@ -29,7 +29,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MainScreen());
+  // runApp(MainScreen());
+
+  //testing the gameplay
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {

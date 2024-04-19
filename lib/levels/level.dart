@@ -27,7 +27,7 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
 
   @override
   FutureOr<void> onLoad() async {
-    level = await TiledComponent.load('level2.tmx', Vector2.all(16));
+    level = await TiledComponent.load('level3.tmx', Vector2.all(16));
 
     _spawningObjects();
 
