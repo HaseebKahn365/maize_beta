@@ -148,6 +148,8 @@ class LocalObjectForLevel {
       if (data.containsKey(i.toString())) {
         toppers.add(LevelTopper.fromMap(data[i.toString()]));
         print("${LevelTopper.fromMap(data[i.toString()])} added to toppers");
+      } else {
+        toppers.add(null);
       }
     }
 
@@ -156,6 +158,8 @@ class LocalObjectForLevel {
       if (data.containsKey(i.toString())) {
         levelThresholds.add(LevelTopperThreshold.fromMap(data[i.toString()]));
         print("${LevelTopperThreshold.fromMap(data[i.toString()])} added to levelThresholds");
+      } else {
+        levelThresholds.add(null);
       }
     }
 

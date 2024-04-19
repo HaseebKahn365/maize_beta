@@ -179,12 +179,12 @@ The document contains the following fields:
             'life': 90,
             'score': 2300,
           },
-          '3': {
-            'uuid': '213jo12i3jii-12n',
-            'time': 140,
-            'life': 80,
-            'score': 2290,
-          },
+          // '3': {
+          //   'uuid': '213jo12i3jii-12n',
+          //   'time': 140,
+          //   'life': 80,
+          //   'score': 2290,
+          // },
           '4': {
             'uuid': '213jo12i3jii-12n',
             'time': 150,
@@ -275,12 +275,12 @@ The document contains the following fields:
             'score': 2140,
             'total_participants': 100,
           },
-          '900': {
-            'time': 300,
-            'life': 70,
-            'score': 2130,
-            'total_participants': 100,
-          },
+          // '900': {
+          //   'time': 300,
+          //   'life': 70,
+          //   'score': 2130,
+          //   'total_participants': 100,
+          // },
           '1000': {
             'time': 310,
             'life': 60,
@@ -409,4 +409,6 @@ The document contains the following fields:
       print('Error in deleting collections: $e');
     }
   } //end of deleteCollections
+
+  //testUploadLevel
 }
