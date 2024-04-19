@@ -224,7 +224,7 @@ class _MyAppState extends State<MyApp> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Maize',
+                                    'Puzzle-Maize',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 40,
@@ -268,32 +268,66 @@ class _MyAppState extends State<MyApp> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  FloatingActionButton(
-                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                    onPressed: () {
-                      // game.som.player.recenterThePlayer();
-                      //restart the game
-                      setState(() {
-                        game.onLoad();
-                        //add another FAB on the top right corner keeping track of the time elapsed
-                      });
-                    },
-                    child: Icon(Icons.restart_alt_rounded),
+                  // FloatingActionButton(
+                  //   backgroundColor: Colors.amber,
+                  //   onPressed: () {
+                  //     // game.som.player.recenterThePlayer();
+                  //     //restart the game
+                  //     setState(() {
+                  //       game.onLoad();
+                  //       //add another FAB on the top right corner keeping track of the time elapsed
+                  //     });
+                  //   },
+                  //   child: Icon(Icons.restart_alt_rounded),
+                  // ),
+
+                  //same as the below FAB
+                  Container(
+                    height: 70,
+                    width: 65,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        // game.som.player.recenterThePlayer();
+                        //restart the game
+                        setState(() {
+                          game.onLoad();
+                          //add another FAB on the top right corner keeping track of the time elapsed
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.restart_alt_rounded),
+                          Text('Restart'),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(height: 20), // Add some spacing between the buttons
-                  FloatingActionButton(
-                    onPressed: () {
-                      final playerAccess = game.som.player;
+                  Container(
+                    height: 70,
+                    child: FloatingActionButton(
+                      //increase the hieght
 
-                      playerAccess.recenterThePlayer();
-                      playerAccess.showGuideArc = !playerAccess.showGuideArc;
-                      game.showPausedOverlay.value = !game.showPausedOverlay.value;
-                    },
-                    child: ValueListenableBuilder(
-                        valueListenable: game.showPausedOverlay,
-                        builder: (BuildContext context, bool value, Widget? child) {
-                          return Icon(value ? Icons.pause : Icons.play_arrow);
-                        }),
+                      onPressed: () {
+                        final playerAccess = game.som.player;
+
+                        playerAccess.recenterThePlayer();
+                        playerAccess.showGuideArc = !playerAccess.showGuideArc;
+                        game.showPausedOverlay.value = !game.showPausedOverlay.value;
+                      },
+                      child: ValueListenableBuilder(
+                          valueListenable: game.showPausedOverlay,
+                          builder: (BuildContext context, bool value, Widget? child) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(value ? Icons.pause : Icons.play_arrow),
+                                Text(value ? 'Pause' : 'Play'),
+                              ],
+                            );
+                          }),
+                    ),
                   ),
                 ],
               ),
