@@ -259,6 +259,34 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                 },
                 child: Text('Create mock leaderboard toppers'),
               ),
+
+              //button to delete the entire firestore db
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await _firestoreServices.deleteCollections();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Firestore db deleted')));
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error deleting firestore db: $e')));
+                  }
+                },
+                child: Text('Delete Firestore DB'),
+              ),
+
+              //button to download the upper and lower level docs for a level
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await _firestoreServices.downloadUpperLower5docs(1);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Level docs downloaded')));
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error downloading level docs: $e')));
+                  }
+                },
+                child: Text('Download Level Docs'),
+              ),
             ],
           ),
         ),
