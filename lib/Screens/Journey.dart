@@ -177,16 +177,17 @@ class _JourneyState extends State<Journey> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 25),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 25),
                 child: Text(
                   'Worldwide Toppers',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                 ),
               ),
             ),

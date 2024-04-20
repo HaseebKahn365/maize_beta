@@ -51,7 +51,7 @@ abstract class Collectable extends SpriteAnimationComponent with HasGameRef<MyGa
       affectScore();
 
       collided = true;
-      FlameAudio.play('collectable.wav');
+      FlameAudio.play('collectable.wav', volume: 0.2);
 
       await Future.delayed(Duration(milliseconds: 1000));
       removeFromParent();

@@ -241,6 +241,64 @@ class DatabaseService {
     }
     return [];
   }
+
+  //method for getting the all stats of the player.
+  /*
+  it includes the total time player, total score, total diamonds collected, total shrinkers collected, total hearts collected, total levels completed
+   */
+
+  Future<DataInsight> getPlayerStats() async {
+    print('Fetching all the player stats from the history table');
+    final db = await getDBorThrow();
+    try {
+      final maps = await db.query(historyTable);
+      int totalScore = 0;
+      int totalTimeSpent = 0;
+      int totalDiamonds = 0;
+      int totalShrinkers = 0;
+      int totalHearts = 0;
+      int totalLevelsCompleted = 0;
+
+      for (var map in maps) {
+        totalTimeSpent += map[timeElapsedColumn] as int;
+        totalScore += map[scoreColumn] as int;
+        totalDiamonds += map[diamondsColumn] as int;
+        totalShrinkers += map[shrinkersColumn] as int;
+        totalHearts += map[heartsColumn] as int;
+        if (map[healthColumn] != 0) {
+          totalLevelsCompleted += 1;
+        }
+      }
+
+      print('Total Time Spent: $totalTimeSpent');
+      print('Total Score: $totalScore');
+      print('Total Diamonds: $totalDiamonds');
+      print('Total Shrinkers: $totalShrinkers');
+      print('Total Hearts: $totalHearts');
+      print('Total Levels Completed: $totalLevelsCompleted');
+
+      return DataInsight(totalTimeSpent: totalTimeSpent, playerUUID: 1, totalScore: totalScore, totalDiamonds: totalDiamonds, totalShrinkers: totalShrinkers, totalHearts: totalHearts, totalLevelsCompleted: totalLevelsCompleted);
+    } catch (e) {
+      print('Error getting player stats: $e');
+    }
+    return DataInsight(totalTimeSpent: 0, playerUUID: 1, totalScore: 0, totalDiamonds: 0, totalShrinkers: 0, totalHearts: 0, totalLevelsCompleted: 0);
+  }
+}
+
+class DataInsight {
+  final playerUUID;
+  final totalTimeSpent;
+  final totalScore;
+  final totalDiamonds;
+  final totalShrinkers;
+  final totalHearts;
+  final totalLevelsCompleted;
+
+  DataInsight({required this.totalTimeSpent, required this.playerUUID, required this.totalScore, required this.totalDiamonds, required this.totalShrinkers, required this.totalHearts, required this.totalLevelsCompleted});
+  @override
+  String toString() {
+    return 'DataInsight{playerUUID: $playerUUID, totalTimeSpent: $totalTimeSpent, totalScore: $totalScore, totalDiamonds: $totalDiamonds, totalShrinkers: $totalShrinkers, totalHearts: $totalHearts, totalLevelsCompleted: $totalLevelsCompleted}';
+  }
 }
 
 class User {
