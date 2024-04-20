@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flame/flame.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -136,6 +137,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        //i don't want its color to change when body is scrolled\
+
+        backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.white,
+
         title: Text('Maize Beta'),
         actions: [
           IconButton(
@@ -153,126 +158,135 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       //using country_code_picker package
       floatingActionButton: (selectedScreen == 1)
           ? SizedBox.shrink()
-          : Padding(
-              padding: const EdgeInsets.only(top: 175.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: (isAccountSet) ? 1 : _animationController.value,
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          String selectedCountry = 'ps';
-                          String countryName = 'Palestine';
-                          //show the bottom sheet
-                          showModalBottomSheet(
-                            //take up full screen
-                            isScrollControlled: true,
-                            elevation: 10,
-                            showDragHandle: true,
-                            context: context,
-                            builder: (context) {
-                              return StatefulBuilder(builder: (context, setState) {
-                                return Container(
-                                  height: MediaQuery.of(context).size.height * 0.8,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: ListTile(
-                                          leading: Icon(
-                                            FluentIcons.person_32_filled,
-                                            size: 40,
-                                          ),
-                                          title: Text(
-                                            'Set Account',
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                          trailing: OutlinedButton(
-                                            onPressed: () {
-                                              setState(() {});
-                                            },
-                                            child: Text('Save'),
-                                          ),
-                                        ),
-                                      ),
-                                      ListTile(
-                                        title: Text(
-                                          'My Name',
-                                          style: TextStyle(fontSize: 17),
-                                        ),
-                                      ),
-                                      //text box for getting the name from user
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(25.0, 10, 25, 10),
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(15),
-                                            hintText: 'Enter your name',
-                                            border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(10),
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 180.0),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: AnimatedBuilder(
+                      animation: _animationController,
+                      builder: (context, child) {
+                        return Transform.scale(
+                          scale: (isAccountSet) ? 1 : _animationController.value,
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              String selectedCountry = 'ps';
+                              String countryName = 'Palestine';
+                              //show the bottom sheet
+                              showModalBottomSheet(
+                                //take up full screen
+                                isScrollControlled: true,
+                                elevation: 10,
+                                showDragHandle: true,
+                                context: context,
+                                builder: (context) {
+                                  return StatefulBuilder(builder: (context, setState) {
+                                    return Container(
+                                      height: MediaQuery.of(context).size.height * 0.8,
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: ListTile(
+                                              leading: Icon(
+                                                FluentIcons.person_32_filled,
+                                                size: 40,
+                                              ),
+                                              title: Text(
+                                                'Set Account',
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                              trailing: OutlinedButton(
+                                                onPressed: () {
+                                                  setState(() {});
+                                                },
+                                                child: Text('Save'),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Column(
-                                        children: [
                                           ListTile(
                                             title: Text(
-                                              'My Country',
+                                              'My Name',
                                               style: TextStyle(fontSize: 17),
                                             ),
                                           ),
-                                          //list tile show country name and flag
+                                          //text box for getting the name from user
                                           Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: ListTile(
-                                              onTap: () {
-                                                //show the country picker
-                                                showCountryPicker(
-                                                  context: context,
-                                                  showPhoneCode: false,
-                                                  onSelect: (Country country) {
-                                                    print('Select country: ${country.countryCode.toLowerCase()}');
-                                                    setState(() {
-                                                      selectedCountry = country.countryCode.toLowerCase();
-                                                      countryName = country.name;
-                                                    });
-                                                  },
-                                                  countryListTheme: CountryListThemeData(
-                                                    flagSize: 30,
-                                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                                    textStyle: TextStyle(fontSize: 15),
-                                                  ),
-                                                );
-                                              },
-                                              title: Text(
-                                                countryName,
-                                                style: TextStyle(fontSize: 16),
-                                              ),
-                                              trailing: CircleAvatar(
-                                                backgroundImage: NetworkImage('https://flagcdn.com/w160/$selectedCountry.jpg'),
-                                                radius: 30,
+                                            padding: const EdgeInsets.fromLTRB(25.0, 10, 25, 10),
+                                            child: TextField(
+                                              decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.all(15),
+                                                hintText: 'Enter your name',
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
                                               ),
                                             ),
                                           ),
+                                          Column(
+                                            children: [
+                                              ListTile(
+                                                title: Text(
+                                                  'My Country',
+                                                  style: TextStyle(fontSize: 17),
+                                                ),
+                                              ),
+                                              //list tile show country name and flag
+                                              Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: ListTile(
+                                                  onTap: () {
+                                                    //show the country picker
+                                                    showCountryPicker(
+                                                      context: context,
+                                                      showPhoneCode: false,
+                                                      onSelect: (Country country) {
+                                                        print('Select country: ${country.countryCode.toLowerCase()}');
+                                                        setState(() {
+                                                          selectedCountry = country.countryCode.toLowerCase();
+                                                          countryName = country.name;
+                                                        });
+                                                      },
+                                                      countryListTheme: CountryListThemeData(
+                                                        flagSize: 30,
+                                                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                                        textStyle: TextStyle(fontSize: 15),
+                                                      ),
+                                                    );
+                                                  },
+                                                  title: Text(
+                                                    countryName,
+                                                    style: TextStyle(fontSize: 16),
+                                                  ),
+                                                  trailing: CircleAvatar(
+                                                    //use cached network image dependency instead:
+                                                    // NetworkImage('https://flagcdn.com/w160/$selectedCountry.jpg')
+
+                                                    backgroundImage: CachedNetworkImageProvider(
+                                                      'https://flagcdn.com/w160/$selectedCountry.jpg',
+                                                    ),
+                                                    radius: 30,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              });
+                                    );
+                                  });
+                                },
+                              );
                             },
-                          );
-                        },
-                        child: Icon(FluentIcons.person_20_regular),
-                      ),
-                    );
-                  },
+                            child: Icon(FluentIcons.person_20_regular),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
 
       body: (selectedScreen == 1) ? LeaderBoardScreen() : Journey(),

@@ -92,6 +92,50 @@ class _GameResultScreenState extends State<GameResultScreen> {
                               ],
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                              size: 50.0,
+                            ).animate(
+                              effects: [
+                                const ScaleEffect(
+                                  curve: Curves.elasticOut,
+                                  duration: Duration(milliseconds: 100),
+                                  delay: Duration(milliseconds: 500),
+                                ),
+                                const ShakeEffect(
+                                    duration: Duration(
+                                      seconds: 1,
+                                    ),
+                                    hz: 2),
+                                const ShimmerEffect(duration: Duration(milliseconds: 700))
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                              size: 50.0,
+                            ).animate(
+                              effects: [
+                                const ScaleEffect(
+                                  curve: Curves.elasticOut,
+                                  duration: Duration(milliseconds: 100),
+                                  delay: Duration(milliseconds: 500),
+                                ),
+                                const ShakeEffect(
+                                    duration: Duration(
+                                      seconds: 1,
+                                    ),
+                                    hz: 2),
+                                const ShimmerEffect(duration: Duration(milliseconds: 700))
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],

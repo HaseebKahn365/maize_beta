@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:maize_beta/TimelineComponents/mytimeline_tile.dart';
 import 'package:maize_beta/main.dart';
 
@@ -32,9 +32,9 @@ List<GenericLevelWidget> levels = [
     myPosition: 1024,
     toppers: [
       //randomized toppers
-      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'in', name: 'Kaushik', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 4, life: 100),
+      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 5, life: 100),
+      Topper(countryCode: 'in', name: 'Kaushik', timeInSeconds: 5, life: 100),
     ],
     isPast: true,
     isCollapsed: false,
@@ -43,9 +43,9 @@ List<GenericLevelWidget> levels = [
     levelName: 'Level 2',
     myPosition: 1024,
     toppers: [
-      Topper(countryCode: 'pk', name: 'Muhammad Bilal', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'in', name: 'Kanetkar Saab', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'pk', name: 'Muhammad Bilal', timeInSeconds: 4, life: 100),
+      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 4, life: 100),
+      Topper(countryCode: 'in', name: 'Kanetkar Saab', timeInSeconds: 5, life: 100),
     ],
     isPast: true,
     isCollapsed: true,
@@ -55,31 +55,31 @@ List<GenericLevelWidget> levels = [
     myPosition: 1024,
     toppers: [
       //randomized toppers
-      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 3, life: 100),
+      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 3, life: 100),
+      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 4, life: 100),
     ],
     isPast: false,
-    isCollapsed: false,
+    isCollapsed: true,
   ),
   GenericLevelWidget(
     levelName: 'Level 4',
     myPosition: 1024,
     toppers: [
-      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 5, life: 40),
+      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 8, life: 100),
+      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 8, life: 100),
     ],
     isPast: false,
-    isCollapsed: false,
+    isCollapsed: true,
   ),
   GenericLevelWidget(
     levelName: 'Level 5',
     myPosition: 1024,
     toppers: [
-      Topper(countryCode: 'pk', name: 'Muhammad Bilal', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'in', name: 'Kanetkar Saab', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'pk', name: 'Muhammad Bilal', timeInSeconds: 8, life: 58),
+      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 10, life: 100),
+      Topper(countryCode: 'in', name: 'Kanetkar Saab', timeInSeconds: 10, life: 100),
     ],
     isPast: false,
     isCollapsed: true,
@@ -88,9 +88,9 @@ List<GenericLevelWidget> levels = [
     levelName: 'Level 6',
     myPosition: 1024,
     toppers: [
-      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 9, life: 100),
+      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 11, life: 100),
+      Topper(countryCode: 'us', name: 'Sam Tucker', timeInSeconds: 11, life: 100),
     ],
     isPast: false,
     isCollapsed: true,
@@ -99,9 +99,9 @@ List<GenericLevelWidget> levels = [
     levelName: 'Level 7',
     myPosition: 1024,
     toppers: [
-      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 10, life: 100),
+      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 11, life: 100),
+      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 13, life: 100),
     ],
     isPast: false,
     isCollapsed: true,
@@ -110,12 +110,12 @@ List<GenericLevelWidget> levels = [
     levelName: 'Level 8',
     myPosition: 1024,
     toppers: [
-      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 10, life: 100),
+      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 13, life: 100),
+      Topper(countryCode: 'us', name: 'Temmethy Jr.', timeInSeconds: 13, life: 100),
     ],
     isPast: false,
-    isCollapsed: false,
+    isCollapsed: true,
   ),
   GenericLevelWidget(
     levelName: 'Level 9',
@@ -133,9 +133,9 @@ List<GenericLevelWidget> levels = [
     myPosition: 1024,
     isLast: true,
     toppers: [
-      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 100, life: 3),
-      Topper(countryCode: 'us', name: 'Heisenberg', timeInSeconds: 100, life: 3),
+      Topper(countryCode: 'ps', name: 'Abdul Haseeb', timeInSeconds: 56, life: 88),
+      Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 56, life: 83),
+      Topper(countryCode: 'us', name: 'Fake Justine', timeInSeconds: 56, life: 70),
     ],
     isPast: false,
     isCollapsed: true,
@@ -156,10 +156,19 @@ class _JourneyState extends State<Journey> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.fromLTRB(20, 80, 20, 0),
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 25),
+                child: Text(
+                  'Worldwide Toppers',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+                ),
+              ),
+            ),
             // Timeline widget
             // Container for each level
             // Avatar
@@ -326,11 +335,13 @@ class BeautifulEventCard extends StatelessWidget {
         child: CircleAvatar(
           maxRadius: 20,
           backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.2),
-          backgroundImage: NetworkImage('https://flagcdn.com/w160/$countryCode.jpg'),
+          backgroundImage: CachedNetworkImageProvider(
+            'https://flagcdn.com/w160/$countryCode.jpg',
+          ),
         ),
       ),
       title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-      subtitle: Text(score.toString()),
+      subtitle: Text('${score} sec'),
       trailing: Icon(Icons.arrow_forward_ios, size: 15),
       onTap: () {
         print('tapped');
