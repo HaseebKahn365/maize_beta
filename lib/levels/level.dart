@@ -15,6 +15,9 @@ import 'package:maize_beta/Components/player.dart';
 class Level extends World with TapCallbacks, HasCollisionDetection {
   late TiledComponent level;
   late Player player;
+  int leveIndex = 1;
+
+  Level({required this.leveIndex});
 
   //on long tap call the recenterPlayer method of the player
 
@@ -27,7 +30,7 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
 
   @override
   FutureOr<void> onLoad() async {
-    level = await TiledComponent.load('level10.tmx', Vector2.all(16));
+    level = await TiledComponent.load('level$leveIndex.tmx', Vector2.all(16));
 
     _spawningObjects();
 

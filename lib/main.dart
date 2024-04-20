@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final game = MyGame();
+    final game = MyGame(selectedLevel: 1);
     //timer for the game
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (game.showStartOverlay.value == false) {
@@ -286,6 +286,7 @@ class _MyAppState extends State<MyApp> {
                     height: 70,
                     width: 65,
                     child: FloatingActionButton(
+                      backgroundColor: Colors.amber,
                       onPressed: () {
                         // game.som.player.recenterThePlayer();
                         //restart the game
@@ -306,9 +307,10 @@ class _MyAppState extends State<MyApp> {
                   SizedBox(height: 20), // Add some spacing between the buttons
                   Container(
                     height: 70,
+                    //color grey or amber
                     child: FloatingActionButton(
-                      //increase the hieght
-
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
                       onPressed: () {
                         final playerAccess = game.som.player;
 

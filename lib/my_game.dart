@@ -8,14 +8,14 @@ import 'package:maize_beta/levels/level.dart';
 
 class MyGame extends FlameGame {
   late final CameraComponent cam;
+  final int selectedLevel;
 
-  //PUSE THE ENGINE METHOD
-  void pause() {
+  MyGame({required this.selectedLevel}) {
     pauseEngine();
   }
 
-  //in the constructor we pause the engine
-  MyGame() {
+  //PUSE THE ENGINE METHOD
+  void pause() {
     pauseEngine();
   }
 
@@ -25,10 +25,11 @@ class MyGame extends FlameGame {
     resumeEngine();
   }
 
-  final som = Level();
+  late final som;
 
   @override
   FutureOr<void> onLoad() async {
+    som = Level(leveIndex: selectedLevel);
     // debugMode = true;
     cam = CameraComponent.withFixedResolution(
       world: som,
