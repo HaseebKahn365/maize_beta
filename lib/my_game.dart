@@ -60,6 +60,15 @@ class MyGame extends FlameGame {
   //a boolean valuenotifier for showing the game over overlay
   final ValueNotifier<bool> gameLevelCompleted = ValueNotifier(false);
 
+  //a int valuenotifier for diamonds count
+  final ValueNotifier<int> diamonds = ValueNotifier(0);
+
+  //a int valuenotifier for shrinkers count
+  final ValueNotifier<int> shrinkers = ValueNotifier(0);
+
+  //a int valuenotifier for hearts count
+  final ValueNotifier<int> hearts = ValueNotifier(0);
+
   //a boolean valuenotifier for showing the paused overlay
   //pause means that we are just keeping the ball in its position and not moving it
 

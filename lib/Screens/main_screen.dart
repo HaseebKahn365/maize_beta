@@ -6,8 +6,12 @@ import 'package:flame/flame.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Screens/Journey.dart';
 import 'package:maize_beta/Screens/leaderboard.dart';
+
+//creating a global db instance
+DatabaseService? databaseService;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -50,6 +54,9 @@ class _MainScreenState extends State<MainScreen> {
     Flame.device.setPortrait();
     super.initState();
     themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
+    //initialize the db
+    databaseService = DatabaseService();
+    databaseService!.open();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
   }
 

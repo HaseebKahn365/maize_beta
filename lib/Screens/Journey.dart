@@ -43,9 +43,9 @@ List<GenericLevelWidget> levels = [
     levelName: 'Level 2',
     myPosition: 1024,
     toppers: [
-      Topper(countryCode: 'pk', name: 'Muhammad Bilal', timeInSeconds: 4, life: 100),
-      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 4, life: 100),
-      Topper(countryCode: 'in', name: 'Kanetkar Saab', timeInSeconds: 5, life: 100),
+      Topper(countryCode: 'pk', name: 'Muhammad Bilal', timeInSeconds: 2, life: 100),
+      Topper(countryCode: 'in', name: 'Kanetkar Saab', timeInSeconds: 2, life: 100),
+      Topper(countryCode: 'pk', name: 'Muhammad Hammad', timeInSeconds: 2, life: 100),
     ],
     isPast: true,
     isCollapsed: true,
@@ -112,7 +112,7 @@ List<GenericLevelWidget> levels = [
     toppers: [
       Topper(countryCode: 'ps', name: 'Tayyab Ahmad', timeInSeconds: 10, life: 100),
       Topper(countryCode: 'pk', name: 'Hamza Fayaz', timeInSeconds: 13, life: 100),
-      Topper(countryCode: 'us', name: 'Temmethy Jr.', timeInSeconds: 13, life: 100),
+      Topper(countryCode: 'au', name: 'Temmethy Jr.', timeInSeconds: 13, life: 100),
     ],
     isPast: false,
     isCollapsed: true,

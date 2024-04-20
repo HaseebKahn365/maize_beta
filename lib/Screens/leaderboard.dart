@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Firebase_Services/firestore_services.dart';
@@ -57,211 +59,71 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
         //6. total score
 
         PlayerListTile(
-          name: 'Abdul Haseeb',
-          countryCode: 'pk',
+          name: 'Tayyab Ahmad',
+          countryCode: 'ps',
           levelsCompleted: 10,
-          collectablesCollected: 100,
+          totalScore: 382314,
+          collectablesCollected: 2323,
           damageTaken: 100,
-          totalScore: 1000,
         ),
 
         PlayerListTile(
           name: 'Abdul Haseeb',
+          countryCode: 'ps',
+          levelsCompleted: 10,
+          collectablesCollected: 2341,
+          damageTaken: 142,
+          totalScore: 412435,
+        ),
+
+        PlayerListTile(
+          name: 'Muhammad Bilal',
           countryCode: 'pk',
           levelsCompleted: 10,
-          collectablesCollected: 100,
-          damageTaken: 100,
-          totalScore: 1000,
+          totalScore: Random().nextInt(500000),
+          collectablesCollected: Random().nextInt(3000),
+          damageTaken: Random().nextInt(200),
+        ),
+
+        PlayerListTile(
+          name: 'Muhammad Hammad',
+          countryCode: 'pk',
+          levelsCompleted: 10,
+          totalScore: Random().nextInt(500000),
+          collectablesCollected: Random().nextInt(3000),
+          damageTaken: Random().nextInt(200),
+        ),
+
+        PlayerListTile(
+          name: 'Kanetkar Saab',
+          countryCode: 'in',
+          levelsCompleted: 10,
+          totalScore: Random().nextInt(500000),
+          collectablesCollected: Random().nextInt(3000),
+          damageTaken: Random().nextInt(200),
+        ),
+
+        PlayerListTile(
+          name: 'Hamza Fayaz',
+          countryCode: 'pk',
+          levelsCompleted: 10,
+          totalScore: Random().nextInt(500000),
+          collectablesCollected: Random().nextInt(3000),
+          damageTaken: Random().nextInt(200),
+        ),
+
+        PlayerListTile(
+          name: 'Temmethy Jr.',
+          countryCode: 'au',
+          levelsCompleted: 10,
+          totalScore: Random().nextInt(500000),
+          collectablesCollected: Random().nextInt(3000),
+          damageTaken: Random().nextInt(200),
         ),
 
         //creating buttons to test the db services
 
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              ElevatedButton(
-                onPressed: () async {
-                  //we need to use the version 4 of RFC4122 UUIDs to generate the uuid
-                  final String uuid = const Uuid().v4();
-                  final User user = User(id: 1, name: 'Abdul Haseeb', country_code: 'pk', uuid: uuid);
-                  try {
-                    await _databaseService!.updateProfile(user);
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
-                  }
-                },
-                child: Text('Create Profile'),
-              ),
-
-              //get the user
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final User? myUser = await _databaseService!.getUser();
-                    print('myUser: $myUser');
-                    if (myUser != null) {
-                      //show snakbar
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myUser: $myUser')));
-                    }
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myUser: $e')));
-                  }
-                },
-                child: Text('Get User'),
-              ),
-
-              //Testing the level table
-              ElevatedButton(
-                onPressed: () async {
-                  final Level level = Level(id: 1, name: "Desert");
-                  final Level level2 = Level(id: 2, name: "Forest");
-                  try {
-                    await _databaseService!.createLevel(level);
-                    await _databaseService!.createLevel(level2);
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating level: $e')));
-                  }
-                },
-                child: Text('Create Level'),
-              ),
-
-              //get the level
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final List<Level?> myLevels = await _databaseService!.getLevels();
-                    print('myLevel: $myLevels');
-                    if (myLevels != null) {
-                      //show snakbar
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myLevel: ${myLevels.length}')));
-                    }
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myLevel: $e')));
-                  }
-                },
-                child: Text('Get Level'),
-              ),
-
-              //Testing the History table
-
-              ElevatedButton(
-                onPressed: () async {
-                  final History history = History(
-                    //id for history is not needed as it is auto incremented
-                    level_id: 1,
-                    diamonds: 10,
-                    health: 100,
-                    //int date time since epoch in milliseconds
-                    date_time: DateTime.now().millisecondsSinceEpoch,
-                    hearts: 5,
-                    player_id: 1,
-                    shrinkers: 2,
-                    //time in seconds
-                    time_elapsed: 21,
-                    score: 1000,
-                  );
-
-                  try {
-                    await _databaseService!.createHistory(history);
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating history: $e')));
-                  }
-                },
-                child: Text('Create History'),
-              ),
-
-              //get the history
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final List<History?> myHistory = await _databaseService!.getHistory();
-                    print('myHistory: $myHistory');
-                    if (myHistory != null) {
-                      //show snakbar
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('myHistory: ${myHistory.length}')));
-                    }
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error getting myHistory: $e')));
-                  }
-                },
-                child: Text('Get History'),
-              ),
-
-              //deleting the entire db
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await _databaseService!.closeAndDelete();
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error deleting db: $e')));
-                  }
-                },
-                child: Text('Delete DB'),
-              ),
-            ],
-          ),
-        ),
-
         //creating buttons to test the firebase firestore services
-
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              ElevatedButton(
-                onPressed: () async {
-                  //we need to use the version 4 of RFC4122 UUIDs to generate the uuid
-
-                  final User? user = await _databaseService!.getUser();
-                  try {
-                    _firestoreServices = FirestoreServices.forUser(user!);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User added to firestore')));
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating profile: $e')));
-                  }
-                },
-                child: Text('Create user in firestore'),
-              ),
-
-              //button to create mock levels toppers
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await _firestoreServices.createMockLevelToppers();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Mock levels toppers created')));
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating mock levels toppers: $e')));
-                  }
-                },
-                child: Text('Create mock levels toppers'),
-              ),
-
-              //button to create mock leaderboard toppers
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await _firestoreServices.createMockLeaderBoard();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Mock leaderboard toppers created')));
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating mock leaderboard toppers: $e')));
-                  }
-                },
-                child: Text('Create mock leaderboard toppers'),
-              ),
-            ],
-          ),
-        ),
       ],
     ));
   }

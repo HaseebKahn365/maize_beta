@@ -1,5 +1,5 @@
 //Here we are going to use the sqflite package to create and manage the db.
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, body_might_complete_normally_nullable
 
 /*
 Here is what the structure of the db tables look like:
@@ -47,7 +47,7 @@ class DatabaseService {
     if (_db != null) {
       throw 'Database already open';
     }
-
+    print('trying to open db');
     try {
       final dbPath = await getApplicationDocumentsDirectory();
       final path = dbPath.path + dbName;
@@ -203,6 +203,8 @@ class DatabaseService {
     final db = await getDBorThrow();
     try {
       await db.insert(historyTable, history.toMap());
+      final historyCount = await getHistoryCount();
+      print('Total Histories: $historyCount');
     } catch (e) {
       print('Error creating history: $e');
     }

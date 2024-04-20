@@ -8,6 +8,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
 
 class GameResultScreen extends StatefulWidget {
@@ -15,9 +16,18 @@ class GameResultScreen extends StatefulWidget {
   final bool isGameOver; //indicates the game was over without completing the level. ie. life became 0
   final int score;
   final int life;
+  //hearts, shrinkers, diamonds
+  final int diamonds;
+  final int hearts;
+  final int shrinkers;
+  final int currentLevel;
   const GameResultScreen({
+    required this.currentLevel,
     super.key,
     this.isGameOver = true,
+    this.diamonds = 0,
+    this.hearts = 0,
+    this.shrinkers = 0,
     required this.timeElapsed,
     required this.score,
     required this.life,
@@ -27,10 +37,16 @@ class GameResultScreen extends StatefulWidget {
   State<GameResultScreen> createState() => _GameResultScreenState();
 }
 
+Future<void> createNewHistory(History history) async {
+  await databaseService!.createHistory(history);
+}
+
 class _GameResultScreenState extends State<GameResultScreen> {
   @override
   void initState() {
     FlameAudio.play('gameover.wav');
+    print('Attempting to create History');
+    createNewHistory(History(diamonds: widget.diamonds, hearts: widget.hearts, shrinkers: widget.shrinkers, level_id: widget.currentLevel, player_id: 1, health: widget.life, score: widget.score, time_elapsed: widget.timeElapsed, date_time: (DateTime.now().millisecondsSinceEpoch)));
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
     super.initState();
@@ -70,72 +86,29 @@ class _GameResultScreenState extends State<GameResultScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                              size: 50.0,
-                            ).animate(
-                              effects: [
-                                const ScaleEffect(
-                                  curve: Curves.elasticOut,
-                                  duration: Duration(milliseconds: 100),
-                                  delay: Duration(milliseconds: 500),
-                                ),
-                                const ShakeEffect(
-                                    duration: Duration(
-                                      seconds: 1,
-                                    ),
-                                    hz: 2),
-                                const ShimmerEffect(duration: Duration(milliseconds: 700))
-                              ],
+                          for (int i = 0; i < 3; i++)
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                                size: 50.0,
+                              ).animate(
+                                effects: [
+                                  ScaleEffect(
+                                    curve: Curves.elasticOut,
+                                    duration: Duration(milliseconds: 100),
+                                    delay: Duration(milliseconds: 500),
+                                  ),
+                                  ShakeEffect(
+                                      duration: Duration(
+                                        seconds: 1,
+                                      ),
+                                      hz: 2),
+                                  ShimmerEffect(duration: Duration(milliseconds: 700))
+                                ],
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                              size: 50.0,
-                            ).animate(
-                              effects: [
-                                const ScaleEffect(
-                                  curve: Curves.elasticOut,
-                                  duration: Duration(milliseconds: 100),
-                                  delay: Duration(milliseconds: 500),
-                                ),
-                                const ShakeEffect(
-                                    duration: Duration(
-                                      seconds: 1,
-                                    ),
-                                    hz: 2),
-                                const ShimmerEffect(duration: Duration(milliseconds: 700))
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                              size: 50.0,
-                            ).animate(
-                              effects: [
-                                const ScaleEffect(
-                                  curve: Curves.elasticOut,
-                                  duration: Duration(milliseconds: 100),
-                                  delay: Duration(milliseconds: 500),
-                                ),
-                                const ShakeEffect(
-                                    duration: Duration(
-                                      seconds: 1,
-                                    ),
-                                    hz: 2),
-                                const ShimmerEffect(duration: Duration(milliseconds: 700))
-                              ],
-                            ),
-                          ),
                         ],
                       ),
                     ],

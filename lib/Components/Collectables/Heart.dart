@@ -14,5 +14,6 @@ class Heart extends Collectable {
   void affectScore() {
     game.incrementScore(100);
     game.increaseLife();
+    game.hearts.value += 1;
   }
 }

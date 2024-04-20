@@ -68,9 +68,13 @@ class _MyAppState extends State<MyApp> {
     game.life.addListener(() {
       if (game.life.value == 0) {
         //navigate to the GameResultScreen
+        print('Died game over: with the following info: doamonds ${game.diamonds.value} hearts ${game.hearts.value} time ${game.timeElapsed.value} score ${game.score.value} life ${game.life.value}');
 
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => GameResultScreen(
+                  currentLevel: widget.selectedLevel,
+                  diamonds: game.diamonds.value,
+                  hearts: game.hearts.value,
                   timeElapsed: game.timeElapsed.value,
                   score: game.score.value,
                   life: game.life.value,
@@ -85,8 +89,13 @@ class _MyAppState extends State<MyApp> {
       if (game.gameLevelCompleted.value) {
         //navigate to the GameResultScreen
 
+        print('Level completed with the following info: ${game.diamonds.value} ${game.hearts.value} ${game.timeElapsed.value} ${game.score.value} ${game.life.value}');
+
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => GameResultScreen(
+                  currentLevel: widget.selectedLevel,
+                  diamonds: game.diamonds.value,
+                  hearts: game.hearts.value,
                   timeElapsed: game.timeElapsed.value,
                   score: game.score.value,
                   life: game.life.value,
