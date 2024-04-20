@@ -77,7 +77,21 @@ class _MyAppState extends State<MyApp> {
                 )));
 
         //stop the timer
-        game.resetTimer();
+      }
+    });
+
+    //constantly listen to game.gameLevelCompleted.value and navigate to the GameResultScreen with isGameOver = false
+    game.gameLevelCompleted.addListener(() {
+      if (game.gameLevelCompleted.value) {
+        //navigate to the GameResultScreen
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => GameResultScreen(
+                  timeElapsed: game.timeElapsed.value,
+                  score: game.score.value,
+                  life: game.life.value,
+                  isGameOver: false,
+                )));
       }
     });
 

@@ -7,14 +7,17 @@ the required data for this screen is the timeElapsed, the score and the life
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
 
 class GameResultScreen extends StatefulWidget {
   final int timeElapsed;
+  final bool isGameOver; //indicates the game was over without completing the level. ie. life became 0
   final int score;
   final int life;
   const GameResultScreen({
     super.key,
+    this.isGameOver = true,
     required this.timeElapsed,
     required this.score,
     required this.life,
@@ -41,15 +44,59 @@ class _GameResultScreenState extends State<GameResultScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Game Over',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 50,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
+            (widget.isGameOver)
+                ? Text(
+                    'Game Over',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                :
+                //Beatiful 'Level Passed' text and aniimated stars
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Level Passed',
+                        style: TextStyle(
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                              size: 50.0,
+                            ).animate(
+                              effects: [
+                                const ScaleEffect(
+                                  curve: Curves.elasticOut,
+                                  duration: Duration(milliseconds: 100),
+                                  delay: Duration(milliseconds: 500),
+                                ),
+                                const ShakeEffect(
+                                    duration: Duration(
+                                      seconds: 1,
+                                    ),
+                                    hz: 2),
+                                const ShimmerEffect(duration: Duration(milliseconds: 700))
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
             Text(
               'Score: ${widget.score}',
               style: TextStyle(
