@@ -39,6 +39,7 @@ CREATE TABLE `History_t` (
 //Here will be the services for the db
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseService {
   Database? _db;
@@ -148,6 +149,12 @@ class DatabaseService {
 
       if (maps.isNotEmpty) {
         return User.fromRow(maps.first);
+      } else {
+        //insert the user with name  = Anon and id = uuidV4
+        var uuid = Uuid();
+        User anonUser = User(id: 1, name: 'Anon', country_code: 'ps', uuid: uuid.v4());
+        await db.insert(profileTable, anonUser.toMap());
+        return anonUser;
       }
     } catch (e) {
       print('Error getting user: $e');
@@ -172,28 +179,29 @@ class DatabaseService {
     }
   }
 
-  //method for getting the count of all the levels
+  //method for getting the count of all the levels. we will unlock the levels from this count
   Future<int> getLevelCount() async {
+    //perform and advanced querry on history.find the max level_id for which life!=0 . this will be the latest level return it
     final db = await getDBorThrow();
-    try {
-      final count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $levelTable'));
-      return count!;
-    } catch (e) {
-      print('Error getting level count: $e');
-    }
-    return 0;
-  }
 
-  //method for getting all the levels
-  Future<List<Level>> getLevels() async {
-    final db = await getDBorThrow();
     try {
-      final maps = await db.query(levelTable);
-      return List.generate(maps.length, (index) => Level.fromRow(maps[index]));
+      List<Map<String, dynamic>> result = await db.query(
+        '$historyTable',
+        where: 'health != ?',
+        whereArgs: [0],
+        orderBy: 'level_id DESC',
+        limit: 1,
+      );
+
+      if (result.isNotEmpty) {
+        return result.first['level_id'];
+      } else {
+        return 0;
+      }
     } catch (e) {
-      print('Error getting levels: $e');
+      print('Error performing query: $e');
+      return 0;
     }
-    return [];
   }
 
 //!methods for the history

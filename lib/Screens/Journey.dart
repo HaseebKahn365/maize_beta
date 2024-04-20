@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:maize_beta/Screens/main_screen.dart';
 import 'package:maize_beta/TimelineComponents/mytimeline_tile.dart';
 import 'package:maize_beta/main.dart';
 
@@ -152,6 +153,26 @@ class Journey extends StatefulWidget {
 }
 
 class _JourneyState extends State<Journey> {
+  @override
+  void initState() {
+    _unlockLevels(); //this method gets the length of levels in the level table and unlocks the levels accordingly in the GenericLevelWidget list
+
+    // get the count of the levels
+    super.initState();
+  }
+
+  Future<void> _unlockLevels() async {
+    int count = await databaseService!.getLevelCount();
+
+    print('Levels in the table count: $count');
+    for (int i = 0; i <= count; i++) {
+      if (i < 10) levels[i].isPast = true;
+    }
+    setState(() {
+      levels = levels;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

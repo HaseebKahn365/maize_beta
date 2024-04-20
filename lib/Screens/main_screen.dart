@@ -12,6 +12,7 @@ import 'package:maize_beta/Screens/leaderboard.dart';
 
 //creating a global db instance
 DatabaseService? databaseService;
+User? currentUser;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -177,10 +178,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         return Transform.scale(
                           scale: (isAccountSet) ? 1 : _animationController.value,
                           child: FloatingActionButton(
-                            onPressed: () {
-                              String selectedCountry = 'ps';
-                              String countryName = 'Palestine';
+                            onPressed: () async {
+                              currentUser = await databaseService!.getUser();
+                              print('Got the user with: ${currentUser!.name}');
+                              if (currentUser!.name != 'Anon') {
+                                setState(() {
+                                  isAccountSet = true;
+                                });
+                              }
+
+                              String selectedCountry = currentUser!.country_code;
+                              //get country name from country_code ie 'pk' implies Pakistan using package: country_picker
+                              String countryName = Country.parse(currentUser!.country_code).name;
+                              String tempName = currentUser!.name;
                               //show the bottom sheet
+                              // ignore: use_build_context_synchronously
                               showModalBottomSheet(
                                 //take up full screen
                                 isScrollControlled: true,
@@ -205,8 +217,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 style: TextStyle(fontSize: 20),
                                               ),
                                               trailing: OutlinedButton(
-                                                onPressed: () {
-                                                  setState(() {});
+                                                onPressed: () async {
+                                                  await databaseService!.updateProfile(User(
+                                                    id: 1,
+                                                    uuid: currentUser!.uuid,
+                                                    name: tempName,
+                                                    country_code: selectedCountry,
+                                                  ));
+                                                  setState(() {
+                                                    //update the user in the database:
+                                                    print('update profile complete');
+                                                  });
+                                                  Navigator.pop(context);
                                                 },
                                                 child: Text('Save'),
                                               ),
@@ -222,9 +244,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(25.0, 10, 25, 10),
                                             child: TextField(
+                                              //temp string = changed string
+                                              onChanged: (value) {
+                                                tempName = value;
+                                              },
+
                                               decoration: InputDecoration(
                                                 contentPadding: EdgeInsets.all(15),
-                                                hintText: 'Enter your name',
+                                                hintText: (currentUser!.name),
                                                 border: OutlineInputBorder(
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
@@ -296,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ],
             ),
 
-      body: (selectedScreen == 1) ? LeaderBoardScreen() : Journey(),
+      body: (selectedScreen == 0) ? LeaderBoardScreen() : Journey(),
 
       //add a bottom navigation bar
       bottomNavigationBar: BottomNavigationBar(

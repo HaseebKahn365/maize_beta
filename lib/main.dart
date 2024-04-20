@@ -9,6 +9,7 @@ import 'package:flame/game.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Screens/GameResultScreen.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
 import 'package:maize_beta/firebase_options.dart';
@@ -85,11 +86,14 @@ class _MyAppState extends State<MyApp> {
     });
 
     //constantly listen to game.gameLevelCompleted.value and navigate to the GameResultScreen with isGameOver = false
-    game.gameLevelCompleted.addListener(() {
+    game.gameLevelCompleted.addListener(() async {
       if (game.gameLevelCompleted.value) {
         //navigate to the GameResultScreen
 
-        print('Level completed with the following info: ${game.diamonds.value} ${game.hearts.value} ${game.timeElapsed.value} ${game.score.value} ${game.life.value}');
+        print('Level completed with the following info: level: ${widget.selectedLevel + 1} ${game.diamonds.value} ${game.hearts.value} ${game.timeElapsed.value} ${game.score.value} ${game.life.value} ');
+
+//add this level_id +1 to the level table in the database:
+        await databaseService!.createLevel(Level(id: widget.selectedLevel, name: ' Desert'));
 
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => GameResultScreen(
