@@ -9,6 +9,7 @@ import 'package:flame/game.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:maize_beta/Screens/GameResultScreen.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
 import 'package:maize_beta/firebase_options.dart';
 import 'package:maize_beta/my_game.dart';
@@ -61,6 +62,25 @@ class _MyAppState extends State<MyApp> {
         }
       }
     });
+
+    //constantly listen to the life.value and immediate   //when the life becomes zero we are gonna navigate to the GameResultScreen with material pushReplacement
+
+    game.life.addListener(() {
+      if (game.life.value == 0) {
+        //navigate to the GameResultScreen
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => GameResultScreen(
+                  timeElapsed: game.timeElapsed.value,
+                  score: game.score.value,
+                  life: game.life.value,
+                )));
+
+        //stop the timer
+        game.resetTimer();
+      }
+    });
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

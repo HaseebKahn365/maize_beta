@@ -176,7 +176,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
     if (audioPlayCount % 8 == 0 || audioPlayCount == 0) {
       // print('Audio played!');
       // Only play the audio if it has been played less than 5 times
-      // FlameAudio.play('laserShoot.wav');
+      FlameAudio.play('collide.wav');
       // print('Audio played!');
     }
   }

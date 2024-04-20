@@ -43,7 +43,7 @@ class MyGame extends FlameGame {
     //casche the audio
     //start the timer
 
-    await FlameAudio.audioCache.loadAll(['collectable.wav', 'laserShoot.wav']);
+    await FlameAudio.audioCache.loadAll(['collectable.wav', 'collide.wav', 'gameover.wav']);
 
     return super.onLoad();
   }
@@ -98,6 +98,7 @@ class MyGame extends FlameGame {
   void decreaseLife() {
     if (life.value > 0) {
       life.value -= 1;
+      //when the life becomes zero we are gonna navigate to the GameResultScreen with material pushReplacement
       print('decreasing life');
     }
   }
