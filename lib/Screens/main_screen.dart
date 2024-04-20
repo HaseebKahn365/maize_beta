@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:country_picker/country_picker.dart';
+import 'package:flame/flame.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter/services.dart';
 import 'package:maize_beta/Screens/Journey.dart';
 import 'package:maize_beta/Screens/leaderboard.dart';
 
@@ -45,8 +46,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   initState() {
+    Flame.device.setPortrait();
     super.initState();
     themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
   }
 
   ThemeData updateThemes(int colorIndex, bool useMaterial3, bool useLightMode) {
@@ -66,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void handleBrightnessChange() {
     setState(() {
+      //use flutter_statusbarcolor_ns to set tge color of the status bar to depending on the theme:
       useLightMode = !useLightMode;
       themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
     });

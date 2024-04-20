@@ -29,13 +29,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // runApp(MainScreen());
+  runApp(MainScreen());
 
   //testing the gameplay
-  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  final int selectedLevel;
+  const MyApp({Key? key, this.selectedLevel = 1}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final game = MyGame(selectedLevel: 1);
+    final game = MyGame(selectedLevel: widget.selectedLevel);
     //timer for the game
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (game.showStartOverlay.value == false) {
