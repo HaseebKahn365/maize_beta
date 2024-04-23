@@ -43,8 +43,6 @@ class MyGame extends FlameGame {
     //casche the audio
     //start the timer
 
-    await FlameAudio.audioCache.loadAll(['collectable.wav', 'collide.wav', 'gameover.wav']);
-
     return super.onLoad();
   }
 

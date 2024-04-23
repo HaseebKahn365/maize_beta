@@ -184,7 +184,7 @@ class _JourneyState extends State<Journey> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 25),
+                padding: const EdgeInsets.symmetric(horizontal: 45.0, vertical: 25),
                 child: Text(
                   'Worldwide Toppers',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),

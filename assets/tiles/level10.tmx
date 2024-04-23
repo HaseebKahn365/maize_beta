@@ -98,7 +98,7 @@
   <object id="115" name="ColllisionRecs" type="ColllisionRecs" x="47.3333" y="304.768" width="16" height="16.4644"/>
   <object id="116" name="ColllisionRecs" type="ColllisionRecs" x="334.667" y="306.101" width="16" height="44.4643"/>
   <object id="117" name="ColllisionRecs" type="ColllisionRecs" x="176.333" y="64.1011" width="108.667" height="14.4644"/>
-  <object id="118" name="ColllisionRecs" type="ColllisionRecs" x="361.333" y="220.768" width="47.3334" height="14.4644"/>
+  <object id="118" name="ColllisionRecs" type="ColllisionRecs" x="352.333" y="224.518" width="47.3334" height="14.4644"/>
   <object id="119" name="ColllisionRecs" type="ColllisionRecs" x="417.833" y="241.268" width="154.833" height="14.4644"/>
  </objectgroup>
 </map>

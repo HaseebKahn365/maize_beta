@@ -235,7 +235,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
 
     // Draw the arrowhead
     final double arrowLength = 5;
-    final double arrowWidth = 2 * 3.1415 / 5; // 24 degrees
+    final double arrowWidth = 2 * 3.1415 / 5; //
     // Calculate the start and sweep angles for the arc
     double startAngle = angle - arrowWidth;
     double sweepAngle = 2 * arrowWidth;

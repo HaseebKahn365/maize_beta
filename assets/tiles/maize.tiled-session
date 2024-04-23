@@ -3,43 +3,43 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level10.tmx",
+    "activeFile": "level4.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
         "level1.tmx": {
             "scale": 1.6803124999999999,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.58341082387955,
-                "y": 183.59680119025484
+                "x": 319.88097452110844,
+                "y": 183.89436488748373
             }
         },
         "level10.tmx": {
-            "scale": 1.5,
+            "scale": 16,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 358,
-                "y": 183.66666666666669
+                "x": 319.96875,
+                "y": 184
             }
         },
         "level2.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 303.3333333333333,
-                "y": 152.33333333333334
+                "x": 319.66666666666663,
+                "y": 184
             }
         },
         "level3.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.5,
             "selectedLayer": 2,
@@ -50,20 +50,20 @@
         },
         "level4.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 1.6803124999999999,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.88097452110844,
-                "y": 183.89436488748373
+                "x": 262,
+                "y": 155.66666666666669
             }
         },
         "level5.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.6803124999999999,
             "selectedLayer": 2,
@@ -74,8 +74,8 @@
         },
         "level6.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.6803124999999999,
             "selectedLayer": 2,
@@ -94,8 +94,8 @@
         },
         "level7.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.6803124999999999,
             "selectedLayer": 2,
@@ -106,8 +106,8 @@
         },
         "level8.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.6803124999999999,
             "selectedLayer": 0,
@@ -118,8 +118,8 @@
         },
         "level9.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.6803124999999999,
             "selectedLayer": 1,
@@ -168,13 +168,13 @@
         "level2.tmx",
         "level3.tmx",
         "level1.tmx",
-        "level4.tmx",
-        "level5.tmx",
-        "level6.tmx",
-        "level7.tmx",
-        "level8.tmx",
-        "level9.tmx",
         "level10.tmx",
+        "level9.tmx",
+        "level8.tmx",
+        "level7.tmx",
+        "level6.tmx",
+        "level5.tmx",
+        "level4.tmx",
         "level7 - Copy (3).tmx",
         "level_01.tmx"
     ],

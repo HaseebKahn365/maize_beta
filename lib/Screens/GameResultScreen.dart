@@ -54,6 +54,7 @@ class _GameResultScreenState extends State<GameResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final int hearts = widget.life ~/ 33;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
@@ -74,7 +75,7 @@ class _GameResultScreenState extends State<GameResultScreen> {
                 Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         'Level Passed',
                         style: TextStyle(
                           fontSize: 32.0,
@@ -86,26 +87,20 @@ class _GameResultScreenState extends State<GameResultScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          for (int i = 0; i < 3; i++)
+                          for (int i = 0; i < hearts; i++)
                             Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Icon(
                                 Icons.star,
                                 color: Colors.yellow,
                                 size: 50.0,
                               ).animate(
-                                effects: [
-                                  ScaleEffect(
-                                    curve: Curves.elasticOut,
-                                    duration: Duration(milliseconds: 100),
-                                    delay: Duration(milliseconds: 500),
-                                  ),
+                                effects: const [
                                   ShakeEffect(
                                       duration: Duration(
-                                        seconds: 1,
+                                        seconds: 3,
                                       ),
-                                      hz: 2),
-                                  ShimmerEffect(duration: Duration(milliseconds: 700))
+                                      hz: 5)
                                 ],
                               ),
                             ),
@@ -145,7 +140,7 @@ class _GameResultScreenState extends State<GameResultScreen> {
               onPressed: () {
                 SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
                 //use material page route pushreplacement to go to mainscreen
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MainScreen()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainScreen()));
               },
               child: Text('Go Back'),
             ),

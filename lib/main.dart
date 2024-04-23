@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -27,6 +28,8 @@ in the body we might load the JourneyScreen or LeaderBoardScreen depending on th
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlameAudio.audioCache.loadAll(['collectable.wav', 'collide.wav', 'gameover.wav']);
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

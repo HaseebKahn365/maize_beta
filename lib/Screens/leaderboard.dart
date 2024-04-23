@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Firebase_Services/firestore_services.dart';
-import 'package:uuid/uuid.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
   const LeaderBoardScreen({Key? key}) : super(key: key);
