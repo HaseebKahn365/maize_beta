@@ -16,7 +16,7 @@ class GameResultScreen extends StatefulWidget {
   final bool isGameOver; //indicates the game was over without completing the level. ie. life became 0
   final int score;
   final int life;
-  //hearts, shrinkers, diamonds
+  //hearts, shrinkers, diamonds:
   final int diamonds;
   final int hearts;
   final int shrinkers;
@@ -44,7 +44,9 @@ Future<void> createNewHistory(History history) async {
 class _GameResultScreenState extends State<GameResultScreen> {
   @override
   void initState() {
-    FlameAudio.play('gameover.wav');
+    FlameAudio.play(
+      'gameover.wav',
+    );
     print('Attempting to create History');
     createNewHistory(History(diamonds: widget.diamonds, hearts: widget.hearts, shrinkers: widget.shrinkers, level_id: widget.currentLevel, player_id: 1, health: widget.life, score: widget.score, time_elapsed: widget.timeElapsed, date_time: (DateTime.now().millisecondsSinceEpoch)));
 

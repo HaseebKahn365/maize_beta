@@ -28,7 +28,6 @@ in the body we might load the JourneyScreen or LeaderBoardScreen depending on th
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FlameAudio.audioCache.loadAll(['collectable.wav', 'collide.wav', 'gameover.wav']);
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -49,6 +48,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    FlameAudio.audioCache.loadAll(['collectable.wav', 'collide.wav', 'gameover.wav']);
     Flame.device.fullScreen();
     Flame.device.setLandscape();
     super.initState();
