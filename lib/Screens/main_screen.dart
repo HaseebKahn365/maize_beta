@@ -129,52 +129,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    databaseService!.open();
 
-    _uploadDataInsights();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1100),
       vsync: this,
     )..repeat(reverse: true, min: 0.8);
-  }
-
-  Future<void> _uploadDataInsights() async {
-    await databaseService!.open();
-    //upload the data insights to the database
-    DataInsight allData = await databaseService!.getPlayerStats();
-    print('All data for firebase: $allData');
-
-    //upload the data insights to the database
-    //check if document exists with current user uuid otherwise create a new document
-    if (currentUser == null) {
-      currentUser = await databaseService!.getUser();
-    }
-    if (FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).get().then((value) => value.exists) == false) {
-      await FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).set({
-        'uuid': currentUser!.uuid,
-        'name': currentUser!.name,
-        'country_code': currentUser!.country_code,
-        'diamonds': 0,
-        'hearts': 0,
-        'shrinkers': 0,
-        'levels_completed': 0,
-        'score': 0,
-        'time_elapsed': 0,
-        'date_time': DateTime.now(),
-      });
-      return;
-    }
-    await FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).set({
-      'uuid': currentUser!.uuid,
-      'name': currentUser!.name,
-      'country_code': currentUser!.country_code,
-      'diamonds': allData.totalDiamonds,
-      'hearts': allData.totalHearts,
-      'levels_completed': allData.totalLevelsCompleted,
-      'shrinkers': allData.totalShrinkers,
-      'score': allData.totalScore,
-      'time_elapsed': allData.totalTimeSpent,
-      'date_time': DateTime.now(),
-    });
   }
 
   @override

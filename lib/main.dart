@@ -51,6 +51,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     FlameAudio.audioCache.loadAll(['collectable.wav', 'collide.wav', 'gameover.wav']);
+    //cache the bgm'bgmc.mp3'
+    FlameAudio.bgm.audioPlayer.audioCache.load('bgmc.mp3');
     Flame.device.fullScreen();
     Flame.device.setLandscape();
     super.initState();
@@ -75,15 +77,28 @@ class _MyAppState extends State<MyApp> {
       if (game.life.value == 0) {
         //navigate to the GameResultScreen
         print('Died game over: with the following info: doamonds ${game.diamonds.value} hearts ${game.hearts.value} time ${game.timeElapsed.value} score ${game.score.value} life ${game.life.value}');
+        //pause the game
+        FlameAudio.play(
+          'gameover.wav',
+          volume: 0.5,
+        );
+        final tempDiamonds = game.diamonds.value;
+        final tempHearts = game.hearts.value;
+        final tempTimeElapsed = game.timeElapsed.value;
+        final tempScore = game.score.value;
+        final tempLife = game.life.value;
 
+        game.pause();
+        //stop the bgm
+        FlameAudio.bgm.stop();
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => GameResultScreen(
                   currentLevel: widget.selectedLevel,
-                  diamonds: game.diamonds.value,
-                  hearts: game.hearts.value,
-                  timeElapsed: game.timeElapsed.value,
-                  score: game.score.value,
-                  life: game.life.value,
+                  diamonds: tempDiamonds,
+                  hearts: tempHearts,
+                  timeElapsed: tempTimeElapsed,
+                  score: tempScore,
+                  life: tempLife,
                 )));
 
         //stop the timer
@@ -92,22 +107,35 @@ class _MyAppState extends State<MyApp> {
 
     //constantly listen to game.gameLevelCompleted.value and navigate to the GameResultScreen with isGameOver = false
     game.gameLevelCompleted.addListener(() async {
+      //immediately storing the values in temp vars to avoid level completion at life 0
       if (game.gameLevelCompleted.value) {
         //navigate to the GameResultScreen
+        FlameAudio.bgm.stop();
+
+        FlameAudio.play(
+          'gamepassed.wav',
+          volume: 0.5,
+        );
 
         print('Level completed with the following info: level: ${widget.selectedLevel + 1} ${game.diamonds.value} ${game.hearts.value} ${game.timeElapsed.value} ${game.score.value} ${game.life.value} ');
+        game.pause();
 
 //add this level_id +1 to the level table in the database:
         await databaseService!.createLevel(Level(id: widget.selectedLevel, name: ' Desert'));
+        final tempDiamonds = game.diamonds.value;
+        final tempHearts = game.hearts.value;
+        final tempTimeElapsed = game.timeElapsed.value;
+        final tempScore = game.score.value;
+        final tempLife = game.life.value;
 
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => GameResultScreen(
                   currentLevel: widget.selectedLevel,
-                  diamonds: game.diamonds.value,
-                  hearts: game.hearts.value,
-                  timeElapsed: game.timeElapsed.value,
-                  score: game.score.value,
-                  life: game.life.value,
+                  diamonds: tempDiamonds,
+                  hearts: tempHearts,
+                  timeElapsed: tempTimeElapsed,
+                  score: tempScore,
+                  life: tempLife,
                   isGameOver: false,
                 )));
       }

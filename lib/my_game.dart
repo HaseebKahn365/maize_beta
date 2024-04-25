@@ -72,7 +72,7 @@ class MyGame extends FlameGame {
 
   final ValueNotifier<bool> showPausedOverlay = ValueNotifier(true);
 
-  //infinite recenter
+  //pause the engine
 
   //reset the timer
   void resetTimer() {

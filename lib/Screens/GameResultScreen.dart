@@ -4,7 +4,7 @@
 the required data for this screen is the timeElapsed, the score and the life
  */
 
-import 'package:flame_audio/flame_audio.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -44,15 +44,52 @@ Future<void> createNewHistory(History history) async {
 class _GameResultScreenState extends State<GameResultScreen> {
   @override
   void initState() {
-    FlameAudio.play(
-      'gameover.wav',
-      volume: 0.5,
-    );
     print('Attempting to create History');
     createNewHistory(History(diamonds: widget.diamonds, hearts: widget.hearts, shrinkers: widget.shrinkers, level_id: widget.currentLevel, player_id: 1, health: widget.life, score: widget.score, time_elapsed: widget.timeElapsed, date_time: (DateTime.now().millisecondsSinceEpoch)));
 
+    _uploadDataInsights();
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
     super.initState();
+  }
+
+  Future<void> _uploadDataInsights() async {
+    //upload the data insights to the database
+    DataInsight allData = await databaseService!.getPlayerStats();
+    print('All data for firebase: $allData');
+
+    //upload the data insights to the database
+    //check if document exists with current user uuid otherwise create a new document
+    if (currentUser == null) {
+      currentUser = await databaseService!.getUser();
+    }
+    if (FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).get().then((value) => value.exists) == false) {
+      await FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).set({
+        'uuid': currentUser!.uuid,
+        'name': currentUser!.name,
+        'country_code': currentUser!.country_code,
+        'diamonds': 0,
+        'hearts': 0,
+        'shrinkers': 0,
+        'levels_completed': 0,
+        'score': 0,
+        'time_elapsed': 0,
+        'date_time': DateTime.now(),
+      });
+      return;
+    }
+    await FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).set({
+      'uuid': currentUser!.uuid,
+      'name': currentUser!.name,
+      'country_code': currentUser!.country_code,
+      'diamonds': allData.totalDiamonds,
+      'hearts': allData.totalHearts,
+      'levels_completed': allData.totalLevelsCompleted,
+      'shrinkers': allData.totalShrinkers,
+      'score': allData.totalScore,
+      'time_elapsed': allData.totalTimeSpent,
+      'date_time': DateTime.now(),
+    });
   }
 
   @override
