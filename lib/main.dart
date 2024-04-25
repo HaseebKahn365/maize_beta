@@ -32,6 +32,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  databaseService = DatabaseService();
+  await databaseService!.open();
 
   runApp(MainScreen());
 

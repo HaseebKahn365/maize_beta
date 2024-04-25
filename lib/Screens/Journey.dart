@@ -143,6 +143,8 @@ List<GenericLevelWidget> levels = [
   ),
 ];
 
+double scrollPosition = 0.0;
+
 class Journey extends StatefulWidget {
   const Journey({
     super.key,
@@ -159,6 +161,16 @@ class _JourneyState extends State<Journey> {
 
     // get the count of the levels
     super.initState();
+    //addingthe scroll listener to the scroll controller
+    _scrollController.addListener(() {
+      scrollPosition = _scrollController.position.pixels;
+      print('Scroll position: $scrollPosition');
+    });
+
+    //jumping to scrollposition
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(scrollPosition);
+    }
   }
 
   Future<void> _unlockLevels() async {
@@ -168,109 +180,120 @@ class _JourneyState extends State<Journey> {
     for (int i = 0; i <= count; i++) {
       if (i < 10) levels[i].isPast = true;
     }
-    setState(() {
-      levels = levels;
-    });
+    setState(() {});
   }
+
+  //creating a scroll controller to maintain the scroll position of the listview
+  ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(scrollPosition);
+    }
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 45.0, vertical: 25),
-                child: Text(
-                  'Worldwide Toppers',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                ),
-              ),
-            ),
-            // Timeline widget
-            // Container for each level
-            // Avatar
-            // Name
-            // Score
+        child: Scrollbar(
+          //show the scroll bar
+          thickness: 5.4,
+          radius: Radius.circular(10),
 
-            //use the spread operator on the list of GenericLevelWidget to create the timeline tiles
-            ...levels.map((level) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    level.isCollapsed = !level.isCollapsed;
-                  });
-                },
-                child: MyTimelineTile(
-                  isFirst: level.isFirst,
-                  isLast: level.isLast,
-                  isPast: level.isPast,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(level.levelName, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                          Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 12.0),
-                            child: Text(
-                              'My Position:   ${(level.myPosition < 1000) ? level.myPosition.toString() : '>1000'}',
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.grey),
-                            ),
-                          )
-                        ],
-                      ),
-                      if (!level.isCollapsed)
-                        ...level.toppers.map((topper) {
-                          return BeautifulEventCard(
-                            countryCode: topper.countryCode,
-                            name: topper.name,
-                            score: topper.timeInSeconds,
-                          );
-                        }).toList(),
-                      //create a play button using row widget and center alligned
-                      //the play button will be a raised button with a text play
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          //elevated button with text play
-                          ElevatedButton(
-                            onPressed: !level.isPast
-                                ? null
-                                : () {
-                                    print('play');
-                                    //use material route to navigate to MyApp(selectedLevel: 1)
-
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                        builder: (context) => MyApp(
-                                            selectedLevel:
-                                                //index of the current element in the list
-                                                levels.indexOf(level) + 1)));
-                                  },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.play_arrow,
-                                  size: 30,
-                                ),
-                                Text('  Play'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+          child: ListView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 45.0, vertical: 25),
+                  child: Text(
+                    'Worldwide Toppers',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
                 ),
-              );
-            }).toList(),
-          ],
+              ),
+              // Timeline widget
+              // Container for each level
+              // Avatar
+              // Name
+              // Score
+
+              //use the spread operator on the list of GenericLevelWidget to create the timeline tiles
+              ...levels.map((level) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      level.isCollapsed = !level.isCollapsed;
+                    });
+                  },
+                  child: MyTimelineTile(
+                    isFirst: level.isFirst,
+                    isLast: level.isLast,
+                    isPast: level.isPast,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(level.levelName, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 12.0),
+                              child: Text(
+                                'My Position:   ${(level.myPosition < 1000) ? level.myPosition.toString() : '>1000'}',
+                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.grey),
+                              ),
+                            )
+                          ],
+                        ),
+                        if (!level.isCollapsed)
+                          ...level.toppers.map((topper) {
+                            return BeautifulEventCard(
+                              countryCode: topper.countryCode,
+                              name: topper.name,
+                              score: topper.timeInSeconds,
+                            );
+                          }).toList(),
+                        //create a play button using row widget and center alligned
+                        //the play button will be a raised button with a text play
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            //elevated button with text play
+                            ElevatedButton(
+                              onPressed: !level.isPast
+                                  ? null
+                                  : () {
+                                      print('play');
+                                      //use material route to navigate to MyApp(selectedLevel: 1)
+
+                                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                          builder: (context) => MyApp(
+                                              selectedLevel:
+                                                  //index of the current element in the list
+                                                  levels.indexOf(level) + 1)));
+                                    },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.play_arrow,
+                                    size: 30,
+                                  ),
+                                  Text('  Play'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ],
+          ),
         ),
       ),
     );

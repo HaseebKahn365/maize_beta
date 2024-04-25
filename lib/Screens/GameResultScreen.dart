@@ -46,6 +46,7 @@ class _GameResultScreenState extends State<GameResultScreen> {
   void initState() {
     FlameAudio.play(
       'gameover.wav',
+      volume: 0.5,
     );
     print('Attempting to create History');
     createNewHistory(History(diamonds: widget.diamonds, hearts: widget.hearts, shrinkers: widget.shrinkers, level_id: widget.currentLevel, player_id: 1, health: widget.life, score: widget.score, time_elapsed: widget.timeElapsed, date_time: (DateTime.now().millisecondsSinceEpoch)));

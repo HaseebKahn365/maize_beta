@@ -129,8 +129,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    databaseService = DatabaseService();
-    databaseService!.open();
 
     _uploadDataInsights();
     _animationController = AnimationController(
