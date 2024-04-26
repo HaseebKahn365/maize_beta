@@ -37,6 +37,7 @@ CREATE TABLE `History_t` (
  */
 
 //Here will be the services for the db
+import 'package:maize_beta/Screens/Journey.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
@@ -205,6 +206,40 @@ class DatabaseService {
   }
 
 //!methods for the history
+
+//Finding three Toppers in the history for a given level
+/*
+Here are the rules:
+for a provided level_id if there are no three instances or less than that then create  instances of Topper()
+if there are more than three instances then return the top three instances
+
+ */
+  Future<List<Topper>> getTopHistory3(int level_id) async {
+    //creating a tempory list of toppers
+
+    List<Topper> toppers = [Topper(), Topper(), Topper()];
+    //get the group of history for the current level and order them by time_elapsed, then life and then score
+    //run a for loop for the first three instances and update the toppers list
+
+    final db = await getDBorThrow();
+    try {
+      final maps = await db.query(historyTable, where: 'level_id = ?', whereArgs: [level_id], orderBy: 'time_elapsed ASC, health DESC, score DESC');
+      int count = maps.length;
+      for (int i = 0; i < count; i++) {
+        if (maps.length > i) {
+          toppers[i] = Topper(
+            collectables: ((maps[i][diamondsColumn] as int) + (maps[i][heartsColumn] as int) + (maps[i][shrinkersColumn] as int)),
+            life: maps[i][healthColumn] as int,
+            score: maps[i][scoreColumn] as int,
+          );
+          print('Printing topper from history: ${toppers[i]}');
+        }
+      }
+    } catch (e) {
+      print('Error getting top history: $e');
+    }
+    return toppers;
+  }
 
 //method for creating a history in the history table
   Future<void> createHistory(History history) async {

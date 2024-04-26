@@ -128,7 +128,10 @@ class _PlayerListTileState extends State<PlayerListTile> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
-        leading: CircleAvatar(radius: 35, backgroundImage: (cachedData[widget.leader.uuid] != null ? NetworkImage('https://flagcdn.com/w160/${cachedData[widget.leader.uuid]!.countryCode}.jpg') : NetworkImage('https://flagcdn.com/w160/pk.jpg'))),
+        leading: CircleAvatar(
+          radius: 35,
+          backgroundImage: (cachedData[widget.leader.uuid] != null ? NetworkImage('https://flagcdn.com/w160/${cachedData[widget.leader.uuid]!.countryCode}.jpg') : NetworkImage('https://google.com/w160/pk.jpg')),
+        ),
         title: Text(
           cachedData[widget.leader.uuid]?.name ?? 'Empty Slot',
           style: TextStyle(fontSize: 20),

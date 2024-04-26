@@ -13,7 +13,6 @@ import 'package:maize_beta/Firebase_Services/resetter.dart';
 import 'package:maize_beta/Screens/Journey.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
 import 'package:maize_beta/main.dart';
-import 'package:maize_beta/my_game.dart';
 
 class GameResultScreen extends StatefulWidget {
   final int timeElapsed;
