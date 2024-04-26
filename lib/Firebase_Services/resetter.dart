@@ -238,3 +238,79 @@ Future<void> resetLeaderBoard() async {
     print(e);
   }
 }
+
+//a representative class for a field  in the leaders document
+class Leader {
+  final String uuid;
+  final int levels;
+  final int collectables;
+  final int score;
+
+  Leader({
+    required this.uuid,
+    required this.levels,
+    required this.collectables,
+    required this.score,
+  });
+
+  @override
+  String toString() {
+    return 'Leader:\n{uuid: $uuid, levels: $levels, collectables: $collectables, score: $score}';
+  }
+}
+
+List<Leader> downloadedLeaders = [];
+
+void checkLeaderAndUpdate(Leader me) {
+  for (int i = 0; i < 10; i++) {
+    if (me.levels > downloadedLeaders[i].levels) {
+      //update the field in firestore document and return
+      FirebaseFirestore.instance.collection('leaderboard').doc('leaders').update({
+        (i + 1).toString(): {
+          'uuid': me.uuid,
+          'levels': me.levels,
+          'collectables': me.collectables,
+          'score': me.score,
+        }
+      });
+      downloadedLeaders[i] = me;
+      print('Leader updated at index +1 : ${i + 1}');
+      return;
+    } else if (me.levels == downloadedLeaders[i].levels && me.collectables > downloadedLeaders[i].collectables) {
+      //update the field in firestore document and return
+      FirebaseFirestore.instance.collection('leaderboard').doc('leaders').update({
+        (i + 1).toString(): {
+          'uuid': me.uuid,
+          'levels': me.levels,
+          'collectables': me.collectables,
+          'score': me.score,
+        }
+      });
+      downloadedLeaders[i] = me;
+      print('Leader updated at index +1 : ${i + 1}');
+      return;
+    } else {
+      continue;
+    }
+  }
+}
+
+Future<void> downloadLeaders() async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance; // Create an instance of FirebaseFirestore
+  try {
+    final leaders = await firestore.collection('leaderboard').doc('leaders').get();
+    for (int i = 1; i <= 10; i++) {
+      final leader = leaders.data()![i.toString()];
+      downloadedLeaders.add(Leader(
+        uuid: leader['uuid'],
+        levels: leader['levels'],
+        collectables: leader['collectables'],
+        score: leader['score'],
+      ));
+    }
+
+    print('Leaders downloaded successfully');
+  } catch (e) {
+    print(e);
+  }
+}
