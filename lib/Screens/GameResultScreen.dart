@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:maize_beta/Database_Services/db.dart';
+import 'package:maize_beta/Firebase_Services/resetter.dart';
+import 'package:maize_beta/Screens/Journey.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
 import 'package:maize_beta/main.dart';
 import 'package:maize_beta/my_game.dart';
@@ -65,6 +67,8 @@ class _GameResultScreenState extends State<GameResultScreen> {
     if (currentUser == null) {
       currentUser = await databaseService!.getUser();
     }
+    Leader me = Leader(uuid: currentUser!.uuid, levels: currentLevelGlobal, collectables: (allData.totalDiamonds + allData.totalHearts + allData.totalShrinkers), score: allData.totalScore);
+    checkLeaderAndUpdate(me); //checking if current user has made it in the leaderBoard
     if (FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).get().then((value) => value.exists) == false) {
       await FirebaseFirestore.instance.collection('data_insights').doc(currentUser!.uuid).set({
         'uuid': currentUser!.uuid,
@@ -92,6 +96,8 @@ class _GameResultScreenState extends State<GameResultScreen> {
       'time_elapsed': allData.totalTimeSpent,
       'date_time': DateTime.now(),
     });
+
+    //Now we checkLeaderAndUpdate by providing a Leader instance made from Me
   }
 
   @override

@@ -264,6 +264,7 @@ List<Leader> downloadedLeaders = [];
 void checkLeaderAndUpdate(Leader me) {
   for (int i = 0; i < 10; i++) {
     if (me.levels > downloadedLeaders[i].levels) {
+      if (downloadedLeaders[i].uuid == me.uuid) return; //if the player is already in the leaderboard then return
       //update the field in firestore document and return
       FirebaseFirestore.instance.collection('leaderboard').doc('leaders').update({
         (i + 1).toString(): {
@@ -277,6 +278,8 @@ void checkLeaderAndUpdate(Leader me) {
       print('Leader updated at index +1 : ${i + 1}');
       return;
     } else if (me.levels == downloadedLeaders[i].levels && me.collectables > downloadedLeaders[i].collectables) {
+      if (downloadedLeaders[i].uuid == me.uuid) return; //if the player is already in the leaderboard then return
+
       //update the field in firestore document and return
       FirebaseFirestore.instance.collection('leaderboard').doc('leaders').update({
         (i + 1).toString(): {

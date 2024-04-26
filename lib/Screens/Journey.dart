@@ -154,6 +154,8 @@ class Journey extends StatefulWidget {
   State<Journey> createState() => _JourneyState();
 }
 
+int currentLevelGlobal = 0;
+
 class _JourneyState extends State<Journey> {
   @override
   void initState() {
@@ -174,6 +176,7 @@ class _JourneyState extends State<Journey> {
 
   Future<void> _unlockLevels() async {
     int count = await databaseService!.getLevelCount();
+    currentLevelGlobal = count;
 
     print('Levels in the table count: $count');
     for (int i = 0; i <= count; i++) {

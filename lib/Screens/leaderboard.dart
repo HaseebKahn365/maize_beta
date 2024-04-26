@@ -1,11 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_beta/Database_Services/db.dart';
-import 'package:maize_beta/Firebase_Services/firestore_services.dart';
 import 'package:maize_beta/Firebase_Services/resetter.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
@@ -72,6 +69,18 @@ using it state we will download the name of the player and the country code of t
 
  */
 
+class Temp {
+  final String name;
+  final String countryCode;
+
+  Temp({
+    required this.name,
+    required this.countryCode,
+  });
+}
+
+Map<String, Temp> cachedData = {};
+
 class PlayerListTile extends StatefulWidget {
   final Leader leader;
 
@@ -85,25 +94,29 @@ class PlayerListTile extends StatefulWidget {
 }
 
 class _PlayerListTileState extends State<PlayerListTile> {
-  String? name;
-  String? countryCode;
-
   @override
   void initState() {
-    _getLeaderDetails();
     super.initState();
+    _cacheTheUser();
   }
 
-  Future<void> _getLeaderDetails() async {
-    //getting the name and country code of the player from the data_insights collection
-    final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('data_insights').doc(widget.leader.uuid).get();
-    final data = snapshot.data();
-    if (snapshot.exists) {
-      setState(() {
-        name = data!['name'];
-        countryCode = data['country_code'];
-      });
+  Future<void> _cacheTheUser() async {
+    //checking if the data is already cached
+    if (cachedData.containsKey(widget.leader.uuid)) {
+      return;
     }
+
+    //if not cached then download the data from the firestore
+    final data = await FirebaseFirestore.instance.collection('data_insights').doc(widget.leader.uuid).get();
+    final name = data.get('name');
+    final countryCode = data.get('country_code');
+
+    //caching the data
+    cachedData[widget.leader.uuid] = Temp(name: name, countryCode: countryCode);
+
+    setState(() {
+      cachedData = cachedData;
+    });
   }
 
   @override
@@ -115,12 +128,9 @@ class _PlayerListTileState extends State<PlayerListTile> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
-        leading: CircleAvatar(
-          radius: 35,
-          backgroundImage: (countryCode != null) ? NetworkImage('https://flagcdn.com/w160/$countryCode.jpg') : NetworkImage('https://flagcdn.com/w160/pk.jpg'),
-        ),
+        leading: CircleAvatar(radius: 35, backgroundImage: (cachedData[widget.leader.uuid] != null ? NetworkImage('https://flagcdn.com/w160/${cachedData[widget.leader.uuid]!.countryCode}.jpg') : NetworkImage('https://flagcdn.com/w160/pk.jpg'))),
         title: Text(
-          name ?? 'Empty Slot',
+          cachedData[widget.leader.uuid]?.name ?? 'Empty Slot',
           style: TextStyle(fontSize: 20),
         ),
         subtitle: Column(
