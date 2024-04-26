@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
+import 'package:maize_beta/main.dart';
+import 'package:maize_beta/my_game.dart';
 
 class GameResultScreen extends StatefulWidget {
   final int timeElapsed;
@@ -176,14 +178,44 @@ class _GameResultScreenState extends State<GameResultScreen> {
             //a beautiful animated star
             // AnimatedStars(),
             SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
-                //use material page route pushreplacement to go to mainscreen
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainScreen()));
-              },
-              child: Text('Go Back'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
+                    //use material page route pushreplacement to go to mainscreen
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainScreen()));
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min, // Use the minimum main axis size
+                    mainAxisAlignment: MainAxisAlignment.center, // Center the content in the row
+                    children: [
+                      Icon(Icons.home), // Add the home icon
+                      SizedBox(width: 10), // Add some spacing between the icon and the text
+                      Text('Go Back'),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
+                    //use material page route pushreplacement to go to mainscreen
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyApp(selectedLevel: widget.currentLevel)));
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min, // Use the minimum main axis size
+                    mainAxisAlignment: MainAxisAlignment.center, // Center the content in the row
+                    children: [
+                      Icon(Icons.refresh), // Add the home icon
+                      SizedBox(width: 10), // Add some spacing between the icon and the text
+                      Text('Play Again'),
+                    ],
+                  ),
+                ),
+              ],
             ),
+            //create a similar button for 'try again'
           ],
         ),
       ),
