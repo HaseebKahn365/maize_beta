@@ -8,6 +8,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maize_beta/Database_Services/db.dart';
+import 'package:maize_beta/Firebase_Services/resetter.dart';
 import 'package:maize_beta/Screens/Journey.dart';
 import 'package:maize_beta/Screens/leaderboard.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -143,6 +144,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     //parsing the feedback
 
     int? parsedFeedback = int.tryParse(feedback!);
+    if (feedback == '' || feedback.isEmpty) {
+      return;
+    }
     if (parsedFeedback != null) {
       //perform admin actions
       //check if the document exists in the firestore under the collection Admin_Secrets
@@ -153,10 +157,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           case 1234:
             //reset the levels collection in the firestore
             print('resetting the levels collection in the firestore');
+            //here i am gonna reset the entire levels collection in the firestore becauuse i want the new players to appear as the toppers of each
+
+            try {
+              await resetLevels();
+              SnackBar(content: Text('Levels collection reset!'));
+            } catch (e) {
+              SnackBar(content: Text('Error resetting the levels collection!'));
+            }
+
             break;
           case 5678:
             //reset the leaderboard collection in the firestore
             print('resetting the leaderboard collection in the firestore');
+            await resetLeaderBoard();
             break;
           default:
             break;
@@ -168,9 +182,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     //send the feedback to the admin: haseebkahn365@outlook.com
     //using the url launcher
-    if (feedback == null || feedback.isEmpty) {
-      return;
-    }
     print('Feedback to be sent: $feedback');
 
     //sending the feedback to the email:
