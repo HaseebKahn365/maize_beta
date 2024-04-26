@@ -297,19 +297,26 @@ void checkLeaderAndUpdate(Leader me) {
 
 Future<void> downloadLeaders() async {
   FirebaseFirestore firestore = FirebaseFirestore.instance; // Create an instance of FirebaseFirestore
+
+  //fill with empty leaders
+  if (downloadedLeaders.isEmpty) {
+    for (int i = 0; i < 10; i++) {
+      downloadedLeaders.add(Leader(uuid: '', levels: 0, collectables: 0, score: 0));
+    }
+  }
+
+  //download and modify at the index
   try {
     final leaders = await firestore.collection('leaderboard').doc('leaders').get();
-    for (int i = 1; i <= 10; i++) {
-      final leader = leaders.data()![i.toString()];
-      downloadedLeaders.add(Leader(
-        uuid: leader['uuid'],
-        levels: leader['levels'],
-        collectables: leader['collectables'],
-        score: leader['score'],
-      ));
+    final data = leaders.data() as Map<String, dynamic>;
+    for (int i = 0; i < 10; i++) {
+      downloadedLeaders[i] = Leader(
+        uuid: data[(i + 1).toString()]['uuid'],
+        levels: data[(i + 1).toString()]['levels'],
+        collectables: data[(i + 1).toString()]['collectables'],
+        score: data[(i + 1).toString()]['score'],
+      );
     }
-
-    print('Leaders downloaded successfully');
   } catch (e) {
     print(e);
   }

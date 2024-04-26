@@ -21,8 +21,18 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
   void initState() {
     _getDbReady();
+    _downloadLeaders();
 
     super.initState();
+  }
+
+  Future<void> _downloadLeaders() async {
+    //downloading the leaders from the firestore
+    downloadLeaders();
+    print('leaders: ' + downloadedLeaders.length.toString()); //this will print the number of leaders downloaded from the firestore (10 in this case
+    setState(() {
+      downloadedLeaders = downloadedLeaders;
+    });
   }
 
   Future<void> _getDbReady() async {
@@ -31,159 +41,70 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
     User? user = await _databaseService!.getUser();
   }
 
-  Future<void> _downloadLeaders() async {
-    try {
-      await downloadLeaders();
-      /*
-      Here is what the Leader object looks like:
-     
-        final String uuid;
-        final int levels;
-        final int collectables;
-        final int score;
-
-        we are gonna use the uuid of the player to get the player's name and country code from the database
-
-        then we will start filling in the details for the player list tile. in case if uuid is '' then we will just display 'Empty slot'
-
-      
-       */
-      for (int i = 0; i < 10; i++) {
-        if (downloadedLeaders[i].uuid == '') {
-          playersOfLeaderBoardList.add(PlayerOfLeaderBoard(
-            name: 'Empty Slot',
-            countryCode: '',
-            collectables: 0,
-            levels: 0,
-            score: 0,
-          ));
-        } else {
-          //find the player by uuid in the data_insights collection and get the name and country code. (in data_insights the player's document is under the uuid of the player.)
-          PlayerOfLeaderBoard player = await FirebaseFirestore.instance.collection('data_insights').doc(downloadedLeaders[i].uuid).get().then((value) {
-            return PlayerOfLeaderBoard(
-              name: value.data()!['name'],
-              countryCode: value.data()!['country_code'],
-              collectables: downloadedLeaders[i].collectables,
-              levels: downloadedLeaders[i].levels,
-              score: downloadedLeaders[i].score,
-            );
-          });
-        }
-      }
-    } catch (e) {
-      print('Error downloading leaders from leaderBoard screen:  $e');
-    }
-
-    setState(() {
-      print('finished downloading the leaders');
-      playersOfLeaderBoardList = playersOfLeaderBoardList;
-    });
-  }
-
-  List<PlayerOfLeaderBoard> playersOfLeaderBoardList = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
       children: [
-        PlayerListTile(
-          name: 'Tayyab Ahmad',
-          countryCode: 'ps',
-          levelsCompleted: 10,
-          totalScore: 382314,
-          collectablesCollected: 2323,
-        ),
+        //displaying the PlayerListTile by passing the leader to it. Remember (List<Leader> downloadedLeaders = [] is global)
 
-        PlayerListTile(
-          name: 'Abdul Haseeb',
-          countryCode: 'ps',
-          levelsCompleted: 10,
-          collectablesCollected: 2341,
-          totalScore: 412435,
-        ),
-
-        PlayerListTile(
-          name: 'Muhammad Bilal',
-          countryCode: 'pk',
-          levelsCompleted: 10,
-          totalScore: Random().nextInt(500000),
-          collectablesCollected: Random().nextInt(3000),
-        ),
-
-        PlayerListTile(
-          name: 'Muhammad Hammad',
-          countryCode: 'pk',
-          levelsCompleted: 10,
-          totalScore: Random().nextInt(500000),
-          collectablesCollected: Random().nextInt(3000),
-        ),
-
-        PlayerListTile(
-          name: 'Kanetkar Saab',
-          countryCode: 'in',
-          levelsCompleted: 10,
-          totalScore: Random().nextInt(500000),
-          collectablesCollected: Random().nextInt(3000),
-        ),
-
-        PlayerListTile(
-          name: 'Hamza Fayaz',
-          countryCode: 'pk',
-          levelsCompleted: 10,
-          totalScore: Random().nextInt(500000),
-          collectablesCollected: Random().nextInt(3000),
-        ),
-
-        PlayerListTile(
-          name: 'Temmethy Jr.',
-          countryCode: 'au',
-          levelsCompleted: 10,
-          totalScore: Random().nextInt(500000),
-          collectablesCollected: Random().nextInt(3000),
-        ),
-
-        //creating buttons to test the db services
-
-        //creating buttons to test the firebase firestore services
+        ...downloadedLeaders
+            .map((leader) => PlayerListTile(
+                  leader: leader,
+                ))
+            .toList(),
       ],
     ));
   }
 }
 
-//!just a simple class for details of the PlayerList Tile
-class PlayerOfLeaderBoard {
-  final String name;
-  final String countryCode;
+//!just a simple list tile to display the player details
+
+/*
+Here is what a Leader instance looks like
+ final String uuid;
   final int levels;
   final int collectables;
   final int score;
 
-  PlayerOfLeaderBoard({
-    required this.name,
-    required this.countryCode,
-    required this.levels,
-    required this.collectables,
-    required this.score,
-  });
+we are gonna use this to display the player details we just have to pass this instance to the PlayerListTile widget
+using it state we will download the name of the player and the country code of the player from the data_insights collection and document under the uuid of the leader
+
+ */
+
+class PlayerListTile extends StatefulWidget {
+  final Leader leader;
+
+  const PlayerListTile({
+    Key? key,
+    required this.leader,
+  }) : super(key: key);
+
+  @override
+  State<PlayerListTile> createState() => _PlayerListTileState();
 }
 
-//!just a simple list tile to display the player details
+class _PlayerListTileState extends State<PlayerListTile> {
+  String? name;
+  String? countryCode;
 
-class PlayerListTile extends StatelessWidget {
-  final String name;
-  final String countryCode;
-  final int levelsCompleted;
-  final int collectablesCollected;
-  final int totalScore;
-  const PlayerListTile({
-    super.key,
-    required this.name,
-    required this.countryCode,
-    required this.levelsCompleted,
-    required this.collectablesCollected,
-    required this.totalScore,
-  });
+  @override
+  void initState() {
+    _getLeaderDetails();
+    super.initState();
+  }
+
+  Future<void> _getLeaderDetails() async {
+    //getting the name and country code of the player from the data_insights collection
+    final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('data_insights').doc(widget.leader.uuid).get();
+    final data = snapshot.data();
+    if (snapshot.exists) {
+      setState(() {
+        name = data!['name'];
+        countryCode = data['country_code'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,20 +117,23 @@ class PlayerListTile extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           radius: 35,
-          backgroundImage: NetworkImage('https://flagcdn.com/w160/$countryCode.jpg'),
+          backgroundImage: (countryCode != null) ? NetworkImage('https://flagcdn.com/w160/$countryCode.jpg') : NetworkImage('https://flagcdn.com/w160/pk.jpg'),
         ),
-        title: Text(name),
+        title: Text(
+          name ?? 'Empty Slot',
+          style: TextStyle(fontSize: 20),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 const Text(
-                  'Levels Completed:  ',
+                  'Current Level:  ',
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
-                  levelsCompleted.toString(),
+                  widget.leader.levels.toString(),
                   style: TextStyle(fontSize: 14),
                 ),
               ],
@@ -221,7 +145,7 @@ class PlayerListTile extends StatelessWidget {
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
-                  collectablesCollected.toString(),
+                  widget.leader.collectables.toString(),
                   style: TextStyle(fontSize: 14),
                 ),
               ],
@@ -233,7 +157,7 @@ class PlayerListTile extends StatelessWidget {
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
-                  totalScore.toString(),
+                  widget.leader.score.toString(),
                   style: TextStyle(fontSize: 14),
                 ),
               ],
