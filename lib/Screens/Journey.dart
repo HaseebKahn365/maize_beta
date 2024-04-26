@@ -164,7 +164,6 @@ class _JourneyState extends State<Journey> {
     //addingthe scroll listener to the scroll controller
     _scrollController.addListener(() {
       scrollPosition = _scrollController.position.pixels;
-      print('Scroll position: $scrollPosition');
     });
 
     //jumping to scrollposition
@@ -287,6 +286,17 @@ class _JourneyState extends State<Journey> {
                             ),
                           ],
                         ),
+                        //add a text button to say more levels coming soon if index [9] isPast
+                        if (level.isLast && level.isPast)
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Text(
+                                'More levels coming soon! \n      Stay on TOP 😉🚀',
+                                style: TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

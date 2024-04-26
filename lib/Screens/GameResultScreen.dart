@@ -187,7 +187,7 @@ class _GameResultScreenState extends State<GameResultScreen> {
                     //use material page route pushreplacement to go to mainscreen
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainScreen()));
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min, // Use the minimum main axis size
                     mainAxisAlignment: MainAxisAlignment.center, // Center the content in the row
                     children: [
@@ -200,10 +200,10 @@ class _GameResultScreenState extends State<GameResultScreen> {
                 ElevatedButton(
                   onPressed: () {
                     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: SystemUiOverlay.values);
-                    //use material page route pushreplacement to go to mainscreen
+                    //use material page route pushreplacement to go to game screen
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyApp(selectedLevel: widget.currentLevel)));
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min, // Use the minimum main axis size
                     mainAxisAlignment: MainAxisAlignment.center, // Center the content in the row
                     children: [

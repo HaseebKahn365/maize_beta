@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Screens/Journey.dart';
 import 'package:maize_beta/Screens/leaderboard.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //creating a global db instance
 DatabaseService? databaseService;
@@ -126,6 +127,66 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   late AnimationController _animationController;
 
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&');
+  }
+
+  _composeAndSendFeedback(String? feedback) async {
+    //here depending on feedback string we are also gonna perform admin actions.. this iis the secrete admin logic:
+    /*
+    Check if parsing the string gives an integer, if it does, then we are gonna perform admin actions
+    actions like: resetting the levels collection in the firestore 
+    also resetting the leaderboard collection in firestore
+    execution of the admin action depends on wether of not the document exists in the firestore under the collection Admin_Secrets
+     */
+
+    //parsing the feedback
+
+    int? parsedFeedback = int.tryParse(feedback!);
+    if (parsedFeedback != null) {
+      //perform admin actions
+      //check if the document exists in the firestore under the collection Admin_Secrets
+      bool documentExists = await FirebaseFirestore.instance.collection('Admin_Secrets').doc('0314').get().then((value) => value.exists);
+      if (documentExists) {
+        //perform the admin actions
+        switch (parsedFeedback) {
+          case 1234:
+            //reset the levels collection in the firestore
+            print('resetting the levels collection in the firestore');
+            break;
+          case 5678:
+            //reset the leaderboard collection in the firestore
+            print('resetting the leaderboard collection in the firestore');
+            break;
+          default:
+            break;
+        }
+      } else {
+        print('admin action denied document does not exist!');
+      }
+    }
+
+    //send the feedback to the admin: haseebkahn365@outlook.com
+    //using the url launcher
+    if (feedback == null || feedback.isEmpty) {
+      return;
+    }
+    print('Feedback to be sent: $feedback');
+
+    //sending the feedback to the email:
+    //launch the email client with the feedback
+    //using the url_launcher package
+
+    final Uri _emailLaunchUri = Uri(
+        scheme: 'mailto',
+        path: 'haseebkhan365@outlook.com',
+        query: encodeQueryParameters(<String, String>{
+          'subject': 'Feedback for Maiz Game!',
+          'body': feedback,
+        }));
+    launchUrl(_emailLaunchUri);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -151,8 +212,55 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
         backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.white,
 
-        title: Text('Maize Beta'),
+        title: Text('Maiz'),
         actions: [
+          //an icon button for feedback
+          IconButton(
+            onPressed: () {
+              //show the feedback dialog
+              showDialog(
+                context: context,
+                builder: (context) {
+                  String feedback = '';
+                  return AlertDialog(
+                    title: Text('Feedback'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Let me know about your problem or Suggestion!\n'),
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Feedback',
+                            border: OutlineInputBorder(),
+                            //make it multilined
+                          ),
+                          onChanged: (value) {
+                            feedback = value;
+                          },
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await _composeAndSendFeedback(feedback);
+                          Navigator.pop(context);
+                        },
+                        child: Text('Send'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: Icon(FluentIcons.chat_24_regular),
+          ),
           IconButton(
             onPressed: () {
               //handle the brightness change
