@@ -6,6 +6,7 @@ class Diamond extends Collectable {
 
   @override
   void _affectScore() {
+    game.diamonds.value += 1;
     super.game.incrementScore(300);
   }
 }

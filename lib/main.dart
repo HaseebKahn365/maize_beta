@@ -87,6 +87,7 @@ class _MyAppState extends State<MyApp> {
         final tempTimeElapsed = game.timeElapsed.value;
         final tempScore = game.score.value;
         final tempLife = game.life.value;
+        final tempShrinkers = game.shrinkers.value;
 
         game.pause();
         //stop the bgm
@@ -95,6 +96,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context) => GameResultScreen(
                   currentLevel: widget.selectedLevel,
                   diamonds: tempDiamonds,
+                  shrinkers: tempShrinkers,
                   hearts: tempHearts,
                   timeElapsed: tempTimeElapsed,
                   score: tempScore,
@@ -127,6 +129,7 @@ class _MyAppState extends State<MyApp> {
         final tempTimeElapsed = game.timeElapsed.value;
         final tempScore = game.score.value;
         final tempLife = game.life.value;
+        final tempShrinkers = game.shrinkers.value;
 
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => GameResultScreen(
@@ -135,6 +138,7 @@ class _MyAppState extends State<MyApp> {
                   hearts: tempHearts,
                   timeElapsed: tempTimeElapsed,
                   score: tempScore,
+                  shrinkers: tempShrinkers,
                   life: tempLife,
                   isGameOver: false,
                 )));

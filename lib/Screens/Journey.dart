@@ -548,10 +548,10 @@ class BeautifulEventCard extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        '${topper.score}',
+        'Score:  ${topper.score}',
         style: TextStyle(
           fontWeight: FontWeight.w300,
-          fontSize: 12,
+          fontSize: 11,
         ),
       ),
       trailing: Text('${topper.collectables} 🔥', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12)),
