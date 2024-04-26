@@ -315,7 +315,7 @@ class _JourneyState extends State<Journey> {
 
   Future<void> _updateTheToppers() async {
     for (int i = 0; i < levels.length; i++) {
-      List<Topper> toppers = await databaseService!.getTopHistory3(i);
+      final toppers = await databaseService!.getTopHistory3(i + 1);
       levels[i].toppers = toppers;
     }
     setState(() {});
@@ -346,7 +346,7 @@ class _JourneyState extends State<Journey> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 45.0, vertical: 25),
                   child: Text(
-                    'Worldwide Toppers',
+                    'Current Level: $currentLevelGlobal',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
                 ),
@@ -385,7 +385,7 @@ class _JourneyState extends State<Journey> {
                                 });
                               },
                               child: Text(
-                                'Top Records',
+                                'Recent Records',
                                 style: TextStyle(fontSize: 10),
                               ),
                             ),
@@ -536,7 +536,7 @@ class BeautifulEventCard extends StatelessWidget {
           ],
         ),
         child: CircleAvatar(
-          maxRadius: 20,
+          maxRadius: 30,
           child: Text('${topper.timeInSeconds}s'),
         ),
       ),
