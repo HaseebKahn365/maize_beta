@@ -43,12 +43,14 @@ const List<Color> colorOptions = [
   Colors.indigo,
   Colors.amber,
 ];
-const List<String> colorText = <String>["M3 Baseline", "Blue", "Teal", "Green", "Yellow", "Orange", "Pink", "Lime"];
+const List<String> colorText = <String>["Purple", "Blue", "Teal", "Green", "Yellow", "Orange", "Pink", "Lime"];
+
+int colorSelected = 0;
+
+bool useLightMode = true;
 
 class _MainScreenState extends State<MainScreen> {
   bool useMaterial3 = true;
-  bool useLightMode = true;
-  int colorSelected = 0;
   int screenIndex = 0;
 
   late ThemeData themeData;
@@ -61,6 +63,13 @@ class _MainScreenState extends State<MainScreen> {
     //initialize the db
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
+  }
+
+  void setNewColor(int colorIndex) {
+    setState(() {
+      colorSelected = colorIndex;
+      themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
+    });
   }
 
   ThemeData updateThemes(int colorIndex, bool useMaterial3, bool useLightMode) {
@@ -101,6 +110,7 @@ class _MainScreenState extends State<MainScreen> {
       themeMode: useLightMode ? ThemeMode.light : ThemeMode.dark,
       theme: themeData,
       home: HomeScreen(
+        setNewColor: setNewColor,
         useLightMode: useLightMode,
         handleBrightnessChange: handleBrightnessChange,
       ),
@@ -111,9 +121,12 @@ class _MainScreenState extends State<MainScreen> {
 class HomeScreen extends StatefulWidget {
   final bool useLightMode;
   final VoidCallback handleBrightnessChange;
+  //create a callback for setting new color
+  final Function(int) setNewColor;
 
   HomeScreen({
     Key? key,
+    required this.setNewColor,
     required this.useLightMode,
     required this.handleBrightnessChange,
   }) : super(key: key);
@@ -348,6 +361,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   setState(() {
                                                     //update the user in the database:
                                                     print('update profile complete');
+                                                    currentUser = User(
+                                                      id: 1,
+                                                      uuid: currentUser!.uuid,
+                                                      name: tempName,
+                                                      country_code: selectedCountry,
+                                                    );
                                                   });
                                                   Navigator.pop(context);
                                                 },
@@ -425,6 +444,103 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   ),
                                                 ),
                                               ),
+
+                                              const SizedBox(height: 20),
+                                              //create a single child scroll view with horizontal scrolling that allows the user to select the color from the list of colors and update the theme
+                                              SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                child: Row(
+                                                  children: List.generate(
+                                                    colorText.length,
+                                                    (index) => Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          widget.setNewColor(index);
+                                                        },
+                                                        child: Container(
+                                                          width: 50,
+                                                          height: 50,
+                                                          decoration: BoxDecoration(
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors.black.withOpacity(0.2),
+                                                                blurRadius: 5,
+                                                                spreadRadius: 0.3,
+                                                              ),
+                                                            ],
+                                                            color: colorOptions[index],
+                                                            borderRadius: BorderRadius.circular(10),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              colorText[index],
+                                                              style: TextStyle(
+                                                                fontSize: 8,
+                                                                color: Colors.black,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+
+                                              //creating a giant button to reset the account which will simply delete the dattabase and navigate to the main screen
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 25),
+                                                child: Container(
+                                                  width: 200,
+                                                  height: 100,
+                                                  child: ElevatedButton.icon(
+                                                    label: Text('Reset Account'),
+                                                    icon: Icon(FluentIcons.delete_24_regular),
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: () async {
+                                                      //reset the account
+                                                      //show confirmation dialogue that asks the user too long press the confirm button to delete the account
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            title: Text('Reset Account?'),
+                                                            content: Text('Are you sure you want to reset your account?\n\nLong Press to confirm the action!'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: Text('Cancel'),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {},
+                                                                onLongPress: () async {
+                                                                  //reset the account
+                                                                  await databaseService!.closeAndDelete();
+                                                                  Navigator.pop(context);
+                                                                  Future.delayed(Duration(milliseconds: 100), () {
+                                                                    //use material route to pushreplacement
+                                                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+                                                                  });
+                                                                },
+                                                                child: Text('Confirm'),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -434,7 +550,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 },
                               );
                             },
-                            child: Icon(FluentIcons.person_20_regular),
+                            //make the flag fill the FAButton
+
+                            child: (isAccountSet)
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: CachedNetworkImage(
+                                        imageUrl: 'https://flagcdn.com/w160/${currentUser!.country_code}.jpg',
+                                        placeholder: (context, url) => Icon(FluentIcons.person_20_filled),
+                                        errorWidget: (context, url, error) => Icon(FluentIcons.person_20_filled),
+                                      ),
+                                    ),
+                                  )
+                                : Icon(FluentIcons.person_20_regular),
                           ),
                         );
                       },

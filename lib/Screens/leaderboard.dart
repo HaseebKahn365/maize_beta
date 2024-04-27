@@ -17,7 +17,6 @@ DatabaseService? _databaseService;
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
   void initState() {
-    _getDbReady();
     _downloadLeaders();
 
     super.initState();
@@ -30,12 +29,6 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
     setState(() {
       downloadedLeaders = downloadedLeaders;
     });
-  }
-
-  Future<void> _getDbReady() async {
-    _databaseService = DatabaseService();
-    await _databaseService!.open();
-    User? user = await _databaseService!.getUser();
   }
 
   @override
