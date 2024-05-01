@@ -276,6 +276,37 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                 },
                 child: Text('Download Level 3'),
               ),
+              //a button to test the upload of the level toppers and thresholds
+              ElevatedButton(
+                onPressed: () async {
+                  print('uploading level 4 topper');
+                  try {
+                    LocalObjectForLevel localLevel = LocalObjectForLevel();
+                    await localLevel.downloadLevelToppersAndThresholds(4);
+
+                    //create a tempory LevelTopper
+                    LevelTopper currentPlayerAndData = LevelTopper(
+                      /*final String uuid;
+  final int time;
+  final int life;
+  final int score; */
+
+                      uuid: 'sjdkfkh3j42k3j4k234',
+                      time: 77,
+                      life: 100,
+                      score: 1000,
+                    );
+
+                    await TryLevelTopperRefresh(localLevel, currentPlayerAndData);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Level toppers and thresholds uploaded')));
+                  } catch (e) {
+                    //show snakbar
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error uploading level toppers and thresholds: $e')));
+                  }
+                },
+                child: Text('Upload Level Toppers and Thresholds'),
+              ),
+
               //button to delete the entire firestore db
               ElevatedButton(
                 onPressed: () async {
