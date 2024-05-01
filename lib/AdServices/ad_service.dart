@@ -7,7 +7,7 @@ import 'dart:developer';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdService {
-  static String get bannerAdUnitId => 'ca-app-pub-7459783790569609/6557854588';
+  static String get bannerAdUnitId => 'ca-app-pub-4570425119545789/3455966956';
 
   //we are only gonna display the banner add in the appbar;
 
@@ -27,7 +27,6 @@ class AdService {
         },
         onAdFailedToLoad: (ad, error) {
           log('Banner Ad failed to load');
-          isBannerAdLoaded = false;
           ad.dispose();
         },
       ),

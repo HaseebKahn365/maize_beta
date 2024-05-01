@@ -260,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                 )
               : AppBar(
-                  backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.white,
+                  backgroundColor: Theme.of(context).brightness == Brightness.dark ? const Color.fromRGBO(0, 0, 0, 0.122) : Colors.white,
                   title: Text('Maiz'),
                   actions: [
                     //an icon button for feedback
