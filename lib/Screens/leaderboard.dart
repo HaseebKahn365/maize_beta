@@ -57,23 +57,23 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
 
         //6. total score
 
-        PlayerListTile(
-          name: 'Abdul Haseeb',
-          countryCode: 'pk',
-          levelsCompleted: 10,
-          collectablesCollected: 100,
-          damageTaken: 100,
-          totalScore: 1000,
-        ),
+        // PlayerListTile(
+        //   name: 'Abdul Haseeb',
+        //   countryCode: 'pk',
+        //   levelsCompleted: 10,
+        //   collectablesCollected: 100,
+        //   damageTaken: 100,
+        //   totalScore: 1000,
+        // ),
 
-        PlayerListTile(
-          name: 'Abdul Haseeb',
-          countryCode: 'pk',
-          levelsCompleted: 10,
-          collectablesCollected: 100,
-          damageTaken: 100,
-          totalScore: 1000,
-        ),
+        // PlayerListTile(
+        //   name: 'Abdul Haseeb',
+        //   countryCode: 'pk',
+        //   levelsCompleted: 10,
+        //   collectablesCollected: 100,
+        //   damageTaken: 100,
+        //   totalScore: 1000,
+        // ),
 
         //creating buttons to test the db services
 
@@ -223,7 +223,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
 
                   final User? user = await _databaseService!.getUser();
                   try {
-                    _firestoreServices = FirestoreServices.forUser(user!);
+                    // _firestoreServices = FirestoreServices.forUser(user!);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User added to firestore')));
                   } catch (e) {
                     //show snakbar
