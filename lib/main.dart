@@ -6,9 +6,13 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:maize_beta/Database_Services/db.dart';
+import 'package:maize_beta/Screens/GameResultScreen.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
 import 'package:maize_beta/firebase_options.dart';
 import 'package:maize_beta/my_game.dart';
@@ -25,14 +29,22 @@ in the body we might load the JourneyScreen or LeaderBoardScreen depending on th
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  databaseService = DatabaseService();
+  await databaseService!.open();
 
   runApp(MainScreen());
+
+  //testing the gameplay
 }
 
 class MyApp extends StatefulWidget {
+  final int selectedLevel;
+  const MyApp({Key? key, this.selectedLevel = 1}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -40,6 +52,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    FlameAudio.audioCache.loadAll(['collectable.wav', 'collide.wav', 'gameover.wav']);
+    //cache the bgm'bgmc.mp3'
+    FlameAudio.bgm.audioPlayer.audioCache.load('bgmc.mp3');
     Flame.device.fullScreen();
     Flame.device.setLandscape();
     super.initState();
@@ -47,7 +62,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final game = MyGame();
+    final game = MyGame(selectedLevel: widget.selectedLevel);
     //timer for the game
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (game.showStartOverlay.value == false) {
@@ -57,6 +72,81 @@ class _MyAppState extends State<MyApp> {
         }
       }
     });
+
+    //constantly listen to the life.value and immediate   //when the life becomes zero we are gonna navigate to the GameResultScreen with material pushReplacement
+
+    game.life.addListener(() {
+      if (game.life.value == 0) {
+        //navigate to the GameResultScreen
+        print('Died game over: with the following info: doamonds ${game.diamonds.value} hearts ${game.hearts.value} time ${game.timeElapsed.value} score ${game.score.value} life ${game.life.value}');
+        //pause the game
+        FlameAudio.play(
+          'gameover.wav',
+          volume: 0.5,
+        );
+        final tempDiamonds = game.diamonds.value;
+        final tempHearts = game.hearts.value;
+        final tempTimeElapsed = game.timeElapsed.value;
+        final tempScore = game.score.value;
+        final tempLife = game.life.value;
+        final tempShrinkers = game.shrinkers.value;
+
+        game.pause();
+        //stop the bgm
+        FlameAudio.bgm.stop();
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => GameResultScreen(
+                  currentLevel: widget.selectedLevel,
+                  diamonds: tempDiamonds,
+                  shrinkers: tempShrinkers,
+                  hearts: tempHearts,
+                  timeElapsed: tempTimeElapsed,
+                  score: tempScore,
+                  life: tempLife,
+                )));
+
+        //stop the timer
+      }
+    });
+
+    //constantly listen to game.gameLevelCompleted.value and navigate to the GameResultScreen with isGameOver = false
+    game.gameLevelCompleted.addListener(() async {
+      //immediately storing the values in temp vars to avoid level completion at life 0
+      if (game.gameLevelCompleted.value) {
+        //navigate to the GameResultScreen
+        FlameAudio.bgm.stop();
+
+        FlameAudio.play(
+          'gamepassed.wav',
+          volume: 0.5,
+        );
+
+        // print('Level completed with the following info: level: ${widget.selectedLevel + 1} ${game.diamonds.value} ${game.hearts.value} ${game.timeElapsed.value} ${game.score.value} ${game.life.value} ');
+        game.pause();
+
+//add this level_id +1 to the level table in the database:
+        await databaseService!.createLevel(Level(id: widget.selectedLevel, name: ' Desert'));
+        final tempDiamonds = game.diamonds.value;
+        final tempHearts = game.hearts.value;
+        final tempTimeElapsed = game.timeElapsed.value;
+        final tempScore = game.score.value;
+        final tempLife = game.life.value;
+        final tempShrinkers = game.shrinkers.value;
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => GameResultScreen(
+                  currentLevel: widget.selectedLevel,
+                  diamonds: tempDiamonds,
+                  hearts: tempHearts,
+                  timeElapsed: tempTimeElapsed,
+                  score: tempScore,
+                  shrinkers: tempShrinkers,
+                  life: tempLife,
+                  isGameOver: false,
+                )));
+      }
+    });
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -76,59 +166,75 @@ class _MyAppState extends State<MyApp> {
 
               child: GameWidget(game: game),
             ),
-            Align(
-              alignment: Alignment.topCenter,
-              //for life
-              child: Container(
-                //add shadow
-                //add white outline and black shadow
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(0.0, 1.0), //(x,y)
-                      blurRadius: 6.0,
-                    ),
-                  ],
-                ),
-
-                height: 20,
-                margin: EdgeInsets.fromLTRB(250, 10, 250, 0),
-
-                child: ValueListenableBuilder(
-                    valueListenable: game.life,
-                    builder: (BuildContext context, int value, Widget? child) {
-                      return LinearProgressIndicator(
-                        //make it rounded cornered add padding and increase hieight
-                        backgroundColor: Colors.grey,
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.red,
-                        //increase the value smoothly
-
-                        value: ((value / 100) > 1) ? 1 : value / 100,
-                      );
-                    }),
-              ),
-            ),
-            ValueListenableBuilder(
-                valueListenable: game.life,
-                builder: (BuildContext context, int value, Widget? child) {
-                  return Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(250, 10, 250, 0),
-                      child: Text(
-                        '$value%',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+            Stack(
+              alignment: Alignment.bottomLeft,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        // Adjust the width and height as needed
+                        width: 20,
+                        height: 100,
+                        margin: EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.red,
+                              offset: Offset(0.0, 1.0), //(x,y)
+                              blurRadius: 6.0,
+                            ),
+                          ],
+                        ),
+                        child: RotatedBox(
+                          quarterTurns: 3,
+                          child: ValueListenableBuilder(
+                            valueListenable: game.life,
+                            builder: (BuildContext context, int value, Widget? child) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: ValueListenableBuilder(
+                                  valueListenable: game.life,
+                                  builder: (BuildContext context, int value, Widget? child) {
+                                    return LinearProgressIndicator(
+                                      backgroundColor: Colors.grey,
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                                      value: ((value / 100) > 1) ? 1 : value / 100,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                      ValueListenableBuilder(
+                        valueListenable: game.life,
+                        builder: (BuildContext context, int value, Widget? child) {
+                          return SizedBox(
+                            width: 45,
+                            height: 20,
+                            child: Center(
+                              child: Text(
+                                '$value%',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             Align(
               alignment: Alignment.topLeft,
               child: Column(
@@ -205,7 +311,7 @@ class _MyAppState extends State<MyApp> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Maize',
+                                    'Puzzle-Maize',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 40,
@@ -249,32 +355,68 @@ class _MyAppState extends State<MyApp> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  FloatingActionButton(
-                    backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                    onPressed: () {
-                      // game.som.player.recenterThePlayer();
-                      //restart the game
-                      setState(() {
-                        game.onLoad();
-                        //add another FAB on the top right corner keeping track of the time elapsed
-                      });
-                    },
-                    child: Icon(Icons.restart_alt_rounded),
+                  // FloatingActionButton(
+                  //   backgroundColor: Colors.amber,
+                  //   onPressed: () {
+                  //     // game.som.player.recenterThePlayer();
+                  //     //restart the game
+                  //     setState(() {
+                  //       game.onLoad();
+                  //       //add another FAB on the top right corner keeping track of the time elapsed
+                  //     });
+                  //   },
+                  //   child: Icon(Icons.restart_alt_rounded),
+                  // ),
+
+                  //same as the below FAB
+                  Container(
+                    height: 70,
+                    width: 65,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.amber,
+                      onPressed: () {
+                        // game.som.player.recenterThePlayer();
+                        //restart the game
+                        setState(() {
+                          game.onLoad();
+                          //add another FAB on the top right corner keeping track of the time elapsed
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.restart_alt_rounded),
+                          Text('Restart'),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(height: 20), // Add some spacing between the buttons
-                  FloatingActionButton(
-                    onPressed: () {
-                      final playerAccess = game.som.player;
+                  Container(
+                    height: 70,
+                    //color grey or amber
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
+                      onPressed: () {
+                        final playerAccess = game.som.player;
 
-                      playerAccess.recenterThePlayer();
-                      playerAccess.showGuideArc = !playerAccess.showGuideArc;
-                      game.showPausedOverlay.value = !game.showPausedOverlay.value;
-                    },
-                    child: ValueListenableBuilder(
-                        valueListenable: game.showPausedOverlay,
-                        builder: (BuildContext context, bool value, Widget? child) {
-                          return Icon(value ? Icons.pause : Icons.play_arrow);
-                        }),
+                        playerAccess.recenterThePlayer();
+                        playerAccess.showGuideArc = !playerAccess.showGuideArc;
+                        game.showPausedOverlay.value = !game.showPausedOverlay.value;
+                      },
+                      child: ValueListenableBuilder(
+                          valueListenable: game.showPausedOverlay,
+                          builder: (BuildContext context, bool value, Widget? child) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(value ? Icons.pause : Icons.play_arrow),
+                                Text(value ? 'Pause' : 'Play'),
+                              ],
+                            );
+                          }),
+                    ),
                   ),
                 ],
               ),

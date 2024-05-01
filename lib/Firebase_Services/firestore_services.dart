@@ -78,17 +78,6 @@ Comparison is made based on the following criteria:
 
 */
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:maize_beta/Database_Services/db.dart';
-import 'package:maize_beta/GeneralRepresentation/level_toppers_and_thresholds.dart';
-
-//starting with a test functioon to create a collection 'users' and add a document to it.
-
-class FirestoreServices {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final User user;
-  FirestoreServices.forUser(this.user); //creating a constructor to get the user object.
 
   //test method for levels collection
   /*#### Definining the structure and rules for the levels collection: {toppers}
@@ -179,12 +168,12 @@ The document contains the following fields:
             'life': 90,
             'score': 2300,
           },
-          // '3': {
-          //   'uuid': '213jo12i3jii-12n',
-          //   'time': 140,
-          //   'life': 80,
-          //   'score': 2290,
-          // },
+          '3': {
+            'uuid': '213jo12i3jii-12n',
+            'time': 140,
+            'life': 80,
+            'score': 2290,
+          },
           '4': {
             'uuid': '213jo12i3jii-12n',
             'time': 150,
@@ -231,61 +220,61 @@ The document contains the following fields:
             'time': 220,
             'life': 60,
             'score': 2210,
-            'total_participants': 100,
+            'total_participants': 0,
           },
           '200': {
             'time': 230,
             'life': 50,
             'score': 2200,
-            'total_participants': 100,
+            'total_participants': 0,
           },
           '300': {
             'time': 240,
             'life': 40,
             'score': 2190,
-            'total_participants': 100,
+            'total_participants': 0,
           },
           '400': {
             'time': 250,
             'life': 30,
             'score': 2180,
-            'total_participants': 100,
+            'total_participants': 0,
           },
           '500': {
             'time': 260,
             'life': 20,
             'score': 2170,
-            'total_participants': 100,
+            'total_participants': 0,
           },
           '600': {
             'time': 270,
             'life': 10,
             'score': 2160,
-            'total_participants': 100,
+            'total_participants': 0,
           },
           '700': {
             'time': 280,
             'life': 90,
             'score': 2150,
-            'total_participants': 100,
+            'total_participants': 0,
           },
           '800': {
             'time': 290,
             'life': 80,
             'score': 2140,
-            'total_participants': 100,
+            'total_participants': 0,
           },
-          // '900': {
-          //   'time': 300,
-          //   'life': 70,
-          //   'score': 2130,
-          //   'total_participants': 100,
-          // },
+          '900': {
+            'time': 300,
+            'life': 70,
+            'score': 2130,
+            'total_participants': 0,
+          },
           '1000': {
             'time': 310,
             'life': 60,
             'score': 2120,
-            'total_participants': 58,
+            'total_participants': 0,
           },
         });
 
@@ -376,39 +365,4 @@ The document contains the following fields:
       print('Error in creating mock leaderboard: $e');
     }
   } //end of createMockLeaderBoard
-
-  //method to download only the 5 upper and bottom 5 levels from a particular level for view of the Journey screen
-
-  int currentLevel = 3;
-
-  //downloading the document for the current level and parsing it into
-
-  Future<void> testDownloadLevel(int level) async {
-    LocalObjectForLevel localLevel = LocalObjectForLevel();
-    await localLevel.downloadLevelToppersAndThresholds(level);
-    print('Level toppers downloaded');
-  }
-
-  //method to delete the entire collections
-  Future<void> deleteCollections() async {
-    try {
-      await _firestore.collection('levels').get().then((snapshot) {
-        for (DocumentSnapshot ds in snapshot.docs) {
-          ds.reference.delete();
-        }
-      });
-
-      await _firestore.collection('leaderboard').get().then((snapshot) {
-        for (DocumentSnapshot ds in snapshot.docs) {
-          ds.reference.delete();
-        }
-      });
-
-      print('Collections deleted');
-    } catch (e) {
-      print('Error in deleting collections: $e');
-    }
-  } //end of deleteCollections
-
-  //testUploadLevel
 }

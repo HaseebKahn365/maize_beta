@@ -10,6 +10,82 @@ https://flagsapi.com/#sizes was used for getting the flags of the countries.
 
 
 
+# Software Requirements Specification for Puzzle Game
+
+## 1. Introduction
+### 1.1 Purpose
+The purpose of this document is to outline the requirements for a puzzle game that uses a Firestore database to store user data, level data, and leaderboard data.
+
+### 1.2 Document Conventions
+This document follows the standard conventions for a Software Requirements Specification (SRS).
+
+### 1.3 Intended Audience and Reading Suggestions
+This document is intended for game developers, project managers, testers, and users of the puzzle game.
+
+### 1.4 Project Scope
+The puzzle game will be a fun and engaging game for users of all ages. The game will involve solving puzzles of varying difficulty levels.
+
+### 1.5 References
+Flags API: https://flagsapi.com/#sizes
+
+## 2. Overall Description
+### 2.1 Product Perspective
+The puzzle game will be a standalone application that can be installed and played on various platforms.
+
+### 2.2 Product Functions
+The main function of the product is to provide entertainment through puzzle-solving activities. The game will also track user progress and display a leaderboard.
+
+### 2.3 User Classes and Characteristics
+The game is intended for users of all ages who enjoy puzzle games.
+
+### 2.4 Operating Environment
+The game will be developed to be compatible with various operating systems.
+
+### 2.5 Design and Implementation Constraints
+The game should be designed to be intuitive and user-friendly. It should also be lightweight and not consume excessive system resources.
+
+## 3. System Features
+### 3.1 System Feature 1: User Data Storage
+#### 3.1.1 Description and Priority
+High priority. The game needs to store user data, including name and country code.
+
+### 3.2 System Feature 2: Level Data Storage
+#### 3.2.1 Description and Priority
+High priority. The game needs to store level data, including the top 10 players for each level and their details.
+
+### 3.3 System Feature 3: Leaderboard Data Storage
+#### 3.3.1 Description and Priority
+High priority. The game needs to store leaderboard data, including the top 10 players and their details.
+
+## 4. External Interface Requirements
+### 4.1 User Interfaces
+The game will have a graphical user interface that is intuitive and easy to navigate.
+
+### 4.2 Hardware Interfaces
+The game will be played using a keyboard and mouse.
+
+### 4.3 Software Interfaces
+The game will interact with the Firestore database for storing and retrieving user data, level data, and leaderboard data.
+
+## 5. Other Nonfunctional Requirements
+### 5.1 Performance Requirements
+The game should load quickly and run smoothly without lagging.
+
+### 5.2 Safety Requirements
+The game should not contain any content that is inappropriate for children.
+
+### 5.3 Security Requirements
+User data should be stored securely.
+
+### 5.4 Software Quality Attributes
+The game should be reliable, maintainable, and user-friendly.
+
+## 6. Other Requirements
+The leaderboard should be updated every two days.
+
+
+
+
 Database design for firestore.
 we are gonna have three collection in the firestore database.
 1. Users

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 import 'package:maize_beta/Components/Collectables/Diamond.dart';
@@ -15,6 +16,9 @@ import 'package:maize_beta/Components/player.dart';
 class Level extends World with TapCallbacks, HasCollisionDetection {
   late TiledComponent level;
   late Player player;
+  int leveIndex = 1;
+
+  Level({required this.leveIndex});
 
   //on long tap call the recenterPlayer method of the player
 
@@ -27,7 +31,10 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
 
   @override
   FutureOr<void> onLoad() async {
-    level = await TiledComponent.load('level2.tmx', Vector2.all(16));
+    level = await TiledComponent.load('level$leveIndex.tmx', Vector2.all(16));
+    FlameAudio.bgm.play('bgmc.mp3', volume: 0.03);
+
+    // _playBgm();
 
     _spawningObjects();
 
@@ -53,6 +60,10 @@ class Level extends World with TapCallbacks, HasCollisionDetection {
     }
 
     // return super.onLoad();
+  }
+
+  void _stopBgm() {
+    FlameAudio.bgm.stop();
   }
 
   void _spawningObjects() {

@@ -2,20 +2,19 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
-import 'package:maize_beta/levels/level1.dart';
+import 'package:maize_beta/levels/level.dart';
 
 class MyGame extends FlameGame {
   late final CameraComponent cam;
+  final int selectedLevel;
 
-  //PUSE THE ENGINE METHOD
-  void pause() {
+  MyGame({required this.selectedLevel}) {
     pauseEngine();
   }
 
-  //in the constructor we pause the engine
-  MyGame() {
+  //PUSE THE ENGINE METHOD
+  void pause() {
     pauseEngine();
   }
 
@@ -25,10 +24,11 @@ class MyGame extends FlameGame {
     resumeEngine();
   }
 
-  final som = Level();
+  late final som;
 
   @override
   FutureOr<void> onLoad() async {
+    som = Level(leveIndex: selectedLevel);
     // debugMode = true;
     cam = CameraComponent.withFixedResolution(
       world: som,
@@ -41,8 +41,6 @@ class MyGame extends FlameGame {
     addAll([cam, som]);
     //casche the audio
     //start the timer
-
-    await FlameAudio.audioCache.loadAll(['collectable.wav', 'laserShoot.wav']);
 
     return super.onLoad();
   }
@@ -57,14 +55,23 @@ class MyGame extends FlameGame {
   final ValueNotifier<bool> showStartOverlay = ValueNotifier(true);
 
   //a boolean valuenotifier for showing the game over overlay
-  final ValueNotifier<bool> showGameOverOverlay = ValueNotifier(false);
+  final ValueNotifier<bool> gameLevelCompleted = ValueNotifier(false);
+
+  //a int valuenotifier for diamonds count
+  final ValueNotifier<int> diamonds = ValueNotifier(0);
+
+  //a int valuenotifier for shrinkers count
+  final ValueNotifier<int> shrinkers = ValueNotifier(0);
+
+  //a int valuenotifier for hearts count
+  final ValueNotifier<int> hearts = ValueNotifier(0);
 
   //a boolean valuenotifier for showing the paused overlay
   //pause means that we are just keeping the ball in its position and not moving it
 
   final ValueNotifier<bool> showPausedOverlay = ValueNotifier(true);
 
-  //infinite recenter
+  //pause the engine
 
   //reset the timer
   void resetTimer() {
@@ -97,6 +104,7 @@ class MyGame extends FlameGame {
   void decreaseLife() {
     if (life.value > 0) {
       life.value -= 1;
+      //when the life becomes zero we are gonna navigate to the GameResultScreen with material pushReplacement
       print('decreasing life');
     }
   }

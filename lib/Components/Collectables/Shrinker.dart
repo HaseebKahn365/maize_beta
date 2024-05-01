@@ -11,6 +11,7 @@ class Shrinker extends Collectable {
         );
   @override
   void affectScore() {
+    game.shrinkers.value += 1;
     super.affectScore();
     gameRef.som.player.shrink();
   }

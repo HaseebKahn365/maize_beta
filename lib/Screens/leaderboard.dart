@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maize_beta/Database_Services/db.dart';
-import 'package:maize_beta/Firebase_Services/firestore_services.dart';
-import 'package:maize_beta/GeneralRepresentation/level_toppers_and_thresholds.dart';
-import 'package:uuid/uuid.dart';
+import 'package:maize_beta/Firebase_Services/resetter.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
   const LeaderBoardScreen({Key? key}) : super(key: key);
@@ -14,23 +13,22 @@ class LeaderBoardScreen extends StatefulWidget {
 }
 
 DatabaseService? _databaseService;
-late FirestoreServices _firestoreServices;
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
   void initState() {
-    _getDbReady();
+    _downloadLeaders();
 
     super.initState();
   }
 
-  Future<void> _getDbReady() async {
-    _databaseService = DatabaseService();
-    await _databaseService!.open();
-    User? user = await _databaseService!.getUser();
-    _firestoreServices = FirestoreServices.forUser(
-      user!,
-    );
+  Future<void> _downloadLeaders() async {
+    //downloading the leaders from the firestore
+    downloadLeaders();
+    print('leaders: ' + downloadedLeaders.length.toString()); //this will print the number of leaders downloaded from the firestore (10 in this case
+    setState(() {
+      downloadedLeaders = downloadedLeaders;
+    });
   }
 
   @override
@@ -260,66 +258,6 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                 },
                 child: Text('Create mock leaderboard toppers'),
               ),
-
-              //button to download the upper and lower level docs for a level
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    _firestoreServices.testDownloadLevel(3);
-
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Downloading level docs')));
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error downloading level docs: $e')));
-                  }
-                },
-                child: Text('Download Level 3'),
-              ),
-              //a button to test the upload of the level toppers and thresholds
-              ElevatedButton(
-                onPressed: () async {
-                  print('uploading level 4 topper');
-                  try {
-                    LocalObjectForLevel localLevel = LocalObjectForLevel();
-                    await localLevel.downloadLevelToppersAndThresholds(4);
-
-                    //create a tempory LevelTopper
-                    LevelTopper currentPlayerAndData = LevelTopper(
-                      /*final String uuid;
-  final int time;
-  final int life;
-  final int score; */
-
-                      uuid: 'sjdkfkh3j42k3j4k234',
-                      time: 77,
-                      life: 100,
-                      score: 1000,
-                    );
-
-                    await TryLevelTopperRefresh(localLevel, currentPlayerAndData);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Level toppers and thresholds uploaded')));
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error uploading level toppers and thresholds: $e')));
-                  }
-                },
-                child: Text('Upload Level Toppers and Thresholds'),
-              ),
-
-              //button to delete the entire firestore db
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await _firestoreServices.deleteCollections();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Firestore db deleted')));
-                  } catch (e) {
-                    //show snakbar
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error deleting firestore db: $e')));
-                  }
-                },
-                child: Text('Delete Firestore DB'),
-              ),
             ],
           ),
         ),
@@ -330,22 +268,67 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
 
 //!just a simple list tile to display the player details
 
-class PlayerListTile extends StatelessWidget {
+/*
+Here is what a Leader instance looks like
+ final String uuid;
+  final int levels;
+  final int collectables;
+  final int score;
+
+we are gonna use this to display the player details we just have to pass this instance to the PlayerListTile widget
+using it state we will download the name of the player and the country code of the player from the data_insights collection and document under the uuid of the leader
+
+ */
+
+class Temp {
   final String name;
   final String countryCode;
-  final int levelsCompleted;
-  final int collectablesCollected;
-  final int damageTaken;
-  final int totalScore;
-  const PlayerListTile({
-    super.key,
+
+  Temp({
     required this.name,
     required this.countryCode,
-    required this.levelsCompleted,
-    required this.collectablesCollected,
-    required this.damageTaken,
-    required this.totalScore,
   });
+}
+
+Map<String, Temp> cachedData = {};
+
+class PlayerListTile extends StatefulWidget {
+  final Leader leader;
+
+  const PlayerListTile({
+    Key? key,
+    required this.leader,
+  }) : super(key: key);
+
+  @override
+  State<PlayerListTile> createState() => _PlayerListTileState();
+}
+
+class _PlayerListTileState extends State<PlayerListTile> {
+  @override
+  void initState() {
+    super.initState();
+    _cacheTheUser();
+  }
+
+  Future<void> _cacheTheUser() async {
+    //checking if the data is already cached
+    if (cachedData.containsKey(widget.leader.uuid)) {
+      return;
+    }
+
+    //if not cached then download the data from the firestore
+    final data = await FirebaseFirestore.instance.collection('data_insights').doc(widget.leader.uuid).get();
+    final name = data.get('name');
+    final countryCode = data.get('country_code');
+
+    //caching the data
+    cachedData[widget.leader.uuid] = Temp(name: name, countryCode: countryCode);
+
+    setState(() {
+      cachedData = cachedData;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -358,20 +341,23 @@ class PlayerListTile extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           radius: 35,
-          backgroundImage: NetworkImage('https://flagcdn.com/w160/$countryCode.jpg'),
+          backgroundImage: (cachedData[widget.leader.uuid] != null ? NetworkImage('https://flagcdn.com/w160/${cachedData[widget.leader.uuid]!.countryCode}.jpg') : NetworkImage('https://google.com/w160/pk.jpg')),
         ),
-        title: Text(name),
+        title: Text(
+          cachedData[widget.leader.uuid]?.name ?? 'Empty Slot',
+          style: TextStyle(fontSize: 20),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Text(
-                  'Levels Completed:  ',
+                const Text(
+                  'Current Level:  ',
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
-                  levelsCompleted.toString(),
+                  widget.leader.levels.toString(),
                   style: TextStyle(fontSize: 14),
                 ),
               ],
@@ -383,19 +369,7 @@ class PlayerListTile extends StatelessWidget {
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
-                  collectablesCollected.toString(),
-                  style: TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  'Damage Taken:  ',
-                  style: TextStyle(fontSize: 12),
-                ),
-                Text(
-                  damageTaken.toString(),
+                  widget.leader.collectables.toString(),
                   style: TextStyle(fontSize: 14),
                 ),
               ],
@@ -407,7 +381,7 @@ class PlayerListTile extends StatelessWidget {
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
-                  totalScore.toString(),
+                  widget.leader.score.toString(),
                   style: TextStyle(fontSize: 14),
                 ),
               ],

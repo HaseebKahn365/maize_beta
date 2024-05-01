@@ -17,7 +17,8 @@ class Trophy extends Collectable {
 
   @override
   void affectScore() {
-    gameRef.showStartOverlay.value = true;
+    game.incrementScore(score);
+    game.gameLevelCompleted.value = true;
   }
 
   int _updateCounter = 0;

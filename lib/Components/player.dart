@@ -176,7 +176,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
     if (audioPlayCount % 8 == 0 || audioPlayCount == 0) {
       // print('Audio played!');
       // Only play the audio if it has been played less than 5 times
-      // FlameAudio.play('laserShoot.wav');
+      FlameAudio.play('collide.wav');
       // print('Audio played!');
     }
   }
@@ -235,7 +235,7 @@ class Player extends PositionComponent with CollisionCallbacks, HasGameRef<MyGam
 
     // Draw the arrowhead
     final double arrowLength = 5;
-    final double arrowWidth = 2 * 3.1415 / 5; // 24 degrees
+    final double arrowWidth = 2 * 3.1415 / 5; //
     // Calculate the start and sweep angles for the arc
     double startAngle = angle - arrowWidth;
     double sweepAngle = 2 * arrowWidth;
