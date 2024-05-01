@@ -7,6 +7,8 @@ import 'package:flame/flame.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:maize_beta/AdServices/ad_service.dart';
 import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Firebase_Services/resetter.dart';
 import 'package:maize_beta/Screens/Journey.dart';
@@ -55,6 +57,8 @@ class _MainScreenState extends State<MainScreen> {
 
   late ThemeData themeData;
 
+  //creating an instance of the ad service
+
   @override
   initState() {
     Flame.device.setPortrait();
@@ -63,6 +67,7 @@ class _MainScreenState extends State<MainScreen> {
     //initialize the db
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
+    //loading the ad
   }
 
   void setNewColor(int colorIndex) {
@@ -134,6 +139,8 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
+AdService adService = AdService();
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   int selectedScreen = 0;
@@ -215,6 +222,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     databaseService!.open();
+    adService.loadBannerAd();
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1100),
@@ -231,69 +239,86 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        //i don't want its color to change when body is scrolled\
+      appBar:
+          //if the bottom navigation bar selected index is 0 and the ad is loaded the show the ad in the appbar otherwise
 
-        backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.white,
-
-        title: Text('Maiz'),
-        actions: [
-          //an icon button for feedback
-          IconButton(
-            onPressed: () {
-              //show the feedback dialog
-              showDialog(
-                context: context,
-                builder: (context) {
-                  String feedback = '';
-                  return AlertDialog(
-                    title: Text('Feedback'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Let me know about your problem or Suggestion!\n'),
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Feedback',
-                            border: OutlineInputBorder(),
-                            //make it multilined
+          (adService.isBannerAdLoaded && selectedScreen == 0)
+              ? PreferredSize(
+                  preferredSize: Size.fromHeight(kToolbarHeight + (adService.isBannerAdLoaded && selectedScreen == 0 ? 50.0 : 0.0)), // 50.0 is the height of the ad
+                  child: Stack(
+                    children: [
+                      if (adService.isBannerAdLoaded && selectedScreen == 0)
+                        Positioned(
+                          bottom: 0,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width, // Set the width to the screen width
+                            height: 50.0, // Set the height to the height of the ad
+                            child: AdWidget(ad: adService.bannerAd),
                           ),
-                          onChanged: (value) {
-                            feedback = value;
-                          },
                         ),
-                      ],
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          await _composeAndSendFeedback(feedback);
-                          Navigator.pop(context);
-                        },
-                        child: Text('Send'),
-                      ),
                     ],
-                  );
-                },
-              );
-            },
-            icon: Icon(FluentIcons.chat_24_regular),
-          ),
-          IconButton(
-            onPressed: () {
-              //handle the brightness change
-              widget.handleBrightnessChange();
-            },
-            icon: Icon(widget.useLightMode ? FluentIcons.weather_sunny_24_regular : FluentIcons.weather_moon_24_regular),
-          ),
-        ],
-      ),
+                  ),
+                )
+              : AppBar(
+                  backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : Colors.white,
+                  title: Text('Maiz'),
+                  actions: [
+                    //an icon button for feedback
+                    IconButton(
+                      onPressed: () {
+                        //show the feedback dialog
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            String feedback = '';
+                            return AlertDialog(
+                              title: Text('Feedback'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('Let me know about your problem or Suggestion!\n'),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Feedback',
+                                      border: OutlineInputBorder(),
+                                      //make it multilined
+                                    ),
+                                    onChanged: (value) {
+                                      feedback = value;
+                                    },
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await _composeAndSendFeedback(feedback);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Send'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(FluentIcons.chat_24_regular),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        //handle the brightness change
+                        widget.handleBrightnessChange();
+                      },
+                      icon: Icon(widget.useLightMode ? FluentIcons.weather_sunny_24_regular : FluentIcons.weather_moon_24_regular),
+                    ),
+                  ],
+                ),
       //create a floating action button on the top right corner for profile
 
       // we are gonna use a bottom sheet to picker the country code and also allow user to set his name

@@ -28,8 +28,8 @@ in the body we might load the JourneyScreen or LeaderBoardScreen depending on th
  */
 
 void main() async {
-  MobileAds.instance.initialize();
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> {
           volume: 0.5,
         );
 
-        print('Level completed with the following info: level: ${widget.selectedLevel + 1} ${game.diamonds.value} ${game.hearts.value} ${game.timeElapsed.value} ${game.score.value} ${game.life.value} ');
+        // print('Level completed with the following info: level: ${widget.selectedLevel + 1} ${game.diamonds.value} ${game.hearts.value} ${game.timeElapsed.value} ${game.score.value} ${game.life.value} ');
         game.pause();
 
 //add this level_id +1 to the level table in the database:
