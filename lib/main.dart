@@ -10,6 +10,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:maize_beta/Database_Services/db.dart';
 import 'package:maize_beta/Screens/GameResultScreen.dart';
 import 'package:maize_beta/Screens/main_screen.dart';
@@ -27,6 +28,7 @@ in the body we might load the JourneyScreen or LeaderBoardScreen depending on th
  */
 
 void main() async {
+  MobileAds.instance.initialize();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
